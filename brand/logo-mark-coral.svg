@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200" role="img" aria-label="LENA Agency mark">
+  <title>LENA Agency</title>
+  <!-- Solid coral square mark for dark email clients / avatars -->
+  <rect width="200" height="200" rx="28" fill="#c41e3a"/>
+  <rect x="48" y="44" width="10" height="112" rx="2" fill="#faf8f5" opacity="0.35"/>
+  <path
+    d="M68 48
+       V140
+       H128
+       V128
+       H84
+       V48
+       Z"
+    fill="#ffffff"
+  />
+  <rect x="68" y="148" width="36" height="4" rx="1" fill="#faf8f5" opacity="0.9"/>
+</svg>

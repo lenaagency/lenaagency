@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>LENA Agency — Gmail signature</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Helvetica, Arial, sans-serif;
+      background: #faf8f5;
+      color: #1f1c19;
+      padding: 32px 20px 64px;
+      line-height: 1.5;
+    }
+    h1 {
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin: 0 0 6px;
+    }
+    h1 span { color: #c41e3a; }
+    .lead { color: #8a837c; font-size: 0.9rem; margin: 0 0 24px; max-width: 48ch; }
+    .card {
+      background: #fff;
+      border: 1px solid #e8e2da;
+      border-radius: 10px;
+      padding: 24px;
+      max-width: 560px;
+      box-shadow: 0 6px 20px rgba(31, 28, 25, 0.06);
+    }
+    .label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #8a837c;
+      font-weight: 600;
+      margin: 0 0 12px;
+    }
+    .actions { margin-top: 16px; display: flex; flex-wrap: wrap; gap: 8px; }
+    button {
+      appearance: none;
+      border: none;
+      background: #c41e3a;
+      color: #fff;
+      padding: 10px 16px;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    button.secondary {
+      background: #fff;
+      color: #1f1c19;
+      border: 1px solid #e8e2da;
+    }
+    .how {
+      margin-top: 28px;
+      max-width: 560px;
+      font-size: 0.88rem;
+      color: #4a4540;
+    }
+    .how ol { margin: 8px 0 0; padding-left: 1.2em; }
+    .how li { margin: 6px 0; }
+    .toast {
+      display: none;
+      margin-top: 10px;
+      font-size: 0.85rem;
+      color: #c41e3a;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+  <h1>LENA <span>Agency</span> · Gmail signature</h1>
+  <p class="lead">로고 없음 · Gmail 서명에 바로 붙여넣기</p>
+
+  <div class="card">
+    <p class="label">Preview</p>
+    <div id="sig">
+<table cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;font-family:Helvetica,Arial,sans-serif;color:#1f1c19;">
+  <tr>
+    <td style="padding:0;font-family:Helvetica,Arial,sans-serif;font-size:15px;font-weight:600;color:#1f1c19;line-height:1.35;">
+      박수진
+    </td>
+  </tr>
+  <tr>
+    <td style="padding:2px 0 0 0;font-family:Helvetica,Arial,sans-serif;font-size:12.5px;color:#8a837c;line-height:1.4;">
+      출판 저작권 에이전트
+    </td>
+  </tr>
+  <tr>
+    <td style="padding:12px 0 0 0;font-family:Helvetica,Arial,sans-serif;font-size:15px;font-weight:600;color:#1f1c19;line-height:1.35;">
+      Sujin Lena Park
+    </td>
+  </tr>
+  <tr>
+    <td style="padding:2px 0 0 0;font-family:Helvetica,Arial,sans-serif;font-size:12.5px;letter-spacing:0.04em;color:#c41e3a;line-height:1.4;font-weight:600;">
+      LENA AGENCY
+    </td>
+  </tr>
+  <tr>
+    <td style="padding:12px 0 0 0;">
+      <div style="width:36px;height:2px;background:#c41e3a;line-height:2px;font-size:1px;">&nbsp;</div>
+    </td>
+  </tr>
+  <tr>
+    <td style="padding:12px 0 0 0;font-family:Helvetica,Arial,sans-serif;font-size:12.5px;line-height:1.55;color:#4a4540;">
+      Mobile: <a href="tel:+821032696523" style="color:#4a4540;text-decoration:none;">+82 10 3269 6523</a>
+    </td>
+  </tr>
+  <tr>
+    <td style="padding:0;font-family:Helvetica,Arial,sans-serif;font-size:12.5px;line-height:1.55;color:#4a4540;">
+      Postal address: #1812 Hyundai World Tower, 77 Mokdong-seo-ro, Yang-cheon-gu, Seoul 07983, Korea
+    </td>
+  </tr>
+  <tr>
+    <td style="padding:0;font-family:Helvetica,Arial,sans-serif;font-size:12.5px;line-height:1.55;color:#4a4540;">
+      우편물 주소: 서울시 양천구 목동서로 77, 현대월드타워 1812호 (우: 07983)
+    </td>
+  </tr>
+  <tr>
+    <td style="padding:6px 0 0 0;font-family:Helvetica,Arial,sans-serif;font-size:12.5px;line-height:1.55;color:#4a4540;">
+      <a href="https://www.instagram.com/lena.agency" style="color:#c41e3a;text-decoration:none;" target="_blank">Instagram</a>
+    </td>
+  </tr>
+</table>
+    </div>
+    <div class="actions">
+      <button type="button" id="btn-copy">Copy for Gmail</button>
+      <button type="button" class="secondary" id="btn-select">Select signature</button>
+    </div>
+    <p class="toast" id="toast">Copied. Paste into Gmail → Settings → Signature.</p>
+  </div>
+
+  <div class="how">
+    <strong>Gmail 적용</strong>
+    <ol>
+      <li><strong>Copy for Gmail</strong> 클릭</li>
+      <li>Gmail → ⚙️ → <strong>모든 설정 보기</strong> → <strong>일반</strong></li>
+      <li><strong>서명</strong> 칸에 ⌘V → 맨 아래 <strong>변경사항 저장</strong></li>
+    </ol>
+  </div>
+
+  <script>
+    const sig = document.getElementById("sig");
+    const toast = document.getElementById("toast");
+
+    document.getElementById("btn-select").addEventListener("click", () => {
+      const range = document.createRange();
+      range.selectNodeContents(sig);
+      const sel = window.getSelection();
+      sel.removeAllRanges();
+      sel.addRange(range);
+    });
+
+    document.getElementById("btn-copy").addEventListener("click", async () => {
+      const range = document.createRange();
+      range.selectNodeContents(sig);
+      const sel = window.getSelection();
+      sel.removeAllRanges();
+      sel.addRange(range);
+      try {
+        const html = sig.innerHTML;
+        const text = sig.innerText;
+        if (navigator.clipboard && window.ClipboardItem) {
+          await navigator.clipboard.write([
+            new ClipboardItem({
+              "text/html": new Blob([html], { type: "text/html" }),
+              "text/plain": new Blob([text], { type: "text/plain" }),
+            }),
+          ]);
+        } else {
+          document.execCommand("copy");
+        }
+        toast.style.display = "block";
+        setTimeout(() => (toast.style.display = "none"), 3500);
+      } catch {
+        document.execCommand("copy");
+        toast.style.display = "block";
+      }
+    });
+  </script>
+</body>
+</html>

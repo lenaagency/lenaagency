@@ -1,0 +1,4 @@
+email,name,role,org,password
+admin@lena.agency,LENA Admin,admin,LENA Agency,change-me-admin
+demo.publisher@example.com,Demo Publisher Contact,partner,Demo Publisher,change-me-partner
+demo.foreign@example.com,Demo Foreign Rights,partner,Demo Foreign Partner,change-me-foreign

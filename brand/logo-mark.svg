@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200" role="img" aria-label="LENA Agency mark">
+  <title>LENA Agency</title>
+  <!-- Square mark: warm paper + coral accent + L monogram -->
+  <rect width="200" height="200" rx="28" fill="#faf8f5"/>
+  <rect x="2" y="2" width="196" height="196" rx="26" fill="none" stroke="#e8e2da" stroke-width="2"/>
+  <!-- Coral accent bar (book spine) -->
+  <rect x="48" y="44" width="10" height="112" rx="2" fill="#c41e3a"/>
+  <!-- Serif L -->
+  <path
+    d="M68 48
+       V140
+       H128
+       V128
+       H84
+       V48
+       Z"
+    fill="#1f1c19"
+  />
+  <!-- Small coral underline tick under foot of L -->
+  <rect x="68" y="148" width="36" height="4" rx="1" fill="#c41e3a"/>
+</svg>

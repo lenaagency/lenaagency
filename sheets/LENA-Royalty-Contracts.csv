@@ -1,0 +1,4 @@
+id,title,title_ko,author,org,partner_side,counterparty,contract_date,territory,rights_type,royalty_rate,currency,sales_qty,royalty_amount,period_start,period_end,status,pdf_url,notes
+sample-001,The Teacher's Art of Words,상처받지 않으면서 나를 지키는 교사의 말 기술,김성효,Demo Publisher,licensee,LENA Agency,2024-06-01,Korea,Korean translation,8%,KRW,3200,2560000,2024-07-01,2024-12-31,Settled,,Replace with real Drive PDF link
+sample-002,Secrets from the Top 1% at Harvard,하버드 상위 1%의 비밀,정주영,Demo Foreign Partner,licensor,LENA Agency,2023-11-15,Vietnam,Translation,7%,USD,1800,4200,2024-01-01,2024-12-31,Open,,
+sample-003,The Teacher's Art of Words,상처받지 않으면서 나를 지키는 교사의 말 기술,김성효,Demo Publisher,licensee,LENA Agency,2024-06-01,Korea,Korean translation,8%,KRW,900,720000,2025-01-01,2025-06-30,Pending,,

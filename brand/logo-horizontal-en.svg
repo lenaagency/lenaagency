@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="420" height="72" viewBox="0 0 420 72" role="img" aria-label="LENA Agency">
+  <title>LENA Agency</title>
+  <text
+    x="0"
+    y="50"
+    font-family="Georgia, 'Times New Roman', serif"
+    font-size="40"
+    font-weight="600"
+    letter-spacing="-0.8"
+    fill="#1f1c19"
+  >LENA</text>
+  <text
+    x="132"
+    y="50"
+    font-family="Georgia, 'Times New Roman', serif"
+    font-size="40"
+    font-weight="600"
+    letter-spacing="-0.6"
+    fill="#c41e3a"
+  >Agency</text>
+</svg>

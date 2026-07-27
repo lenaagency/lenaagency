@@ -1,36 +1,72 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# LENA Agency · 레나에이전시 (Next.js)
 
-## Getting Started
+Seoul literary rights agency website — Next.js 15 (App Router), ready for **Vercel**.
 
-First, run the development server:
+## Local development
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open http://localhost:3000
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Build
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run build
+npm start
+```
 
-## Learn More
+## Deploy to Vercel
 
-To learn more about Next.js, take a look at the following resources:
+### Option A — CLI
+```bash
+npm i -g vercel
+vercel
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Option B — GitHub
+1. Push this folder to a GitHub repository
+2. Import the repo at [vercel.com/new](https://vercel.com/new)
+3. Framework: **Next.js** (auto-detected)
+4. Deploy
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+No env vars required for the demo form (saves to `localStorage`).
 
-## Deploy on Vercel
+## Project structure
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```
+src/app/           # Routes: /, /about, /import, /export, /export/[id], /contact
+src/components/    # Header, Footer, CoverCard
+src/context/       # KO/EN language provider
+src/lib/data.ts    # Titles, bestsellers, services
+public/covers/     # Book cover images
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Content updates
+
+Edit `src/lib/data.ts`:
+- `exportTitles` — Korean titles for rights sales
+- `importHighlights` — licensed bestsellers showcase
+- `services`, `stats`, `agency`
+
+Cover images go in `public/covers/` and paths like `/covers/filename.png`.
+
+
+## Contact form email
+
+Inquiries are sent to **lena.lenaagency@gmail.com** via `/api/contact`.
+
+### Default (FormSubmit)
+No API key needed. On the **first** real submission, open that Gmail inbox and click the FormSubmit confirmation link.
+
+### Recommended for production (Web3Forms)
+1. Go to https://web3forms.com and create a free access key for `lena.lenaagency@gmail.com`
+2. In Vercel → Project → Settings → Environment Variables:
+   - `WEB3FORMS_ACCESS_KEY` = your key
+   - `CONTACT_EMAIL` = `lena.lenaagency@gmail.com` (optional)
+3. Redeploy
+
+### Optional (Formspree)
+Set `FORMSPREE_FORM_ID` to your form id instead.

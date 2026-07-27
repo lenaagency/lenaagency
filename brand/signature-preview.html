@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>LENA Agency — Email signature</title>
+  <style>
+    :root {
+      --coral: #c41e3a;
+      --ink: #1f1c19;
+      --muted: #8a837c;
+      --line: #e8e2da;
+      --paper: #faf8f5;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "DM Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+      background: var(--paper);
+      color: var(--ink);
+      line-height: 1.5;
+    }
+    .wrap { max-width: 880px; margin: 0 auto; padding: 40px 24px 80px; }
+    h1 {
+      font-family: Georgia, "Times New Roman", serif;
+      font-weight: 600;
+      font-size: 1.75rem;
+      letter-spacing: -0.02em;
+      margin: 0 0 8px;
+    }
+    h1 span { color: var(--coral); }
+    .lead { color: var(--muted); margin: 0 0 32px; max-width: 52ch; }
+    h2 {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      margin: 40px 0 12px;
+      font-weight: 600;
+    }
+    .card {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 28px;
+      box-shadow: 0 8px 28px rgba(31, 28, 25, 0.06);
+    }
+    .note {
+      margin-top: 16px;
+      font-size: 0.85rem;
+      color: var(--muted);
+      background: #fff;
+      border-left: 3px solid var(--coral);
+      padding: 12px 16px;
+    }
+    .note code {
+      font-size: 0.8em;
+      background: #f0ebe4;
+      padding: 1px 6px;
+      border-radius: 3px;
+    }
+    .logo-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 16px;
+    }
+    .logo-cell {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      text-align: center;
+    }
+    .logo-cell.dark { background: #1f1c19; }
+    .logo-cell img { max-width: 100%; height: auto; }
+    .logo-cell figcaption { font-size: 0.75rem; color: var(--muted); }
+    .logo-cell.dark figcaption { color: #a89f96; }
+    .actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+    button, .btn {
+      appearance: none;
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--ink);
+      padding: 8px 14px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      font-weight: 500;
+    }
+    button.primary, .btn.primary {
+      background: var(--coral);
+      border-color: var(--coral);
+      color: #fff;
+    }
+    button:hover { filter: brightness(0.97); }
+    .fields {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    @media (max-width: 600px) { .fields { grid-template-columns: 1fr; } }
+    label { display: block; font-size: 0.75rem; color: var(--muted); margin-bottom: 4px; font-weight: 600; }
+    input {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      font: inherit;
+      background: #fff;
+    }
+    #live-sig { min-height: 120px; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>LENA <span>Agency</span></h1>
+    <p class="lead">
+      이메일 서명란용 로고 · 서명 디자인 프리뷰.
+      사이트 브랜드(다홍 coral · 따뜻한 paper · 세리프 워드마크)와 맞춰 두었습니다.
+    </p>
+
+    <h2>Logos</h2>
+    <div class="logo-grid">
+      <figure class="logo-cell">
+        <img src="png/logo-email.png" alt="Email logo" width="280" />
+        <figcaption>Email horizontal · logo-email.png</figcaption>
+      </figure>
+      <figure class="logo-cell">
+        <img src="png/logo-horizontal.png" alt="Horizontal wordmark" width="240" />
+        <figcaption>Wordmark + 한글 · logo-horizontal.png</figcaption>
+      </figure>
+      <figure class="logo-cell">
+        <img src="png/logo-mark.png" width="88" height="88" alt="Mark" />
+        <figcaption>Square mark · logo-mark.png</figcaption>
+      </figure>
+      <figure class="logo-cell dark">
+        <img src="png/logo-mark-coral.png" width="88" height="88" alt="Coral mark" />
+        <figcaption>Coral mark (avatar) · logo-mark-coral.png</figcaption>
+      </figure>
+    </div>
+
+    <h2>Signature — customize</h2>
+    <div class="card">
+      <div class="fields">
+        <div>
+          <label for="f-name">Name / 이름</label>
+          <input id="f-name" value="Lena Park" />
+        </div>
+        <div>
+          <label for="f-title">Title / 직함</label>
+          <input id="f-title" value="Literary Rights Agent" />
+        </div>
+        <div>
+          <label for="f-email">Email</label>
+          <input id="f-email" value="lena.lenaagency@gmail.com" />
+        </div>
+        <div>
+          <label for="f-phone">Phone (optional)</label>
+          <input id="f-phone" value="" placeholder="+82 …" />
+        </div>
+        <div>
+          <label for="f-web">Website</label>
+          <input id="f-web" value="https://lena-agency.com" placeholder="https://…" />
+        </div>
+        <div>
+          <label for="f-ig">Instagram</label>
+          <input id="f-ig" value="https://www.instagram.com/lena.agency" />
+        </div>
+      </div>
+      <div class="actions">
+        <button type="button" class="primary" id="btn-refresh">Update preview</button>
+        <button type="button" id="btn-copy">Copy HTML for Gmail</button>
+      </div>
+    </div>
+
+    <h2>Variant A — Classic (recommended)</h2>
+    <div class="card" id="live-sig"></div>
+    <p class="note">
+      Gmail: 설정 → 모든 설정 보기 → 일반 → 서명 → HTML 붙여넣기.
+      로고 이미지는 <strong>공개 URL</strong>이 필요합니다. 배포 후
+      <code>/brand/logo-email.png</code> 경로를 쓰거나, 아래 파일을 웹에 올린 뒤
+      <code>src</code>를 교체하세요. 로컬 파일 경로는 수신자에게 안 보입니다.
+    </p>
+
+    <h2>Variant B — Compact (mark only)</h2>
+    <div class="card" id="sig-b"></div>
+
+    <h2>Variant C — Bilingual line</h2>
+    <div class="card" id="sig-c"></div>
+  </div>
+
+  <script>
+    // Default logo URL — replace with production host after deploy
+    const LOGO_EMAIL = "png/logo-email.png";
+    const LOGO_MARK = "png/logo-mark-64.png";
+
+    function esc(s) {
+      return String(s)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+    }
+
+    function vals() {
+      return {
+        name: document.getElementById("f-name").value.trim() || "Lena Park",
+        title: document.getElementById("f-title").value.trim() || "Literary Rights Agent",
+        email: document.getElementById("f-email").value.trim() || "lena.lenaagency@gmail.com",
+        phone: document.getElementById("f-phone").value.trim(),
+        web: document.getElementById("f-web").value.trim(),
+        ig: document.getElementById("f-ig").value.trim() || "https://www.instagram.com/lena.agency",
+      };
+    }
+
+    function sigA(v, logoSrc) {
+      const phoneRow = v.phone
+        ? `<tr>
+            <td style="padding:2px 0;font-family:Helvetica,Arial,sans-serif;font-size:13px;line-height:1.45;color:#4a4540;">
+              <span style="color:#8a837c;font-size:11px;letter-spacing:0.04em;">T</span>&nbsp;&nbsp;
+              <a href="tel:${esc(v.phone.replace(/\\s/g, ""))}" style="color:#4a4540;text-decoration:none;">${esc(v.phone)}</a>
+            </td>
+          </tr>`
+        : "";
+      const webRow = v.web
+        ? `<tr>
+            <td style="padding:2px 0;font-family:Helvetica,Arial,sans-serif;font-size:13px;line-height:1.45;color:#4a4540;">
+              <span style="color:#8a837c;font-size:11px;letter-spacing:0.04em;">W</span>&nbsp;&nbsp;
+              <a href="${esc(v.web)}" style="color:#4a4540;text-decoration:none;" target="_blank">${esc(v.web.replace(/^https?:\\/\\//, ""))}</a>
+            </td>
+          </tr>`
+        : "";
+
+      return `<table cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;font-family:Helvetica,Arial,sans-serif;max-width:520px;">
+  <tr>
+    <td style="padding:0 0 14px 0;">
+      <a href="${esc(v.web || "https://www.instagram.com/lena.agency")}" target="_blank" style="text-decoration:none;">
+        <img src="${logoSrc}" width="180" height="32" alt="LENA Agency" style="display:block;border:0;height:auto;" />
+      </a>
+    </td>
+  </tr>
+  <tr>
+    <td style="padding:0 0 2px 0;font-family:Georgia,'Times New Roman',serif;font-size:17px;font-weight:600;color:#1f1c19;letter-spacing:-0.02em;">
+      ${esc(v.name)}
+    </td>
+  </tr>
+  <tr>
+    <td style="padding:0 0 12px 0;font-family:Helvetica,Arial,sans-serif;font-size:12.5px;color:#8a837c;">
+      ${esc(v.title)} · LENA Agency · 레나에이전시
+    </td>
+  </tr>
+  <tr>
+    <td style="padding:0 0 12px 0;">
+      <div style="height:1px;background:#e8e2da;line-height:1px;font-size:1px;">&nbsp;</div>
+    </td>
+  </tr>
+  <tr>
+    <td style="padding:2px 0;font-family:Helvetica,Arial,sans-serif;font-size:13px;line-height:1.45;color:#4a4540;">
+      <span style="color:#8a837c;font-size:11px;letter-spacing:0.04em;">E</span>&nbsp;&nbsp;
+      <a href="mailto:${esc(v.email)}" style="color:#c41e3a;text-decoration:none;">${esc(v.email)}</a>
+    </td>
+  </tr>
+  ${phoneRow}
+  ${webRow}
+  <tr>
+    <td style="padding:2px 0;font-family:Helvetica,Arial,sans-serif;font-size:13px;line-height:1.45;color:#4a4540;">
+      <span style="color:#8a837c;font-size:11px;letter-spacing:0.04em;">IG</span>&nbsp;
+      <a href="${esc(v.ig)}" style="color:#4a4540;text-decoration:none;" target="_blank">@lena.agency</a>
+    </td>
+  </tr>
+  <tr>
+    <td style="padding:10px 0 0 0;font-family:Georgia,'Times New Roman',serif;font-size:12px;font-style:italic;color:#8a837c;">
+      Partnerships beyond borders
+    </td>
+  </tr>
+</table>`;
+    }
+
+    function sigB(v, markSrc) {
+      return `<table cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;font-family:Helvetica,Arial,sans-serif;">
+  <tr>
+    <td valign="top" style="padding:0 14px 0 0;">
+      <a href="${esc(v.web || v.ig)}" target="_blank">
+        <img src="${markSrc}" width="48" height="48" alt="LENA" style="display:block;border:0;border-radius:8px;" />
+      </a>
+    </td>
+    <td valign="top" style="padding:0;">
+      <div style="font-family:Georgia,'Times New Roman',serif;font-size:16px;font-weight:600;color:#1f1c19;">${esc(v.name)}</div>
+      <div style="font-size:12px;color:#8a837c;margin:2px 0 8px;">${esc(v.title)} · <span style="color:#c41e3a;">LENA Agency</span></div>
+      <div style="font-size:12.5px;line-height:1.5;color:#4a4540;">
+        <a href="mailto:${esc(v.email)}" style="color:#c41e3a;text-decoration:none;">${esc(v.email)}</a><br />
+        <a href="${esc(v.ig)}" style="color:#4a4540;text-decoration:none;" target="_blank">instagram.com/lena.agency</a>
+        ${v.web ? `<br /><a href="${esc(v.web)}" style="color:#4a4540;text-decoration:none;" target="_blank">${esc(v.web.replace(/^https?:\\/\\//, ""))}</a>` : ""}
+      </div>
+    </td>
+  </tr>
+</table>`;
+    }
+
+    function sigC(v, logoSrc) {
+      return `<table cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;font-family:Helvetica,Arial,sans-serif;max-width:480px;">
+  <tr>
+    <td style="padding:0 0 10px 0;border-bottom:2px solid #c41e3a;">
+      <img src="${logoSrc}" width="160" alt="LENA Agency" style="display:block;border:0;height:auto;" />
+    </td>
+  </tr>
+  <tr>
+    <td style="padding:12px 0 0 0;font-family:Georgia,'Times New Roman',serif;font-size:16px;color:#1f1c19;font-weight:600;">
+      ${esc(v.name)}
+    </td>
+  </tr>
+  <tr>
+    <td style="padding:2px 0 8px 0;font-size:12px;color:#4a4540;">
+      ${esc(v.title)} · 문학 판권 에이전트<br />
+      LENA Agency · 레나에이전시 · Seoul
+    </td>
+  </tr>
+  <tr>
+    <td style="font-size:12.5px;line-height:1.55;color:#4a4540;">
+      <a href="mailto:${esc(v.email)}" style="color:#c41e3a;text-decoration:none;">${esc(v.email)}</a>
+      &nbsp;·&nbsp;
+      <a href="${esc(v.ig)}" style="color:#4a4540;text-decoration:none;" target="_blank">@lena.agency</a>
+    </td>
+  </tr>
+  <tr>
+    <td style="padding:8px 0 0 0;font-size:11.5px;color:#8a837c;">
+      국경을 넘는 파트너십 · Partnerships beyond borders
+    </td>
+  </tr>
+</table>`;
+    }
+
+    function render() {
+      const v = vals();
+      // For copy: use absolute placeholder the user should replace
+      const prodLogo = "https://YOUR-DOMAIN/brand/logo-email.png";
+      const prodMark = "https://YOUR-DOMAIN/brand/logo-mark-64.png";
+
+      document.getElementById("live-sig").innerHTML = sigA(v, LOGO_EMAIL);
+      document.getElementById("sig-b").innerHTML = sigB(v, LOGO_MARK);
+      document.getElementById("sig-c").innerHTML = sigC(v, LOGO_EMAIL);
+
+      window.__sigHtml = sigA(v, prodLogo);
+    }
+
+    document.getElementById("btn-refresh").addEventListener("click", render);
+    document.querySelectorAll("input").forEach((el) => el.addEventListener("input", render));
+    document.getElementById("btn-copy").addEventListener("click", async () => {
+      try {
+        await navigator.clipboard.writeText(window.__sigHtml);
+        const b = document.getElementById("btn-copy");
+        const t = b.textContent;
+        b.textContent = "Copied — replace YOUR-DOMAIN";
+        setTimeout(() => (b.textContent = t), 2200);
+      } catch {
+        alert("Copy failed — select the HTML from signature-gmail.html instead.");
+      }
+    });
+    render();
+  </script>
+</body>
+</html>
