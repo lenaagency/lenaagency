@@ -27,9 +27,9 @@ export default function ImportPage() {
         <div className="container">
           <div className="breadcrumb">
             <Link href="/">{t("Home", "홈")}</Link> /{" "}
-            <span>{t("Licensed", "수입")}</span>
+            <span>{t("Licensed titles", "수입 도서")}</span>
           </div>
-          <h1>{t("Rights imports", "해외 저작물 수입")}</h1>
+          <h1>{t("Licensed titles", "수입 도서")}</h1>
           <p>
             {t(
               "Highlights of titles we have licensed and published in Korea. For the latest updates, follow us on Instagram.",
