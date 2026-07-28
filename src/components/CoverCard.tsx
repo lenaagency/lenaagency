@@ -104,7 +104,6 @@ export function ExportCard({ book }: { book: ExportTitle }) {
     lang === "ko"
       ? catLabelsKo.filter(Boolean).join(" · ")
       : catLabelsEn.filter(Boolean).join(" · ");
-  const hasSeries = Boolean(book.series?.trim() || book.seriesKo?.trim());
   const hasAge = Boolean(book.age?.trim());
 
   return (
@@ -131,20 +130,6 @@ export function ExportCard({ book }: { book: ExportTitle }) {
                 {t(catLabelsEn[i] || id, catLabelsKo[i] || id)}
               </Link>
             ))}
-          </div>
-        )}
-        {hasSeries && (
-          <div className="series-line">
-            <Link
-              className="series-link"
-              href={`/export?series=${encodeURIComponent(
-                (lang === "ko"
-                  ? book.seriesKo || book.series
-                  : book.series || book.seriesKo) || ""
-              )}`}
-            >
-              {t(book.series || book.seriesKo || "", book.seriesKo || book.series || "")}
-            </Link>
           </div>
         )}
         <h3>
