@@ -1,3 +1,4 @@
+import https from "node:https";
 import { NextResponse } from "next/server";
 
 const TO_EMAIL =
@@ -8,6 +9,47 @@ const SITE_ORIGIN =
   process.env.NEXT_PUBLIC_SITE_URL?.trim() ||
   "https://www.lenaagency.com";
 
+/**
+ * FormSubmit AJAX requires an Origin from a real site. undici/fetch on
+ * Vercel strips forbidden headers (Origin/Referer), so use raw https.
+ */
+function formSubmitAjax(
+  toEmail: string,
+  payload: Record<string, string>
+): Promise<{ status: number; body: string }> {
+  const data = JSON.stringify(payload);
+  const contactPage = `${SITE_ORIGIN.replace(/\/$/, "")}/contact`;
+
+  return new Promise((resolve, reject) => {
+    const req = https.request(
+      {
+        hostname: "formsubmit.co",
+        path: `/ajax/${encodeURIComponent(toEmail)}`,
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+          Origin: SITE_ORIGIN,
+          Referer: contactPage,
+          "Content-Length": Buffer.byteLength(data),
+        },
+      },
+      (res) => {
+        const chunks: Buffer[] = [];
+        res.on("data", (c: Buffer) => chunks.push(c));
+        res.on("end", () => {
+          resolve({
+            status: res.statusCode || 0,
+            body: Buffer.concat(chunks).toString("utf8"),
+          });
+        });
+      }
+    );
+    req.on("error", reject);
+    req.write(data);
+    req.end();
+  });
+}
 const INTEREST_LABELS: Record<string, { en: string; ko: string }> = {
   export: {
     en: "Titles for rights sales",
@@ -185,34 +227,33 @@ export async function POST(req: Request) {
   }
 
   // 3) FormSubmit.co → Gmail (no API key; first use needs inbox activation)
-  // Server-side fetch must send Origin/Referer/_url or FormSubmit rejects the call.
   const contactPage = `${SITE_ORIGIN.replace(/\/$/, "")}/contact`;
-  const res = await fetch(
-    `https://formsubmit.co/ajax/${encodeURIComponent(TO_EMAIL)}`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-        Origin: SITE_ORIGIN,
-        Referer: contactPage,
+  let raw = "";
+  try {
+    const fsRes = await formSubmitAjax(TO_EMAIL, {
+      name,
+      company,
+      email,
+      interest: interestLabel,
+      message: text,
+      _subject: subject,
+      _template: "table",
+      _captcha: "false",
+      _replyto: email,
+      _url: contactPage,
+    });
+    raw = fsRes.body;
+  } catch {
+    return NextResponse.json(
+      {
+        ok: false,
+        error:
+          "Failed to reach email provider. Please try again later. / 메일 서비스에 연결하지 못했습니다. 잠시 후 다시 시도해 주세요.",
       },
-      body: JSON.stringify({
-        name,
-        company,
-        email,
-        interest: interestLabel,
-        message: text,
-        _subject: subject,
-        _template: "table",
-        _captcha: "false",
-        _replyto: email,
-        _url: contactPage,
-      }),
-    }
-  );
+      { status: 502 }
+    );
+  }
 
-  const raw = await res.text();
   let data: { success?: string | boolean; message?: string } = {};
   try {
     data = JSON.parse(raw) as typeof data;
