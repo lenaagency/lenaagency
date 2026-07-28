@@ -6,6 +6,22 @@ import { useLang } from "@/context/LangContext";
 
 type Status = "idle" | "loading" | "success" | "error";
 
+/**
+ * Web3Forms free plan only allows client-side submit (server IP blocked).
+ * Access key is intentionally public — it is NOT the inbox address.
+ * @see https://docs.web3forms.com/getting-started/faq
+ */
+const WEB3FORMS_KEY =
+  process.env.NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY?.trim() || "";
+
+const INTEREST_EN: Record<string, string> = {
+  export: "Titles for rights sales",
+  import: "Korean rights",
+  copro: "Co-production",
+  "other-rights": "Other rights",
+  other: "Other",
+};
+
 export default function ContactPage() {
   const { t } = useLang();
   const [status, setStatus] = useState<Status>("idle");
@@ -18,20 +34,87 @@ export default function ContactPage() {
 
     const form = e.currentTarget;
     const fd = new FormData(form);
-    const payload = {
-      name: String(fd.get("name") || ""),
-      company: String(fd.get("company") || ""),
-      email: String(fd.get("email") || ""),
-      interest: String(fd.get("interest") || ""),
-      message: String(fd.get("message") || ""),
-      website: String(fd.get("website") || ""),
-    };
+    const name = String(fd.get("name") || "").trim();
+    const company = String(fd.get("company") || "").trim();
+    const email = String(fd.get("email") || "").trim();
+    const interest = String(fd.get("interest") || "other").trim();
+    const message = String(fd.get("message") || "").trim();
+    const website = String(fd.get("website") || "");
+
+    // Honeypot — pretend success
+    if (website) {
+      setStatus("success");
+      form.reset();
+      return;
+    }
+
+    const interestLabel = INTEREST_EN[interest] || interest;
+    const subject = `[LENA Agency] Inquiry — ${interestLabel} — ${name}`;
+    const fullMessage = [
+      "New inquiry from the LENA Agency website",
+      "",
+      `Name: ${name}`,
+      `Company: ${company}`,
+      `Email: ${email}`,
+      `Type: ${interestLabel} (${interest})`,
+      "",
+      "Message:",
+      message,
+    ].join("\n");
 
     try {
+      // Prefer browser → Web3Forms (free plan requires client-side)
+      if (WEB3FORMS_KEY) {
+        const res = await fetch("https://api.web3forms.com/submit", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify({
+            access_key: WEB3FORMS_KEY,
+            subject,
+            from_name: name,
+            name,
+            email,
+            company,
+            interest: interestLabel,
+            message: fullMessage,
+            botcheck: false,
+          }),
+        });
+        const data = (await res.json().catch(() => ({}))) as {
+          success?: boolean;
+          message?: string;
+        };
+        if (!res.ok || data.success === false) {
+          setStatus("error");
+          setErrorMsg(
+            data.message ||
+              t(
+                "Failed to send. Please try again.",
+                "전송에 실패했습니다. 다시 시도해 주세요."
+              )
+          );
+          return;
+        }
+        setStatus("success");
+        form.reset();
+        return;
+      }
+
+      // Fallback: server route (Apps Script / Formspree / Pro Web3Forms)
       const res = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
+        body: JSON.stringify({
+          name,
+          company,
+          email,
+          interest,
+          message,
+          website: "",
+        }),
       });
       const data = (await res.json().catch(() => ({}))) as {
         ok?: boolean;
@@ -42,7 +125,10 @@ export default function ContactPage() {
         setStatus("error");
         setErrorMsg(
           data.error ||
-            t("Failed to send. Please try again.", "전송에 실패했습니다. 다시 시도해 주세요.")
+            t(
+              "Failed to send. Please try again.",
+              "전송에 실패했습니다. 다시 시도해 주세요."
+            )
         );
         return;
       }
