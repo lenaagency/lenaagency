@@ -3,6 +3,11 @@ import { NextResponse } from "next/server";
 const TO_EMAIL =
   process.env.CONTACT_EMAIL?.trim() || "lena.lenaagency@gmail.com";
 
+const SITE_ORIGIN =
+  process.env.CONTACT_SITE_URL?.trim() ||
+  process.env.NEXT_PUBLIC_SITE_URL?.trim() ||
+  "https://www.lenaagency.com";
+
 const INTEREST_LABELS: Record<string, { en: string; ko: string }> = {
   export: {
     en: "Titles for rights sales",
@@ -40,6 +45,31 @@ type Body = {
   website?: string; // honeypot
 };
 
+function isProviderSuccess(data: {
+  success?: string | boolean;
+}): boolean {
+  return data.success === true || data.success === "true";
+}
+
+/** Map provider messages to user-facing text (no inbox address leaked). */
+function publicErrorMessage(raw: string | undefined, fallback: string): string {
+  const msg = (raw || "").toLowerCase();
+  if (
+    msg.includes("activation") ||
+    msg.includes("activate form") ||
+    msg.includes("activate")
+  ) {
+    return "Email delivery needs a one-time activation. Check the agency Gmail for a FormSubmit “Activate Form” email, click it, then try again. / 이메일 전송 최초 활성화가 필요합니다. 레나 지메일에서 FormSubmit 활성화 메일을 확인·클릭한 뒤 다시 시도해 주세요.";
+  }
+  if (msg.includes("web server") || msg.includes("html files")) {
+    return "Email provider rejected the request. Please try again in a moment. / 메일 서비스가 요청을 거절했습니다. 잠시 후 다시 시도해 주세요.";
+  }
+  if (raw && raw.trim() && raw.length < 240) {
+    return raw.trim();
+  }
+  return fallback;
+}
+
 export async function POST(req: Request) {
   let body: Body;
   try {
@@ -73,8 +103,7 @@ export async function POST(req: Request) {
     );
   }
 
-  const interestLabel =
-    INTEREST_LABELS[interest]?.en || interest;
+  const interestLabel = INTEREST_LABELS[interest]?.en || interest;
   const subject = `[LENA Agency] Inquiry — ${interestLabel} — ${name}`;
 
   const text = [
@@ -122,7 +151,7 @@ export async function POST(req: Request) {
     return NextResponse.json(
       {
         ok: false,
-        error: data.message || "Web3Forms failed",
+        error: publicErrorMessage(data.message, "Web3Forms failed"),
       },
       { status: 502 }
     );
@@ -155,7 +184,9 @@ export async function POST(req: Request) {
     );
   }
 
-  // 3) FormSubmit.co → Gmail (no API key; first use requires inbox confirmation)
+  // 3) FormSubmit.co → Gmail (no API key; first use needs inbox activation)
+  // Server-side fetch must send Origin/Referer/_url or FormSubmit rejects the call.
+  const contactPage = `${SITE_ORIGIN.replace(/\/$/, "")}/contact`;
   const res = await fetch(
     `https://formsubmit.co/ajax/${encodeURIComponent(TO_EMAIL)}`,
     {
@@ -163,6 +194,8 @@ export async function POST(req: Request) {
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",
+        Origin: SITE_ORIGIN,
+        Referer: contactPage,
       },
       body: JSON.stringify({
         name,
@@ -174,16 +207,20 @@ export async function POST(req: Request) {
         _template: "table",
         _captcha: "false",
         _replyto: email,
+        _url: contactPage,
       }),
     }
   );
 
-  const data = (await res.json().catch(() => ({}))) as {
-    success?: string | boolean;
-    message?: string;
-  };
+  const raw = await res.text();
+  let data: { success?: string | boolean; message?: string } = {};
+  try {
+    data = JSON.parse(raw) as typeof data;
+  } catch {
+    data = {};
+  }
 
-  if (res.ok && (data.success === "true" || data.success === true || !data.message?.includes("error"))) {
+  if (isProviderSuccess(data)) {
     return NextResponse.json({
       ok: true,
       provider: "formsubmit",
@@ -193,7 +230,10 @@ export async function POST(req: Request) {
   return NextResponse.json(
     {
       ok: false,
-      error: data.message || "Failed to send inquiry",
+      error: publicErrorMessage(
+        data.message,
+        "Failed to send inquiry. Please try again later."
+      ),
     },
     { status: 502 }
   );
