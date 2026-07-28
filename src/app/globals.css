@@ -1056,33 +1056,6 @@ a.pill-link {
   font-size: 1.02rem;
 }
 
-.page-hero .contact-email-line {
-  margin-top: 14px;
-  font-size: 0.98rem;
-}
-
-.page-hero .contact-email-line a {
-  color: var(--coral-dark);
-  text-decoration: underline;
-  text-underline-offset: 3px;
-  word-break: break-all;
-}
-
-.page-hero .contact-email-line a:hover {
-  color: var(--coral);
-}
-
-.form-note a {
-  color: var(--coral-dark);
-  text-decoration: underline;
-  text-underline-offset: 2px;
-  word-break: break-all;
-}
-
-.form-note a:hover {
-  color: var(--coral);
-}
-
 .breadcrumb {
   font-size: 0.8rem;
   color: var(--muted);
