@@ -117,16 +117,6 @@ export default function ExportDetailPage() {
       </Link>
     );
   }
-  if (hasPublisher) {
-    bylineParts.push(
-      <Link key="pub" className="inline-link" href={publisherHref}>
-        {publisherLabel}
-      </Link>
-    );
-  }
-  if (hasYear) {
-    bylineParts.push(<span key="year">{book.pubYear}</span>);
-  }
 
   return (
     <div className="container">
