@@ -187,8 +187,6 @@ export async function POST(req: Request) {
     return NextResponse.json({
       ok: true,
       provider: "formsubmit",
-      note:
-        "If this is the first submission, check lena.lenaagency@gmail.com and confirm FormSubmit activation.",
     });
   }
 

@@ -8,7 +8,7 @@ export const LENA = {
     taglineKo: "국경을 넘는 파트너십",
     lead: "Bringing outstanding ideas to the world.",
     leadKo: "탁월한 아이디어를 세계에 전합니다.",
-    email: "lena.lenaagency@gmail.com",
+    // Contact email is server-only (see /api/contact) — never ship to client HTML/JS.
     instagram: "https://www.instagram.com/lena.agency",
     address: "Seoul, Republic of Korea",
     addressKo: "서울특별시",
