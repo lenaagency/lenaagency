@@ -3,8 +3,11 @@
 import { FormEvent, useState } from "react";
 import Link from "next/link";
 import { useLang } from "@/context/LangContext";
+import { LENA } from "@/lib/data";
 
 type Status = "idle" | "loading" | "success" | "error";
+
+const CONTACT_EMAIL = LENA.agency.email;
 
 export default function ContactPage() {
   const { t } = useLang();
@@ -74,6 +77,10 @@ export default function ContactPage() {
               "Publishers, agents, and rights holders — send a clear brief. LENA Agency will follow up with next steps.",
               "출판사, 에이전트, 권리자 여러분 — 핵심을 간결히 보내 주세요. 레나에이전시가 다음 단계를 안내드립니다."
             )}
+          </p>
+          <p className="contact-email-line">
+            Email:{" "}
+            <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>
           </p>
         </div>
       </div>
@@ -174,10 +181,8 @@ export default function ContactPage() {
                   : t("Send", "보내기")}
               </button>
               <p className="form-note">
-                {t(
-                  "Inquiries are delivered to lena.lenaagency@gmail.com",
-                  "문의는 lena.lenaagency@gmail.com 으로 전달됩니다."
-                )}
+                {t("Inquiries are delivered to", "문의 수신")}:{" "}
+                <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>
               </p>
             </form>
           </div>
