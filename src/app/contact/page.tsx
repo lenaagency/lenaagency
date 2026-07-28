@@ -157,8 +157,8 @@ export default function ContactPage() {
           <h1>{t("Contact", "문의")}</h1>
           <p>
             {t(
-              "Publishers, agents, and rights holders — send a clear brief. LENA Agency will follow up with next steps.",
-              "출판사, 에이전트, 권리자 여러분 — 핵심을 간결히 보내 주세요. 레나에이전시가 다음 단계를 안내드립니다."
+              "Send a clear brief. LENA Agency will follow up with next steps.",
+              "핵심을 간결히 보내 주세요. 레나에이전시가 다음 단계를 안내드립니다."
             )}
           </p>
         </div>
