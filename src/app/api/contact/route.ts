@@ -1,55 +1,12 @@
-import https from "node:https";
 import { NextResponse } from "next/server";
 
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
+
+/** Inbox — server-only. Never return this to the client. */
 const TO_EMAIL =
   process.env.CONTACT_EMAIL?.trim() || "lena.lenaagency@gmail.com";
 
-const SITE_ORIGIN =
-  process.env.CONTACT_SITE_URL?.trim() ||
-  process.env.NEXT_PUBLIC_SITE_URL?.trim() ||
-  "https://www.lenaagency.com";
-
-/**
- * FormSubmit AJAX requires an Origin from a real site. undici/fetch on
- * Vercel strips forbidden headers (Origin/Referer), so use raw https.
- */
-function formSubmitAjax(
-  toEmail: string,
-  payload: Record<string, string>
-): Promise<{ status: number; body: string }> {
-  const data = JSON.stringify(payload);
-  const contactPage = `${SITE_ORIGIN.replace(/\/$/, "")}/contact`;
-
-  return new Promise((resolve, reject) => {
-    const req = https.request(
-      {
-        hostname: "formsubmit.co",
-        path: `/ajax/${encodeURIComponent(toEmail)}`,
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-          Origin: SITE_ORIGIN,
-          Referer: contactPage,
-          "Content-Length": Buffer.byteLength(data),
-        },
-      },
-      (res) => {
-        const chunks: Buffer[] = [];
-        res.on("data", (c: Buffer) => chunks.push(c));
-        res.on("end", () => {
-          resolve({
-            status: res.statusCode || 0,
-            body: Buffer.concat(chunks).toString("utf8"),
-          });
-        });
-      }
-    );
-    req.on("error", reject);
-    req.write(data);
-    req.end();
-  });
-}
 const INTEREST_LABELS: Record<string, { en: string; ko: string }> = {
   export: {
     en: "Titles for rights sales",
@@ -67,7 +24,6 @@ const INTEREST_LABELS: Record<string, { en: string; ko: string }> = {
     en: "Other rights",
     ko: "기타 권리",
   },
-  // legacy form value
   subrights: {
     en: "Other rights",
     ko: "기타 권리",
@@ -87,30 +43,8 @@ type Body = {
   website?: string; // honeypot
 };
 
-function isProviderSuccess(data: {
-  success?: string | boolean;
-}): boolean {
-  return data.success === true || data.success === "true";
-}
-
-/** Map provider messages to user-facing text (no inbox address leaked). */
-function publicErrorMessage(raw: string | undefined, fallback: string): string {
-  const msg = (raw || "").toLowerCase();
-  if (
-    msg.includes("activation") ||
-    msg.includes("activate form") ||
-    msg.includes("activate")
-  ) {
-    return "Email delivery needs a one-time activation. Check the agency Gmail for a FormSubmit “Activate Form” email, click it, then try again. / 이메일 전송 최초 활성화가 필요합니다. 레나 지메일에서 FormSubmit 활성화 메일을 확인·클릭한 뒤 다시 시도해 주세요.";
-  }
-  if (msg.includes("web server") || msg.includes("html files")) {
-    return "Email provider rejected the request. Please try again in a moment. / 메일 서비스가 요청을 거절했습니다. 잠시 후 다시 시도해 주세요.";
-  }
-  if (raw && raw.trim() && raw.length < 240) {
-    return raw.trim();
-  }
-  return fallback;
-}
+const NOT_CONFIGURED =
+  "Contact email is not configured yet. Please try again later. / 문의 메일 연동이 아직 설정되지 않았습니다. 잠시 후 다시 시도해 주세요.";
 
 export async function POST(req: Request) {
   let body: Body;
@@ -163,43 +97,57 @@ export async function POST(req: Request) {
     `Sent at ${new Date().toISOString()}`,
   ].join("\n");
 
-  // 1) Web3Forms (recommended for Vercel — set WEB3FORMS_ACCESS_KEY)
+  // 1) Web3Forms — https://web3forms.com (recommended on Vercel)
   const web3Key = process.env.WEB3FORMS_ACCESS_KEY?.trim();
   if (web3Key) {
-    const res = await fetch("https://api.web3forms.com/submit", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      body: JSON.stringify({
-        access_key: web3Key,
-        subject,
-        from_name: name,
-        email,
-        company,
-        interest: interestLabel,
-        message: text,
-        to: TO_EMAIL,
-      }),
-    });
-    const data = (await res.json().catch(() => ({}))) as {
-      success?: boolean;
-      message?: string;
-    };
-    if (res.ok && data.success !== false) {
-      return NextResponse.json({ ok: true, provider: "web3forms" });
+    try {
+      const res = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          access_key: web3Key,
+          subject,
+          from_name: name,
+          email,
+          company,
+          interest: interestLabel,
+          message: text,
+          to: TO_EMAIL,
+        }),
+      });
+      const data = (await res.json().catch(() => ({}))) as {
+        success?: boolean;
+        message?: string;
+      };
+      if (res.ok && data.success !== false) {
+        return NextResponse.json({ ok: true, provider: "web3forms" });
+      }
+      console.error("[contact] web3forms failed", data);
+      return NextResponse.json(
+        {
+          ok: false,
+          error:
+            "Failed to send inquiry. Please try again later. / 전송에 실패했습니다. 잠시 후 다시 시도해 주세요.",
+        },
+        { status: 502 }
+      );
+    } catch (err) {
+      console.error("[contact] web3forms network", err);
+      return NextResponse.json(
+        {
+          ok: false,
+          error:
+            "Failed to send inquiry. Please try again later. / 전송에 실패했습니다. 잠시 후 다시 시도해 주세요.",
+        },
+        { status: 502 }
+      );
     }
-    return NextResponse.json(
-      {
-        ok: false,
-        error: publicErrorMessage(data.message, "Web3Forms failed"),
-      },
-      { status: 502 }
-    );
   }
 
-  // 2) Formspree (optional FORMSPREE_FORM_ID = form id only)
+  // 2) Formspree — optional FORMSPREE_FORM_ID
   const formspreeId = process.env.FORMSPREE_FORM_ID?.trim();
   if (formspreeId) {
     const res = await fetch(`https://formspree.io/f/${formspreeId}`, {
@@ -220,62 +168,68 @@ export async function POST(req: Request) {
     if (res.ok) {
       return NextResponse.json({ ok: true, provider: "formspree" });
     }
-    return NextResponse.json(
-      { ok: false, error: "Formspree failed" },
-      { status: 502 }
-    );
-  }
-
-  // 3) FormSubmit.co → Gmail (no API key; first use needs inbox activation)
-  const contactPage = `${SITE_ORIGIN.replace(/\/$/, "")}/contact`;
-  let raw = "";
-  try {
-    const fsRes = await formSubmitAjax(TO_EMAIL, {
-      name,
-      company,
-      email,
-      interest: interestLabel,
-      message: text,
-      _subject: subject,
-      _template: "table",
-      _captcha: "false",
-      _replyto: email,
-      _url: contactPage,
-    });
-    raw = fsRes.body;
-  } catch {
+    console.error("[contact] formspree failed", res.status);
     return NextResponse.json(
       {
         ok: false,
         error:
-          "Failed to reach email provider. Please try again later. / 메일 서비스에 연결하지 못했습니다. 잠시 후 다시 시도해 주세요.",
+          "Failed to send inquiry. Please try again later. / 전송에 실패했습니다. 잠시 후 다시 시도해 주세요.",
       },
       { status: 502 }
     );
   }
 
-  let data: { success?: string | boolean; message?: string } = {};
-  try {
-    data = JSON.parse(raw) as typeof data;
-  } catch {
-    data = {};
+  // 3) Google Apps Script mail relay (GmailApp) — no address on the website
+  // See sheets/apps-script-contact.gs
+  const scriptUrl = process.env.CONTACT_APPS_SCRIPT_URL?.trim();
+  const scriptSecret = process.env.CONTACT_APPS_SCRIPT_SECRET?.trim();
+  if (scriptUrl && scriptSecret) {
+    try {
+      const res = await fetch(scriptUrl, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          secret: scriptSecret,
+          subject,
+          text,
+          replyTo: email,
+          email,
+          name,
+          company,
+          interest: interestLabel,
+        }),
+        redirect: "follow",
+      });
+      const data = (await res.json().catch(() => ({}))) as {
+        ok?: boolean;
+        message?: string;
+      };
+      if (res.ok && data.ok !== false) {
+        return NextResponse.json({ ok: true, provider: "apps_script" });
+      }
+      console.error("[contact] apps script failed", data);
+      return NextResponse.json(
+        {
+          ok: false,
+          error:
+            "Failed to send inquiry. Please try again later. / 전송에 실패했습니다. 잠시 후 다시 시도해 주세요.",
+        },
+        { status: 502 }
+      );
+    } catch (err) {
+      console.error("[contact] apps script network", err);
+      return NextResponse.json(
+        {
+          ok: false,
+          error:
+            "Failed to send inquiry. Please try again later. / 전송에 실패했습니다. 잠시 후 다시 시도해 주세요.",
+        },
+        { status: 502 }
+      );
+    }
   }
 
-  if (isProviderSuccess(data)) {
-    return NextResponse.json({
-      ok: true,
-      provider: "formsubmit",
-    });
-  }
-
-  return NextResponse.json(
-    {
-      ok: false,
-      error: publicErrorMessage(
-        data.message,
-        "Failed to send inquiry. Please try again later."
-      ),
-    },
-    { status: 502 }
-  );
+  // FormSubmit.co is not used: Cloudflare blocks Vercel server IPs.
+  console.error("[contact] no mail provider configured");
+  return NextResponse.json({ ok: false, error: NOT_CONFIGURED }, { status: 503 });
 }
