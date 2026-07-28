@@ -58,7 +58,7 @@ export default function Footer() {
             <Link href="/import">{t("Korean rights", "해외 저작물 수입")}</Link>
             <Link href="/export">{t("Foreign rights", "한국 저작물 수출")}</Link>
             <Link href="/about#services">{t("Co-production", "공동제작")}</Link>
-            <Link href="/about#services">{t("Other rights", "기타 권리")}</Link>
+            <Link href="/about#services">{t("IP consultation", "IP 상담")}</Link>
           </div>
 
           <div className="footer-col">

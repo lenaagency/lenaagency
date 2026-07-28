@@ -720,10 +720,11 @@ export const LENA = {
     },
     {
       num: "04",
-      title: "Other rights",
-      titleKo: "기타 권리",
-      body: "We are open to discussing all other rights—digital, audio, video, media, AI training, and more. Feel free to get in touch.",
-      bodyKo: "디지털·오디오·영상·미디어·AI 학습 등 기타 권리에 대해 언제든 상담합니다. 편하게 문의해 주세요.",
+      title: "IP consultation",
+      titleKo: "IP 상담",
+      body: "We consult on a wide range of book-based rights—merchandising, media adaptations, AI training rights, and more. Feel free to get in touch anytime.",
+      bodyKo:
+        "책을 기반으로 한 상품화, 미디어화, AI 학습권 등 다양한 권리에 대해 언제든 상담합니다. 편하게 문의해 주세요.",
     },
   ],
 
