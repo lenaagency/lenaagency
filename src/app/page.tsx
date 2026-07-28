@@ -91,7 +91,7 @@ export default function HomePage() {
         <div className="container">
           <div className="section-head">
             <div>
-              <h2>{t("Rights imports", "해외 저작물 수입")}</h2>
+              <h2>{t("Licensed titles", "수입 도서")}</h2>
             </div>
             <Link className="btn btn-ghost" href="/import">
               {t("View all →", "전체 보기 →")}
