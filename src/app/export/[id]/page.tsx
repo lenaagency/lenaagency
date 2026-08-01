@@ -226,30 +226,30 @@ export default function ExportDetailPage() {
                       </td>
                     </tr>
                   )}
-                  {authors.map((a, i) => (
-                    <tr key={`spec-author-${a.slot}`}>
-                      <th>
-                        {authors.length > 1
-                          ? t(`Author ${i + 1}`, `저자 ${i + 1}`)
-                          : t("Author", "저자")}
-                      </th>
+                  {authors.length > 0 && (
+                    <tr>
+                      <th>{t("Author", "저자")}</th>
                       <td>
-                        <Link
-                          className="inline-link"
-                          href={authorHref(a)}
-                          title={t("View author biography", "저자소개 보기")}
-                        >
-                          {t(a.nameEn || a.name, a.name)}
-                        </Link>
-                        {a.nameEn && a.name && a.nameEn !== a.name ? (
-                          <span className="author-alt-inline">
-                            {" "}
-                            ({t(a.name, a.nameEn)})
+                        {authors.map((a, i) => (
+                          <span key={`spec-author-${a.slot}`}>
+                            {i > 0 ? (
+                              <span className="byline-author-sep">{" · "}</span>
+                            ) : null}
+                            <Link
+                              className="inline-link"
+                              href={authorHref(a)}
+                              title={t(
+                                "View author biography",
+                                "저자소개 보기"
+                              )}
+                            >
+                              {t(a.nameEn || a.name, a.name)}
+                            </Link>
                           </span>
-                        ) : null}
+                        ))}
                       </td>
                     </tr>
-                  ))}
+                  )}
                   {hasSeries && (
                     <tr>
                       <th>{t("Series", "시리즈")}</th>
