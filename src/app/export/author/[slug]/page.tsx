@@ -62,6 +62,12 @@ export default function ExportAuthorPage() {
               {t(profile.name, profile.nameEn)}
             </p>
           ) : null}
+          <p className="author-header-meta">
+            {t(
+              `${profile.books.length} title${profile.books.length === 1 ? "" : "s"} in the catalogue`,
+              `카탈로그 저작물 ${profile.books.length}종`
+            )}
+          </p>
         </header>
 
         {hasBio ? (
@@ -77,8 +83,8 @@ export default function ExportAuthorPage() {
           <section className="detail-section author-bio">
             <p className="author-bio-empty">
               {t(
-                "Author biography will be added soon.",
-                "저자소개는 곧 업데이트됩니다."
+                "Author biography will be added soon. Add authorBio / authorBioKo in the Titles sheet.",
+                "저자소개는 곧 업데이트됩니다. Titles 시트의 authorBio / authorBioKo 에 입력하세요."
               )}
             </p>
           </section>

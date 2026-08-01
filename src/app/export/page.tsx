@@ -205,6 +205,8 @@ function ExportCatalog() {
         stripRichText(b.titleKo),
         b.author,
         b.authorEn,
+        b.author2,
+        b.author2En,
         b.publisher,
         b.publisherEn,
         b.series,
@@ -264,9 +266,14 @@ function ExportCatalog() {
           <h1>{t("Titles for rights sales", "한국 저작물 수출")}</h1>
           <p>
             {t(
-              "Click a title for details.",
-              "타이틀을 클릭하면 상세소개 페이지로 이동합니다."
+              "Click a title for details. Co-authors are listed separately — click each name for their bio.",
+              "타이틀을 클릭하면 상세로 이동합니다. 공저자는 이름마다 따로 표시되며, 각각 클릭하면 저자소개로 갑니다."
             )}
+          </p>
+          <p style={{ marginTop: 12 }}>
+            <Link className="btn btn-secondary" href="/export/authors">
+              {t("Browse by author", "저자별 보기")}
+            </Link>
           </p>
         </div>
       </div>

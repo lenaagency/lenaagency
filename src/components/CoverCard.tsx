@@ -6,7 +6,7 @@ import type { ReactNode } from "react";
 import { useLang } from "@/context/LangContext";
 import type { ExportTitle, ImportHighlight } from "@/lib/types";
 import { normalizeCoverUrl } from "@/lib/cover-url";
-import { authorHref } from "@/lib/export-authors";
+import { authorHref, bookAuthors } from "@/lib/export-authors";
 import { RichText, plainText } from "@/components/RichText";
 
 type Badge = "export" | "import" | "none";
@@ -85,12 +85,10 @@ export function ExportCard({ book }: { book: ExportTitle }) {
   const { t, lang } = useLang();
   const title = t(book.title, book.titleKo);
   const titlePlain = plainText(title);
-  const hasAuthor = Boolean(
-    (book.author && book.author !== "—") || book.authorEn?.trim()
-  );
-  const author = hasAuthor
-    ? t(book.authorEn || book.author, book.author)
-    : "";
+  const authors = bookAuthors(book);
+  const authorLine = authors
+    .map((a) => t(a.nameEn || a.name, a.name))
+    .join(" · ");
   const catIds = (book.categories?.length ? book.categories : [book.category]).filter(
     Boolean
   );
@@ -111,7 +109,7 @@ export function ExportCard({ book }: { book: ExportTitle }) {
       <Link className="title-card-link" href={`/export/${book.id}`}>
         <CoverVisual
           title={titlePlain}
-          author={author}
+          author={authorLine}
           colors={book.colors}
           cover={book.cover}
           genre={genre}
@@ -137,11 +135,20 @@ export function ExportCard({ book }: { book: ExportTitle }) {
             <RichText text={title} />
           </Link>
         </h3>
-        {hasAuthor && (
+        {authors.length > 0 && (
           <div className="author">
-            <Link className="author-link" href={authorHref(book)}>
-              {author}
-            </Link>
+            {authors.map((a, i) => (
+              <span key={a.slug + String(a.slot)}>
+                {i > 0 ? <span className="author-sep"> · </span> : null}
+                <Link
+                  className="author-link"
+                  href={authorHref(a)}
+                  title={t("View author biography", "저자소개 보기")}
+                >
+                  {t(a.nameEn || a.name, a.name)}
+                </Link>
+              </span>
+            ))}
           </div>
         )}
         {hasAge ? <div className="age-line">{book.age}</div> : null}
@@ -186,10 +193,13 @@ export function ImportCard({
 
 export function HeroCover({ book }: { book: ExportTitle }) {
   const { t } = useLang();
+  const authorLine = bookAuthors(book)
+    .map((a) => t(a.nameEn || a.name, a.name))
+    .join(" · ");
   return (
     <CoverVisual
       title={plainText(t(book.title, book.titleKo))}
-      author={t(book.authorEn || book.author, book.author)}
+      author={authorLine}
       colors={book.colors}
       cover={book.cover}
       genre={book.categoryLabelKo}

@@ -1,13 +1,12 @@
 "use client";
 
-import type { ReactNode } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useLang } from "@/context/LangContext";
 import { ExportCard, HeroCover } from "@/components/CoverCard";
 import { InteriorPreview } from "@/components/InteriorPreview";
 import { useExportTitles } from "@/hooks/useExportTitles";
-import { authorHref } from "@/lib/export-authors";
+import { authorHref, bookAuthors } from "@/lib/export-authors";
 import { RichText, plainText } from "@/components/RichText";
 import { bookCategoryIds } from "@/lib/export-categories";
 
@@ -40,19 +39,15 @@ export default function ExportDetailPage() {
 
   const title = t(book.title, book.titleKo);
   const titlePlain = plainText(title);
-  const hasAuthor = Boolean(
-    (book.author && book.author !== "—") || book.authorEn?.trim()
-  );
-  const author = hasAuthor
-    ? t(book.authorEn || book.author, book.author)
-    : "";
+  /** Up to 2 co-authors from sheet author / author2 columns */
+  const authors = bookAuthors(book);
+  const hasAuthor = authors.length > 0;
   const hasPublisher = Boolean(
     (book.publisher && book.publisher !== "—") || book.publisherEn?.trim()
   );
   const publisherLabel = hasPublisher
     ? t(book.publisherEn || book.publisher, book.publisher)
     : "";
-  const authorPageHref = authorHref(book);
   const myCats = new Set(bookCategoryIds(book));
   const sameCategory = exportTitles.filter((b) => {
     if (b.id === book.id) return false;
@@ -109,15 +104,6 @@ export default function ExportDetailPage() {
     hasRightsNote ||
     hasTerritories;
 
-  const bylineParts: ReactNode[] = [];
-  if (hasAuthor) {
-    bylineParts.push(
-      <Link key="author" className="inline-link" href={authorPageHref}>
-        {author}
-      </Link>
-    );
-  }
-
   return (
     <div className="container">
       <div className="breadcrumb" style={{ paddingTop: 28 }}>
@@ -158,12 +144,20 @@ export default function ExportDetailPage() {
               </Link>
             </p>
           )}
-          {bylineParts.length > 0 ? (
+          {authors.length > 0 ? (
             <div className="byline">
-              {bylineParts.map((part, i) => (
-                <span key={i}>
-                  {i > 0 ? " · " : null}
-                  {part}
+              {authors.map((a, i) => (
+                <span key={`author-${a.slot}-${a.slug}`}>
+                  {i > 0 ? (
+                    <span className="byline-author-sep">{" · "}</span>
+                  ) : null}
+                  <Link
+                    className="inline-link"
+                    href={authorHref(a)}
+                    title={t("View author biography", "저자소개 보기")}
+                  >
+                    {t(a.nameEn || a.name, a.name)}
+                  </Link>
                 </span>
               ))}
             </div>
@@ -211,6 +205,72 @@ export default function ExportDetailPage() {
             </div>
           )}
 
+          {authors.map((a) => {
+            const href = authorHref(a);
+            const display = t(a.nameEn || a.name, a.name);
+            const alt =
+              a.nameEn && a.name && a.nameEn !== a.name
+                ? t(a.name, a.nameEn)
+                : "";
+            const bioText = t(a.bio || "", a.bioKo || "");
+            const hasBio = Boolean(plainText(bioText).trim());
+            return (
+              <div
+                key={`bio-${a.slot}-${a.slug}`}
+                className="detail-section author-bio-teaser"
+              >
+                <h2>
+                  <Link
+                    className="inline-link"
+                    href={href}
+                    title={t("View author biography", "저자소개 보기")}
+                  >
+                    {authors.length > 1
+                      ? t(
+                          `About the author · ${display}`,
+                          `저자소개 · ${display}`
+                        )
+                      : t("About the author", "저자소개")}
+                  </Link>
+                </h2>
+                <p className="author-bio-name-line">
+                  <Link className="inline-link author-name-link" href={href}>
+                    {display}
+                  </Link>
+                  {alt ? (
+                    <span className="author-alt-inline"> ({alt})</span>
+                  ) : null}
+                </p>
+                {hasBio ? (
+                  <>
+                    <RichText
+                      as="p"
+                      className="author-bio-text"
+                      text={bioText}
+                    />
+                    <p className="author-bio-more">
+                      <Link className="btn-ghost" href={href}>
+                        {t(
+                          "More about this author →",
+                          "이 저자 더 보기 →"
+                        )}
+                      </Link>
+                    </p>
+                  </>
+                ) : (
+                  <p className="author-bio-empty">
+                    <Link className="inline-link" href={href}>
+                      {t(
+                        "View author page (biography coming soon)",
+                        "저자 페이지 보기 (소개 준비 중)"
+                      )}
+                    </Link>
+                  </p>
+                )}
+              </div>
+            );
+          })}
+
           {hasSpecs && (
             <div className="detail-section">
               <h2>{t("Specifications", "스펙")}</h2>
@@ -232,16 +292,30 @@ export default function ExportDetailPage() {
                       </td>
                     </tr>
                   )}
-                  {hasAuthor && (
-                    <tr>
-                      <th>{t("Author", "저자")}</th>
+                  {authors.map((a, i) => (
+                    <tr key={`spec-author-${a.slot}`}>
+                      <th>
+                        {authors.length > 1
+                          ? t(`Author ${i + 1}`, `저자 ${i + 1}`)
+                          : t("Author", "저자")}
+                      </th>
                       <td>
-                        <Link className="inline-link" href={authorPageHref}>
-                          {author}
+                        <Link
+                          className="inline-link"
+                          href={authorHref(a)}
+                          title={t("View author biography", "저자소개 보기")}
+                        >
+                          {t(a.nameEn || a.name, a.name)}
                         </Link>
+                        {a.nameEn && a.name && a.nameEn !== a.name ? (
+                          <span className="author-alt-inline">
+                            {" "}
+                            ({t(a.name, a.nameEn)})
+                          </span>
+                        ) : null}
                       </td>
                     </tr>
-                  )}
+                  ))}
                   {hasSeries && (
                     <tr>
                       <th>{t("Series", "시리즈")}</th>

@@ -82,10 +82,30 @@ npm run dev
 | `id` | `my-new-book` (영문·하이픈, URL용) | ✅ |
 | `titleKo` | 한국어 제목 | ✅ |
 | `title` | 영문 제목 | 권장 |
-| `author` | 저자 | ✅ |
+| `author` / `authorEn` | **저자 1** (한글 / 영문) | ✅ / 권장 |
+| `author2` / `author2En` | **저자 2** (공저자, 같은 책에 2명일 때) | 선택 |
+| `authorBio` / `authorBioKo` | 저자 1 소개 (영문 / 한글) | 권장 |
+| `authorBio2` / `authorBio2Ko` | 저자 2 소개 | 선택 |
 | `category` | `practical` / `fiction` / … | ✅ |
 | `synopsisKo` | 소개 | 권장 |
 | `cover` | 표지 이미지 (아래 참고) | 선택 |
+
+### 공저자 2명 (같은 책)
+
+한 책에 저자가 **두 명**이면 **한 셀에 합치지 말고** 열을 나눕니다.
+
+| 열 | 역할 |
+|----|------|
+| `author` | 저자 1 한글 |
+| `authorEn` | 저자 1 영문 |
+| `author2` | 저자 2 한글 |
+| `author2En` | 저자 2 영문 |
+| `authorBio` / `authorBioKo` | 저자 1 소개 |
+| `authorBio2` / `authorBio2Ko` | 저자 2 소개 |
+
+- 사이트에서 **각 이름**을 따로 클릭 → 각자 저자소개 페이지  
+- 목록: `/export/authors`  
+- 메뉴 **LENA → 저자 2열·저자소개 열 추가** 로 없는 열 자동 생성
 
 ### 제목·소개 서식 (볼드 / 이탤릭 / 글자색)
 

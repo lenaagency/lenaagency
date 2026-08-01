@@ -4,8 +4,14 @@ export type ExportTitle = {
   id: string;
   title: string;
   titleKo: string;
+  /** 1st author (Korean / primary) — sheet: author */
   author: string;
+  /** 1st author (English) — sheet: authorEn */
   authorEn?: string;
+  /** 2nd co-author (Korean) — sheet: author2 */
+  author2?: string;
+  /** 2nd co-author (English) — sheet: author2En */
+  author2En?: string;
   /** Primary category id (first of multi-select) */
   category: string;
   categoryLabel: string;
@@ -37,8 +43,12 @@ export type ExportTitle = {
   /** Cover / belly-band marketing lines */
   coverCopy?: string;
   coverCopyKo?: string;
+  /** 1st author bio EN / KO */
   authorBio?: string;
   authorBioKo?: string;
+  /** 2nd co-author bio EN / KO — sheet: authorBio2 / authorBio2Ko */
+  authorBio2?: string;
+  authorBio2Ko?: string;
   colors: string[];
   featured?: boolean;
   new?: boolean;

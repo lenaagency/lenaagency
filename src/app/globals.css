@@ -985,13 +985,130 @@ a.pill-link {
   font-size: 1rem;
 }
 
+.author-header-meta {
+  margin: 10px 0 0;
+  font-size: 0.88rem;
+  color: var(--muted);
+}
+
 .author-bio-empty {
   color: var(--muted);
   font-style: italic;
 }
 
+.author-bio-teaser .author-bio-name-line {
+  margin: 0 0 10px;
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+
+.author-bio-teaser .author-alt-inline {
+  font-weight: 400;
+  color: var(--muted);
+}
+
+.author-bio-teaser .author-bio-more {
+  margin: 12px 0 0;
+}
+
+.byline-author-alt {
+  font-weight: 400;
+  color: var(--muted);
+}
+
 .author-titles .section-head {
   margin-bottom: 16px;
+}
+
+/* Author index /export/authors */
+.author-index-header {
+  margin: 8px 0 28px;
+  max-width: 40rem;
+}
+
+.author-index-header h1 {
+  font-family: var(--serif);
+  font-size: clamp(1.85rem, 3.2vw, 2.45rem);
+  font-weight: 550;
+  letter-spacing: -0.02em;
+  margin: 0 0 10px;
+}
+
+.author-index-lead {
+  color: var(--ink-soft);
+  margin: 0;
+  line-height: 1.55;
+}
+
+.author-index-list {
+  list-style: none;
+  margin: 0 0 32px;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 14px;
+}
+
+.author-index-card {
+  display: block;
+  height: 100%;
+  padding: 18px 18px 16px;
+  border: 1px solid var(--line, #e8e4da);
+  border-radius: 10px;
+  background: var(--paper, #fff);
+  text-decoration: none;
+  color: inherit;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.author-index-card:hover {
+  border-color: rgba(196, 30, 58, 0.35);
+  box-shadow: 0 6px 20px rgba(26, 26, 46, 0.06);
+}
+
+.author-index-card-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 4px;
+}
+
+.author-index-card h2 {
+  font-family: var(--serif);
+  font-size: 1.2rem;
+  font-weight: 550;
+  margin: 0;
+  line-height: 1.3;
+}
+
+.author-index-count {
+  flex-shrink: 0;
+  font-size: 0.75rem;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.author-index-alt {
+  margin: 0 0 8px;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+.author-index-bio {
+  margin: 0;
+  font-size: 0.88rem;
+  line-height: 1.5;
+  color: var(--ink-soft);
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.author-index-bio.muted {
+  font-style: italic;
+  color: var(--muted);
 }
 
 .results-bar {

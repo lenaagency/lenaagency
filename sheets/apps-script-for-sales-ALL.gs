@@ -49,6 +49,7 @@ function buildLenaMenu_() {
     .addItem("시리즈명 열 추가 (한·영)", "addSeriesNameColumns")
     .addItem("Titles 추천 카테고리·시리즈 적용", "applyRecommendedTitleCategories")
     .addItem("본문 미리보기 열(preview1–4) 추가", "ensurePreviewColumnsOnTitles")
+    .addItem("저자·공저(author2) 열 추가", "ensureAuthorColumnsOnTitles")
     .addSeparator()
     .addItem("서식을 HTML로 변환 (Titles)", "convertTitlesRichTextToHtml")
     .addToUi();
@@ -1081,6 +1082,154 @@ function ensurePreviewColumnsOnTitles() {
       missing.join(", ") +
       "\n\n각 행에 본문 스캔 이미지 링크를 3~4장 넣으세요.\n" +
       "Drive: 공유 → 링크 있는 모든 사용자 → 뷰어 → 링크 복사",
+    SpreadsheetApp.getUi().ButtonSet.OK
+  );
+}
+
+// ─── 저자 2열 (author / authorEn) + 저자소개 2열 ─────────────────
+
+/**
+ * Titles 저자 열 보강 (공저 2명 지원)
+ * 저자1: author / authorEn / authorBio / authorBioKo
+ * 저자2: author2 / author2En / authorBio2 / authorBio2Ko
+ */
+function ensureAuthorColumnsOnTitles() {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var titleSheet = ss.getSheetByName(TITLES_SHEET);
+  if (!titleSheet) {
+    SpreadsheetApp.getUi().alert("오류", "Titles 시트를 찾을 수 없습니다.", SpreadsheetApp.getUi().ButtonSet.OK);
+    return;
+  }
+
+  var lastCol = Math.max(titleSheet.getLastColumn(), 1);
+  var headers = titleSheet
+    .getRange(1, 1, 1, lastCol)
+    .getValues()[0]
+    .map(function (h) {
+      return String(h || "").trim();
+    });
+  var lower = headers.map(function (h) {
+    return h.toLowerCase().replace(/[\s/]+/g, "_");
+  });
+
+  function hasCol(name) {
+    var n = String(name).toLowerCase().replace(/[\s/]+/g, "_");
+    return lower.indexOf(n) >= 0;
+  }
+
+  function insertAfterHeader(afterName, newName) {
+    var idx = -1;
+    var want = String(afterName).toLowerCase().replace(/[\s/]+/g, "_");
+    for (var i = 0; i < lower.length; i++) {
+      if (lower[i] === want) {
+        idx = i;
+        break;
+      }
+    }
+    var insertAt = idx >= 0 ? idx + 2 : headers.length + 1;
+    titleSheet.insertColumnBefore(insertAt);
+    titleSheet.getRange(1, insertAt).setValue(newName);
+    try {
+      titleSheet.getRange(1, insertAt).setBackground("#FFF3E0").setFontWeight("bold");
+    } catch (e) { /* ignore */ }
+    headers.splice(insertAt - 1, 0, newName);
+    lower.splice(insertAt - 1, 0, String(newName).toLowerCase().replace(/[\s/]+/g, "_"));
+    return insertAt;
+  }
+
+  var added = [];
+
+  if (!hasCol("author")) {
+    if (hasCol("titleko") || hasCol("title_ko")) {
+      insertAfterHeader(hasCol("titleko") ? "titleKo" : "title_ko", "author");
+    } else if (hasCol("title")) {
+      insertAfterHeader("title", "author");
+    } else {
+      titleSheet.insertColumnAfter(Math.max(titleSheet.getLastColumn(), 1));
+      var c = titleSheet.getLastColumn();
+      titleSheet.getRange(1, c).setValue("author");
+      headers.push("author");
+      lower.push("author");
+    }
+    added.push("author");
+  }
+  if (!hasCol("authoren") && !hasCol("author_en")) {
+    insertAfterHeader("author", "authorEn");
+    added.push("authorEn");
+  }
+  // 공저자 2
+  if (!hasCol("author2") && !hasCol("author_2")) {
+    insertAfterHeader(hasCol("authoren") ? "authorEn" : "author", "author2");
+    added.push("author2");
+  }
+  if (!hasCol("author2en") && !hasCol("author_2_en") && !hasCol("author2_en")) {
+    insertAfterHeader("author2", "author2En");
+    added.push("author2En");
+  }
+
+  if (!hasCol("authorbio") && !hasCol("author_bio")) {
+    if (hasCol("synopsisko") || hasCol("synopsis_ko")) {
+      insertAfterHeader(hasCol("synopsisko") ? "synopsisKo" : "synopsis_ko", "authorBio");
+    } else if (hasCol("synopsis")) {
+      insertAfterHeader("synopsis", "authorBio");
+    } else {
+      insertAfterHeader("author2En", "authorBio");
+    }
+    added.push("authorBio");
+  }
+  if (!hasCol("authorbioko") && !hasCol("author_bio_ko")) {
+    insertAfterHeader(hasCol("authorbio") ? "authorBio" : "author_bio", "authorBioKo");
+    added.push("authorBioKo");
+  }
+  if (!hasCol("authorbio2") && !hasCol("author_bio_2")) {
+    insertAfterHeader(hasCol("authorbioko") ? "authorBioKo" : "authorBio", "authorBio2");
+    added.push("authorBio2");
+  }
+  if (!hasCol("authorbio2ko") && !hasCol("author_bio_2_ko") && !hasCol("authorbio2_ko")) {
+    insertAfterHeader("authorBio2", "authorBio2Ko");
+    added.push("authorBio2Ko");
+  }
+
+  try {
+    var h2 = titleSheet.getRange(1, 1, 1, titleSheet.getLastColumn()).getValues()[0];
+    var notes = {
+      author: "저자1 한글",
+      authorEn: "저자1 영문",
+      author2: "저자2(공저) 한글 — 같은 책에 2명일 때",
+      author2En: "저자2(공저) 영문",
+      authorBio: "저자1 소개 영문",
+      authorBioKo: "저자1 소개 한글",
+      authorBio2: "저자2 소개 영문",
+      authorBio2Ko: "저자2 소개 한글"
+    };
+    for (var j = 0; j < h2.length; j++) {
+      var hn = String(h2[j] || "").trim();
+      if (notes[hn]) titleSheet.getRange(1, j + 1).setNote(notes[hn]);
+    }
+  } catch (eNote) { /* ignore */ }
+
+  if (!added.length) {
+    SpreadsheetApp.getUi().alert(
+      "안내",
+      "이미 저자·공저 열이 있습니다.\n\n" +
+        "저자1: author / authorEn / authorBio / authorBioKo\n" +
+        "저자2: author2 / author2En / authorBio2 / authorBio2Ko\n\n" +
+        "한 셀에 이름을 합치지 말고 열을 나누세요.\n" +
+        "웹에서 각 이름을 따로 클릭 → 각자 저자소개",
+      SpreadsheetApp.getUi().ButtonSet.OK
+    );
+    return;
+  }
+
+  SpreadsheetApp.getUi().alert(
+    "완료",
+    "추가된 열: " +
+      added.join(", ") +
+      "\n\n" +
+      "공저 예:\n" +
+      "  author=김성효 · author2=홍길동\n" +
+      "  authorEn=Seonghyo Kim · author2En=Gildong Hong\n\n" +
+      "웹: 각 이름 클릭 → 각자 저자 페이지",
     SpreadsheetApp.getUi().ButtonSet.OK
   );
 }
