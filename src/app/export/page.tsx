@@ -266,8 +266,8 @@ function ExportCatalog() {
           <h1>{t("Titles for rights sales", "한국 저작물 수출")}</h1>
           <p>
             {t(
-              "Click a title for details. Co-authors are listed separately — click each name for their bio.",
-              "타이틀을 클릭하면 상세로 이동합니다. 공저자는 이름마다 따로 표시되며, 각각 클릭하면 저자소개로 갑니다."
+              "Click a title for details.",
+              "타이틀을 클릭하면 상세로 이동합니다."
             )}
           </p>
           <p style={{ marginTop: 12 }}>
