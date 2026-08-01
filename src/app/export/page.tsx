@@ -270,11 +270,6 @@ function ExportCatalog() {
               "타이틀을 클릭하면 상세로 이동합니다."
             )}
           </p>
-          <p style={{ marginTop: 12 }}>
-            <Link className="btn btn-secondary" href="/export/authors">
-              {t("Browse by author", "저자별 보기")}
-            </Link>
-          </p>
         </div>
       </div>
 
