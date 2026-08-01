@@ -44,6 +44,19 @@ var RICH_TEXT_HEADERS = [
   "authorbioko",
   "author_bio_ko",
   "저자소개",
+  "저자소개한글",
+  "저자소개영문",
+  "authorbio2",
+  "author_bio_2",
+  "authorbio2en",
+  "authorbio2ko",
+  "author_bio_2_ko",
+  "authorbio2_ko",
+  "저자2소개",
+  "저자2소개한글",
+  "저자2소개영문",
+  "공저자소개",
+  "공저자소개한글",
 ];
 
 /**
@@ -242,18 +255,43 @@ function runHasFormat_(run) {
     if (style.isItalic()) return true;
     if (style.isUnderline()) return true;
   } catch (e1) {}
+  return Boolean(getRunColorHex_(style));
+}
+
+/** Theme/RGB colors → #rrggbb (skip pure black defaults) */
+function getRunColorHex_(style) {
+  if (!style) return "";
   try {
     var color = style.getForegroundColor();
-    if (
-      color &&
-      color.toLowerCase() !== "#000000" &&
-      color.toLowerCase() !== "#000" &&
-      color.toLowerCase() !== "black"
-    ) {
-      return true;
+    if (color && isNonDefaultColor_(color)) return color;
+  } catch (e1) {}
+  try {
+    var obj = style.getForegroundColorObject && style.getForegroundColorObject();
+    if (obj && obj.getColorType) {
+      if (obj.getColorType() === SpreadsheetApp.ColorType.RGB) {
+        var rgb = obj.asRgbColor();
+        var hex =
+          "#" +
+          ("0" + rgb.getRed().toString(16)).slice(-2) +
+          ("0" + rgb.getGreen().toString(16)).slice(-2) +
+          ("0" + rgb.getBlue().toString(16)).slice(-2);
+        if (isNonDefaultColor_(hex)) return hex;
+      }
     }
   } catch (e2) {}
-  return false;
+  return "";
+}
+
+function isNonDefaultColor_(color) {
+  var c = String(color || "").toLowerCase().trim();
+  if (!c) return false;
+  return (
+    c !== "#000000" &&
+    c !== "#000" &&
+    c !== "black" &&
+    c !== "rgb(0,0,0)" &&
+    c !== "rgb(0, 0, 0)"
+  );
 }
 
 function richTextValueToHtml_(rich) {
@@ -271,17 +309,10 @@ function richTextValueToHtml_(rich) {
         if (style.isItalic()) text = "<i>" + text + "</i>";
         if (style.isUnderline()) text = "<u>" + text + "</u>";
       } catch (e3) {}
-      try {
-        var color = style.getForegroundColor();
-        if (
-          color &&
-          color.toLowerCase() !== "#000000" &&
-          color.toLowerCase() !== "#000" &&
-          color.toLowerCase() !== "black"
-        ) {
-          text = '<span style="color:' + color + '">' + text + "</span>";
-        }
-      } catch (e4) {}
+      var color = getRunColorHex_(style);
+      if (color) {
+        text = '<span style="color:' + color + '">' + text + "</span>";
+      }
     }
     out += text;
   }

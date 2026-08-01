@@ -81,15 +81,17 @@ export default function ExportDetailPage() {
   const hasSynopsis = Boolean(
     plainText(t(book.synopsis || "", book.synopsisKo || "")).trim()
   );
-  const hasCoverCopy = Boolean(book.coverCopy?.trim() || book.coverCopyKo?.trim());
+  const hasCoverCopy = Boolean(
+    plainText(book.coverCopy).trim() || plainText(book.coverCopyKo).trim()
+  );
   const hasRightsSold = Boolean(
-    book.rightsSold?.trim() || book.rightsSoldKo?.trim()
+    plainText(book.rightsSold).trim() || plainText(book.rightsSoldKo).trim()
   );
   const hasRightsNote = Boolean(
-    book.rightsNote?.trim() || book.rightsNoteKo?.trim()
+    plainText(book.rightsNote).trim() || plainText(book.rightsNoteKo).trim()
   );
   const hasTerritories = Boolean(
-    book.territories?.trim() || book.territoriesKo?.trim()
+    plainText(book.territories).trim() || plainText(book.territoriesKo).trim()
   );
   const hasSpecs =
     hasTitleEn ||

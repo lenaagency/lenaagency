@@ -2,8 +2,10 @@
  * Sheet → web rich text
  * Supports:
  *  - HTML subset: <b> <strong> <i> <em> <u> <br> <span style="color:…">
+ *    also <font color="…">, span font-weight / font-style
  *  - Markdown-lite: **bold** *italic* __bold__ _italic_
  *  - Color: {#c41e3a}text{/} or [color=#c41e3a]text[/color]
+ *  - Escaped tags from some CSV paths: &lt;b&gt;…&lt;/b&gt;
  */
 
 const ALLOWED_TAGS = new Set([
@@ -22,6 +24,12 @@ export function stripRichText(input: string | undefined | null): string {
   return String(input)
     .replace(/<br\s*\/?>/gi, "\n")
     .replace(/<\/?[^>]+>/g, "")
+    .replace(/&nbsp;/gi, " ")
+    .replace(/&amp;/g, "&")
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
     .replace(/\{\#[^}]+\}/g, "")
     .replace(/\{\/\}/g, "")
     .replace(/\[color=[^\]]+\]/gi, "")
@@ -63,6 +71,22 @@ function normalizeColor(raw: string): string | null {
   return null;
 }
 
+/**
+ * Some exports double-escape markup as &lt;b&gt;. Decode once when that pattern appears.
+ */
+export function unescapeSheetHtmlEntities(input: string): string {
+  if (!input) return "";
+  if (!/&lt;\/?(?:b|strong|i|em|u|br|span|font)\b/i.test(input)) {
+    return input;
+  }
+  return input
+    .replace(/&lt;/gi, "<")
+    .replace(/&gt;/gi, ">")
+    .replace(/&quot;/gi, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/&amp;/gi, "&");
+}
+
 /** Convert markdown-lite + color shortcodes to HTML (before sanitize) */
 export function markdownLiteToHtml(input: string): string {
   let s = input;
@@ -94,26 +118,47 @@ export function markdownLiteToHtml(input: string): string {
 }
 
 /**
+ * Normalize legacy / Sheets-exported tags before sanitizing.
+ * - <font color="…"> → <span style="color:…">
+ * - strip disallowed attributes on allowed tags later
+ */
+function normalizeLegacyTags(html: string): string {
+  return html
+    .replace(/<font\b([^>]*)>/gi, (_, attrs: string) => {
+      const colorMatch = String(attrs).match(
+        /color\s*=\s*["']?([^"'\s>]+)/i
+      );
+      if (!colorMatch) return "<span>";
+      const color = normalizeColor(colorMatch[1]);
+      if (!color) return "<span>";
+      return `<span style="color:${color}">`;
+    })
+    .replace(/<\/font>/gi, "</span>");
+}
+
+/**
  * Sanitize to a safe HTML string for dangerouslySetInnerHTML.
  * Escapes unknown tags; only allows formatting tags above.
  */
 export function sanitizeSheetHtml(raw: string): string {
   if (!raw) return "";
-  // If no tags / markdown markers, escape and return (newlines kept as text; CSS pre-line)
-  const hasMarkup =
-    /<\/?[a-z][\s\S]*>/i.test(raw) ||
-    /\*\*|__|(?<!\w)_(?!\w)|\*(?!\*)|\{#|\[color=/i.test(raw);
 
-  let html = raw;
+  let html = unescapeSheetHtmlEntities(String(raw));
+  html = normalizeLegacyTags(html);
+
+  // If no tags / markdown markers, escape and return
+  const hasMarkup =
+    /<\/?[a-z][\s\S]*>/i.test(html) ||
+    /\*\*|__|(?<!\w)_(?!\w)|\*(?!\*)|\{#|\[color=/i.test(html);
+
   if (!/<\/?[a-z]/i.test(html)) {
     // plain or markdown only — escape first then apply markdown
     html = escapeHtml(html);
     html = markdownLiteToHtml(html);
-    // markdownLite may not re-escape content inside — content already escaped
     return html.replace(/\n/g, "<br />");
   }
 
-  // Has HTML — convert markdown first on raw carefully, then sanitize tokens
+  // Has HTML — convert markdown outside tags carefully is hard; apply lite then sanitize
   html = markdownLiteToHtml(html);
 
   // Tokenize tags vs text
@@ -137,6 +182,7 @@ function sanitizeTag(tag: string): string {
   const close = tag.match(/^<\/\s*([a-z0-9]+)\s*>$/i);
   if (close) {
     const name = close[1].toLowerCase();
+    if (name === "font") return "</span>";
     return ALLOWED_TAGS.has(name) && name !== "br" ? `</${name}>` : "";
   }
 
@@ -144,21 +190,48 @@ function sanitizeTag(tag: string): string {
   if (!open) return "";
 
   const name = open[1].toLowerCase();
-  if (!ALLOWED_TAGS.has(name)) return "";
-  if (name === "br") return "<br />";
+  const attrs = open[2] || "";
 
-  if (name === "span") {
-    const styleMatch = (open[2] || "").match(
-      /style\s*=\s*["']([^"']*)["']/i
-    );
-    if (!styleMatch) return "<span>";
-    const colorMatch = styleMatch[1].match(
-      /(?:^|;)\s*color\s*:\s*([^;]+)/i
-    );
+  if (name === "br") return "<br />";
+  if (name === "font") {
+    // already normalized usually; keep as fallback
+    const colorMatch = attrs.match(/color\s*=\s*["']?([^"'\s>]+)/i);
     if (!colorMatch) return "<span>";
     const color = normalizeColor(colorMatch[1]);
-    if (!color) return "<span>";
-    return `<span style="color:${color}">`;
+    return color ? `<span style="color:${color}">` : "<span>";
+  }
+
+  if (!ALLOWED_TAGS.has(name)) return "";
+
+  if (name === "span") {
+    const styleMatch = attrs.match(/style\s*=\s*["']([^"']*)["']/i);
+    if (!styleMatch) return "<span>";
+    const style = styleMatch[1];
+    const parts: string[] = [];
+
+    const colorMatch = style.match(/(?:^|;)\s*color\s*:\s*([^;]+)/i);
+    if (colorMatch) {
+      const color = normalizeColor(colorMatch[1]);
+      if (color) parts.push(`color:${color}`);
+    }
+
+    const weightMatch = style.match(
+      /(?:^|;)\s*font-weight\s*:\s*(bold|[6-9]00)\b/i
+    );
+    if (weightMatch) parts.push("font-weight:bold");
+
+    const italicMatch = style.match(
+      /(?:^|;)\s*font-style\s*:\s*italic\b/i
+    );
+    if (italicMatch) parts.push("font-style:italic");
+
+    const decoMatch = style.match(
+      /(?:^|;)\s*text-decoration\s*:\s*underline\b/i
+    );
+    if (decoMatch) parts.push("text-decoration:underline");
+
+    if (!parts.length) return "<span>";
+    return `<span style="${parts.join(";")}">`;
   }
 
   // b strong i em u — no attributes
@@ -168,12 +241,14 @@ function sanitizeTag(tag: string): string {
 /** True if string contains formatting worth HTML render */
 export function hasRichMarkup(input: string | undefined | null): boolean {
   if (!input) return false;
+  const s = String(input);
   return (
-    /<\/?(?:b|strong|i|em|u|br|span)\b/i.test(input) ||
-    /\*\*[^*]+\*\*/.test(input) ||
-    /\*[^*]+\*/.test(input) ||
-    /__[^_]+__/.test(input) ||
-    /\{#[0-9a-fA-F]{3,8}\}/.test(input) ||
-    /\[color=/i.test(input)
+    /<\/?(?:b|strong|i|em|u|br|span|font)\b/i.test(s) ||
+    /&lt;\/?(?:b|strong|i|em|u|br|span|font)\b/i.test(s) ||
+    /\*\*[^*]+\*\*/.test(s) ||
+    /\*[^*]+\*/.test(s) ||
+    /__[^_]+__/.test(s) ||
+    /\{#[0-9a-fA-F]{3,8}\}/.test(s) ||
+    /\[color=/i.test(s)
   );
 }

@@ -109,14 +109,18 @@ npm run dev
 
 ### 제목·소개 서식 (볼드 / 이탤릭 / 글자색)
 
-CSV 연동만으로는 시트 **툴바 서식**이 웹에 안 옵니다. 아래 중 하나를 쓰면 사이트에 반영됩니다.
+사이트 **도서 상세**(`synopsis` · `coverCopy`)와 **저자 페이지**(`authorBio` · `authorBio2`)에  
+시트 서식이 반영됩니다. (CSV는 툴바 서식을 그대로 못 가져오므로 HTML로 한 번 변환 필요)
 
 **방법 A — 시트에서 툴바 서식 후 메뉴 변환 (권장)**
 
 1. Titles 셀에서 글자 일부 **굵게 / 기울임 / 글자색** 적용  
-2. `sheets/apps-script-for-sales-rich-text.gs` 를 Apps Script에 추가  
+2. `sheets/apps-script-for-sales-ALL.gs` (또는 `apps-script-for-sales-rich-text.gs`) 를 Apps Script에 붙여넣기  
 3. 시트 메뉴 **LENA → 서식을 HTML로 변환 (Titles)** 실행  
-4. 사이트 새로고침  
+4. 사이트 강력 새로고침 (⌘⇧R)  
+
+적용 열: `title`, `titleKo`, `synopsis`, `synopsisKo`, `coverCopy`, `coverCopyKo`,  
+`authorBio`, `authorBioKo`, `authorBio2`, `authorBio2Ko`
 
 **방법 B — 셀에 직접 마크업 입력**
 
@@ -125,8 +129,6 @@ CSV 연동만으로는 시트 **툴바 서식**이 웹에 안 옵니다. 아래 
 | 굵게 | `**중요 구절**` 또는 `<b>중요 구절</b>` |
 | 기울임 | `*강조*` 또는 `<i>강조</i>` |
 | 글자색 | `{#c41e3a}빨간 글자{/}` 또는 `[color=#c41e3a]빨간 글자[/color]` |
-
-적용 열: `title`, `titleKo`, `synopsis`, `synopsisKo`, `coverCopy`, `coverCopyKo` 등 |
 | `preview1` ~ `preview4` | 본문 미리보기 이미지 3–4장 | 선택 |
 | `published` | `TRUE` (공개) / `FALSE` (숨김) | 기본 공개 |
 | `featured` | `TRUE` → 홈 추천 | |

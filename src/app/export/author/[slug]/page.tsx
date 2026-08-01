@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useLang } from "@/context/LangContext";
 import { ExportCard } from "@/components/CoverCard";
-import { RichText } from "@/components/RichText";
+import { RichText, plainText } from "@/components/RichText";
 import { useExportTitles } from "@/hooks/useExportTitles";
 import { getAuthorProfile } from "@/lib/export-authors";
 
@@ -43,7 +43,9 @@ export default function ExportAuthorPage() {
   }
 
   const displayName = t(profile.nameEn || profile.name, profile.name);
-  const hasBio = Boolean(profile.bio || profile.bioKo);
+  const hasBio = Boolean(
+    plainText(profile.bio).trim() || plainText(profile.bioKo).trim()
+  );
 
   return (
     <div className="container">

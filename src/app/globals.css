@@ -1597,7 +1597,7 @@ a.pill-link {
   border-bottom-color: rgba(196, 30, 58, 0.35);
 }
 
-/* Sheet rich text (bold / italic / color) */
+/* Sheet rich text (bold / italic / color) — Titles synopsis / coverCopy / authorBio */
 .rich-text {
   white-space: pre-line;
   word-break: keep-all;
@@ -1617,6 +1617,26 @@ a.pill-link {
 .rich-text u {
   text-decoration: underline;
   text-underline-offset: 2px;
+}
+
+/* Keep nested sheet styles visible even when parent is already semi-bold */
+.detail-section .cover-copy.rich-text b,
+.detail-section .cover-copy.rich-text strong,
+.detail-section p.rich-text b,
+.detail-section p.rich-text strong,
+.author-bio .rich-text b,
+.author-bio .rich-text strong {
+  font-weight: 800;
+}
+
+.detail-section .cover-copy.rich-text i,
+.detail-section .cover-copy.rich-text em,
+.detail-section p.rich-text i,
+.detail-section p.rich-text em,
+.author-bio .rich-text i,
+.author-bio .rich-text em {
+  font-style: italic;
+  font-weight: 500;
 }
 
 .author-bio-text,
