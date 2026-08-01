@@ -313,7 +313,8 @@ export function bookCategoryIds(book: {
 }
 
 /**
- * Infer age-band ids from free-text age cell (e.g. "12+", "Ages 7–9", "성인").
+ * Infer age-band ids from free-text age cell (e.g. "12+", "Ages 7–9").
+ * Does NOT infer `all-ages` — that pill only matches category id `all-ages`.
  */
 export function ageBandIdsFromText(age: string | undefined | null): string[] {
   const raw = String(age || "").trim();
@@ -321,12 +322,6 @@ export function ageBandIdsFromText(age: string | undefined | null): string[] {
   const a = raw.toLowerCase().replace(/\s+/g, "");
   const out: string[] = [];
 
-  if (
-    /all.?ages|전연령|전\s*연령|전체연령|전나이/.test(a) ||
-    a === "all"
-  ) {
-    out.push("all-ages");
-  }
   if (
     /baby|toddler|0\s*[-–~to]?\s*6|영아|유아|0-6|0–6|아동\(0/.test(a) ||
     /0\s*~\s*6/.test(a)
@@ -357,7 +352,11 @@ export function ageBandIdsFromText(age: string | undefined | null): string[] {
   return [...new Set(out)];
 }
 
-/** Whether a book matches an age-band filter id */
+/**
+ * Whether a book matches an age-band filter id.
+ * `all-ages` matches only when the book has category id `all-ages`
+ * (not other age bands, not free-text age cell).
+ */
 export function bookMatchesAgeFilter(
   book: { age?: string; category?: string; categories?: string[] },
   ageId: string
@@ -366,7 +365,8 @@ export function bookMatchesAgeFilter(
   if (!isAgeCategoryId(id)) return false;
   const cats = bookCategoryIds(book);
   if (cats.includes(id)) return true;
-  if (id === "all-ages" && cats.some((c) => isAgeCategoryId(c))) return true;
+  // All Ages: explicit category id only — no "any age band" or age-text fallback
+  if (id === "all-ages") return false;
   return ageBandIdsFromText(book.age).includes(id);
 }
 
