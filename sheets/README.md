@@ -91,24 +91,29 @@ npm run dev
 | `title` · `coverCopy` · `synopsis` · `authorBio` | 영문 (비우면 메뉴로 자동 채우기 가능) | 권장 |
 | `cover` | 표지 이미지 (아래 참고) | 선택 |
 
-### 한글만 넣고 영문 자동 채우기
+### 한글만 넣고 영문 채우기 (Grok 권장)
 
-`titleKo` · `coverCopyKo` · `synopsisKo` · `authorBioKo` 만 적어도 됩니다.  
-**영문 칸이 비어 있을 때만** 짧고 자연스러운 영어로 채웁니다 (이미 있는 영문은 유지).
+`titleKo` · `coverCopyKo` · `synopsisKo` · `authorBioKo` 만 적어도 됩니다.
 
-1. For sales 시트 → Apps Script에 `apps-script-for-sales-ALL.gs` 최신 붙여넣기  
-2. 시트 새로고침 → **LENA → 한글→영문 채우기 (빈 칸만)**  
-3. 사이트 강력 새로고침  
+**권장 — 채팅에서 Grok에게 요청**
+
+1. Titles에 한글을 넣는다  
+2. Grok 채팅에 예:  
+   - `Titles 영문 채워줘`  
+   - `비트코인 없는 미래는 없다 영문 번역해줘`  
+3. Grok이 **짧고 자연스러운** `title` · `coverCopy` · `synopsis` · `authorBio` 초안을 준다  
+4. 시트 영문 칸에 붙여넣기 → 사이트 새로고침  
+
+이미 있는 영문은 기본적으로 유지하고, **빈 칸만** 채우는 방식으로 요청하면 됩니다.
+
+**비상용 — 시트 메뉴 기계번역** (문장 품질은 Grok보다 낮음)
 
 | 메뉴 | 동작 |
 |------|------|
-| 한글→영문 채우기 (빈 칸만) | 비어 있는 `title` / `coverCopy` / `synopsis` / `authorBio` / `authorBio2` 만 채움 |
-| 한글→영문 덮어쓰기 (선택 행) | 선택한 행만 한글로 다시 번역 (기존 영문 삭제됨) |
+| 한글→영문 기계번역 (빈 칸만·비상용) | LanguageApp으로 빈 영문만 채움 |
+| 한글→영문 기계번역 덮어쓰기 (선택 행) | 선택 행 영문 덮어씀 |
 
-**(선택) 더 자연스러운 문장**  
-Apps Script → 프로젝트 설정 → 스크립트 속성  
-`GEMINI_API_KEY` = [Google AI Studio](https://aistudio.google.com/apikey) 키  
-없으면 구글 LanguageApp 기계번역 + 길이 다듬기를 씁니다.
+제미니 API 연동은 사용하지 않습니다.
 
 ### 공저자 2명 (같은 책)
 

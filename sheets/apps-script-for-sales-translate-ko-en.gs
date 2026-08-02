@@ -1,27 +1,23 @@
 /**
  * LENA Agency · Titles
- * 한글만 있는 칸 → 짧고 자연스러운 영문 채우기
+ * 한글 → 영문 (비상용 기계번역)
  *
- * 대상 (영문이 비어 있을 때만, 덮어쓰지 않음)
+ * 권장: 짧고 자연스러운 영문 카피는 채팅에서 Grok에게
+ *   「Titles 영문 채워줘」 / 「이 책 영문 번역해줘」
+ * 라고 요청하세요. Grok이 제목·커버카피·시놉시스·저자소개를 다듬어 드립니다.
+ *
+ * 이 스크립트는 급한 일괄 채움용(LanguageApp)입니다.
+ * 대상 (영문이 비어 있을 때만):
  *   titleKo → title
  *   coverCopyKo → coverCopy
  *   synopsisKo → synopsis
  *   authorBioKo → authorBio
  *   authorBio2Ko → authorBio2
  *
- * 설치
- * 1) For sales 시트 → 확장 프로그램 → Apps Script
- * 2) 이 파일을 새 스크립트로 추가하거나 apps-script-for-sales-ALL.gs 에 포함
- * 3) 저장 → installLenaMenu 실행 → 시트 새로고침
- * 4) 메뉴 LENA → 한글→영문 채우기 (빈 칸만)
- *
- * (선택) 더 자연스러운 문장:
- * Apps Script → 프로젝트 설정 → 스크립트 속성
- *   GEMINI_API_KEY = Google AI Studio 키
- * 없으면 구글 LanguageApp 기계번역 + 길이 다듬기
+ * 설치: apps-script-for-sales-ALL.gs 를 쓰는 경우 이 파일은 넣지 마세요 (중복).
+ * ALL 없이 이 기능만 쓸 때만 추가.
  */
 
-/** 한글 → 영문 필드 쌍 (enHeader, koHeader 후보들) */
 var KO_EN_FIELD_PAIRS = [
   {
     kind: "title",
@@ -50,31 +46,22 @@ var KO_EN_FIELD_PAIRS = [
   }
 ];
 
-/**
- * 메뉴: 빈 영문 칸만 한글로 채움 (기존 영문 유지)
- */
 function fillEmptyEnglishFromKorean() {
   fillEnglishFromKorean_({ overwrite: false });
 }
 
-/**
- * 메뉴: 선택 행만 — 한글이 있으면 영문 다시 씀 (주의)
- */
 function refillEnglishFromKoreanSelected() {
   var ui = SpreadsheetApp.getUi();
   var ans = ui.alert(
-    "영문 덮어쓰기",
-    "선택한 행에서 한글이 있는 필드의 영문을 다시 번역해 덮어씁니다.\n" +
-      "기존 영문 카피가 지워질 수 있습니다. 계속할까요?",
+    "영문 덮어쓰기 (기계번역)",
+    "선택한 행의 영문을 기계번역으로 덮어씁니다.\n" +
+      "자연스러운 카피는 Grok 채팅을 권장합니다. 계속할까요?",
     ui.ButtonSet.YES_NO
   );
   if (ans !== ui.Button.YES) return;
   fillEnglishFromKorean_({ overwrite: true, selectedOnly: true });
 }
 
-/**
- * @param {{overwrite?:boolean, selectedOnly?:boolean}=} opt
- */
 function fillEnglishFromKorean_(opt) {
   opt = opt || {};
   var overwrite = !!opt.overwrite;
@@ -96,7 +83,7 @@ function fillEnglishFromKorean_(opt) {
     if (!pairCols.length) {
       ui.alert(
         "오류",
-        "title / titleKo / synopsis 등 한·영 열을 찾지 못했습니다.\n헤더: " +
+        "title / titleKo 등 한·영 열을 찾지 못했습니다.\n헤더: " +
           headers.filter(Boolean).join(", "),
         ui.ButtonSet.OK
       );
@@ -115,7 +102,6 @@ function fillEnglishFromKorean_(opt) {
       rowEnd = Math.min(lastRow, range.getLastRow());
     }
 
-    var useGemini = Boolean(getGeminiApiKey_());
     var filled = 0;
     var skipped = 0;
     var errors = 0;
@@ -138,9 +124,11 @@ function fillEnglishFromKorean_(opt) {
             skipped++;
             continue;
           }
-          // 영문이 이미 충분히 길면 덮어쓰기 모드에서도 스킵? no — overwrite means refill
 
-          var translated = translateFieldKoToEn_(koVal, pair.kind, useGemini);
+          var translated = translateWithLanguageApp_(
+            stripHtmlForTranslate_(koVal),
+            pair.kind
+          );
           if (!translated) {
             skipped++;
             continue;
@@ -149,33 +137,29 @@ function fillEnglishFromKorean_(opt) {
           filled++;
           if (samples.length < 6) {
             samples.push(
-              "행" + r + " · " + pair.kind + " → " + translated.slice(0, 80).replace(/\n/g, " ")
+              "행" +
+                r +
+                " · " +
+                pair.kind +
+                " → " +
+                translated.slice(0, 80).replace(/\n/g, " ")
             );
           }
-          // API rate limit 완화
-          if (useGemini) Utilities.sleep(200);
         } catch (cellErr) {
           errors++;
-          Logger.log("fill EN r=" + r + " " + pair.kind + ": " + cellErr);
         }
       }
     }
 
     ui.alert(
-      "한글→영문 완료",
+      "기계번역 완료 (비상용)",
       "채운 칸: " +
         filled +
         "개\n건너뜀: " +
         skipped +
         "개\n" +
         (errors ? "오류: " + errors + "개\n" : "") +
-        "엔진: " +
-        (useGemini ? "Gemini (자연스러운 짧은 영문)" : "LanguageApp (기계번역+다듬기)") +
-        "\n\n" +
-        (samples.length ? "예시:\n• " + samples.join("\n• ") + "\n\n" : "") +
-        "※ 빈 영문만 채움 (덮어쓰기 메뉴 제외)\n" +
-        "※ Gemini: 스크립트 속성 GEMINI_API_KEY\n" +
-        "사이트 강력 새로고침(⌘⇧R) 하세요.",
+        "\n자연스러운 영문은 채팅에서 Grok에게\n「Titles 영문 채워줘」 라고 요청하세요.",
       ui.ButtonSet.OK
     );
   } catch (e) {
@@ -203,60 +187,24 @@ function normHeaderTranslate_(h) {
     .replace(/[^a-z0-9가-힣_]/g, "");
 }
 
-/**
- * @return {{kind:string, enCol:number, koCol:number}[]}
- */
 function resolveKoEnColumns_(headers) {
   var out = [];
   for (var i = 0; i < KO_EN_FIELD_PAIRS.length; i++) {
     var pair = KO_EN_FIELD_PAIRS[i];
     var enCol = findHeaderCol_(headers, pair.en);
     var koCol = findHeaderCol_(headers, pair.ko);
-    if (enCol && koCol) {
-      out.push({ kind: pair.kind, enCol: enCol, koCol: koCol });
-    }
+    if (enCol && koCol) out.push({ kind: pair.kind, enCol: enCol, koCol: koCol });
   }
   return out;
 }
 
 function findHeaderCol_(headers, names) {
   for (var i = 0; i < names.length; i++) {
-    var want = names[i];
     for (var c = 0; c < headers.length; c++) {
-      if (headers[c] === want) return c + 1;
+      if (headers[c] === names[i]) return c + 1;
     }
   }
   return 0;
-}
-
-function getGeminiApiKey_() {
-  try {
-    var k = PropertiesService.getScriptProperties().getProperty("GEMINI_API_KEY");
-    if (k && String(k).trim()) return String(k).trim();
-  } catch (e) {}
-  return "";
-}
-
-/**
- * @param {string} koText
- * @param {string} kind title|coverCopy|synopsis|authorBio|authorBio2
- * @param {boolean} preferGemini
- * @return {string}
- */
-function translateFieldKoToEn_(koText, kind, preferGemini) {
-  var plain = stripHtmlForTranslate_(koText);
-  if (!plain) return "";
-
-  if (preferGemini) {
-    try {
-      var ai = translateWithGemini_(plain, kind);
-      if (ai) return ai;
-    } catch (eAi) {
-      Logger.log("Gemini failed, LanguageApp fallback: " + eAi);
-    }
-  }
-
-  return translateWithLanguageApp_(plain, kind);
 }
 
 function stripHtmlForTranslate_(s) {
@@ -268,7 +216,6 @@ function stripHtmlForTranslate_(s) {
     .replace(/&lt;/g, "<")
     .replace(/&gt;/g, ">")
     .replace(/&quot;/g, '"')
-    .replace(/\s+\n/g, "\n")
     .replace(/\n{3,}/g, "\n\n")
     .trim();
 }
@@ -277,32 +224,18 @@ function translateWithLanguageApp_(plain, kind) {
   var en = LanguageApp.translate(plain, "ko", "en");
   en = String(en || "").trim();
   if (!en) return "";
-
-  // 길이·톤 다듬기 (기계번역을 카탈로그 카피에 가깝게)
   if (kind === "title") {
     en = en.replace(/\s+/g, " ").trim();
-    // 과도한 직역 제목 정리
     if (en.length > 90) en = en.slice(0, 87).replace(/\s+\S*$/, "") + "…";
     return en;
   }
-  if (kind === "coverCopy") {
-    en = shortenForCatalog_(en, 180, 2);
-    return en;
-  }
-  if (kind === "synopsis") {
-    en = shortenForCatalog_(en, 520, 5);
-    return en;
-  }
-  // authorBio / authorBio2
-  en = shortenForCatalog_(en, 480, 4);
-  return en;
+  if (kind === "coverCopy") return shortenForCatalog_(en, 180, 2);
+  if (kind === "synopsis") return shortenForCatalog_(en, 520, 5);
+  return shortenForCatalog_(en, 480, 4);
 }
 
-/** 문장 단위로 잘라 카탈로그용 짧은 영문 */
 function shortenForCatalog_(text, maxChars, maxSentences) {
-  var t = String(text || "")
-    .replace(/\s+/g, " ")
-    .trim();
+  var t = String(text || "").replace(/\s+/g, " ").trim();
   if (!t) return "";
   var parts = t.match(/[^.!?]+[.!?]+|[^.!?]+$/g) || [t];
   var out = [];
@@ -319,74 +252,4 @@ function shortenForCatalog_(text, maxChars, maxSentences) {
     joined = joined.slice(0, maxChars - 1).replace(/\s+\S*$/, "") + "…";
   }
   return joined;
-}
-
-/**
- * Gemini: 짧고 자연스러운 권리 카탈로그 영문
- * @return {string}
- */
-function translateWithGemini_(plain, kind) {
-  var key = getGeminiApiKey_();
-  if (!key) return "";
-
-  var guidance = {
-    title:
-      "English book title for a rights catalog. Short, natural, publishable. Not a word-for-word calque. No quotes.",
-    coverCopy:
-      "1–2 punchy marketing lines for rights buyers. Shorter than the Korean if long. No hashtags. No quotes around the whole text.",
-    synopsis:
-      "2–5 fluent sentences for foreign rights readers. Tighter and more natural than a literal translation. Keep key selling points. No quotes.",
-    authorBio:
-      "2–4 sentence professional author bio in natural English. Shorter than the Korean source. Credentials and notable works only. No quotes.",
-    authorBio2:
-      "2–4 sentence professional co-author bio in natural English. Shorter than the Korean. No quotes."
-  };
-  var g = guidance[kind] || guidance.synopsis;
-
-  var prompt =
-    "You help a Seoul literary rights agency (LENA Agency).\n" +
-    "Task: rewrite the Korean catalog text into " +
-    g +
-    "\n" +
-    "Output English only. No preamble, no markdown fences.\n\n" +
-    "Korean source:\n" +
-    plain;
-
-  // flash is fast/cheap for catalog fields
-  var url =
-    "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=" +
-    encodeURIComponent(key);
-
-  var payload = {
-    contents: [{ role: "user", parts: [{ text: prompt }] }],
-    generationConfig: {
-      temperature: 0.4,
-      maxOutputTokens: kind === "title" ? 64 : kind === "coverCopy" ? 120 : 512
-    }
-  };
-
-  var res = UrlFetchApp.fetch(url, {
-    method: "post",
-    contentType: "application/json",
-    payload: JSON.stringify(payload),
-    muteHttpExceptions: true
-  });
-  var code = res.getResponseCode();
-  var body = res.getContentText();
-  if (code < 200 || code >= 300) {
-    throw new Error("Gemini HTTP " + code + ": " + body.slice(0, 200));
-  }
-  var json = JSON.parse(body);
-  var text = "";
-  try {
-    text = json.candidates[0].content.parts[0].text || "";
-  } catch (eParse) {
-    text = "";
-  }
-  text = String(text || "")
-    .replace(/^["'“”]+|["'“”]+$/g, "")
-    .replace(/^```[\s\S]*?\n/, "")
-    .replace(/\n```$/, "")
-    .trim();
-  return text;
 }
