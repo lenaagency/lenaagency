@@ -88,7 +88,27 @@ npm run dev
 | `authorBio2` / `authorBio2Ko` | 저자 2 소개 | 선택 |
 | `category` | `practical` / `fiction` / … | ✅ |
 | `synopsisKo` | 소개 | 권장 |
+| `title` · `coverCopy` · `synopsis` · `authorBio` | 영문 (비우면 메뉴로 자동 채우기 가능) | 권장 |
 | `cover` | 표지 이미지 (아래 참고) | 선택 |
+
+### 한글만 넣고 영문 자동 채우기
+
+`titleKo` · `coverCopyKo` · `synopsisKo` · `authorBioKo` 만 적어도 됩니다.  
+**영문 칸이 비어 있을 때만** 짧고 자연스러운 영어로 채웁니다 (이미 있는 영문은 유지).
+
+1. For sales 시트 → Apps Script에 `apps-script-for-sales-ALL.gs` 최신 붙여넣기  
+2. 시트 새로고침 → **LENA → 한글→영문 채우기 (빈 칸만)**  
+3. 사이트 강력 새로고침  
+
+| 메뉴 | 동작 |
+|------|------|
+| 한글→영문 채우기 (빈 칸만) | 비어 있는 `title` / `coverCopy` / `synopsis` / `authorBio` / `authorBio2` 만 채움 |
+| 한글→영문 덮어쓰기 (선택 행) | 선택한 행만 한글로 다시 번역 (기존 영문 삭제됨) |
+
+**(선택) 더 자연스러운 문장**  
+Apps Script → 프로젝트 설정 → 스크립트 속성  
+`GEMINI_API_KEY` = [Google AI Studio](https://aistudio.google.com/apikey) 키  
+없으면 구글 LanguageApp 기계번역 + 길이 다듬기를 씁니다.
 
 ### 공저자 2명 (같은 책)
 
