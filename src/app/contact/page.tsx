@@ -3,6 +3,7 @@
 import { FormEvent, useState } from "react";
 import Link from "next/link";
 import { useLang } from "@/context/LangContext";
+import NewsletterSubscribe from "@/components/NewsletterSubscribe";
 
 type Status = "idle" | "loading" | "success" | "error";
 
@@ -165,8 +166,11 @@ export default function ContactPage() {
       </div>
 
       <section className="section">
-        <div className="container contact-form-only">
+        <div className="container contact-stack">
           <div className="form-card">
+            <h2 className="contact-form-title">
+              {t("Send an inquiry", "문의 보내기")}
+            </h2>
             {status === "success" && (
               <div className="form-success show">
                 {t(
@@ -267,6 +271,8 @@ export default function ContactPage() {
               </p>
             </form>
           </div>
+
+          <NewsletterSubscribe />
         </div>
       </section>
     </>

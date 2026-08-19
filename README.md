@@ -70,3 +70,17 @@ No API key needed. On the **first** real submission, open that Gmail inbox and c
 
 ### Optional (Formspree)
 Set `FORMSPREE_FORM_ID` to your form id instead.
+
+## Newsletter subscribe (`/contact`)
+
+The contact page includes an email form with **checkboxes** that adds the address to Brevo via `POST /api/newsletter/subscribe`.
+
+| Site language | Checkbox options | Env var | List id |
+|---------------|------------------|---------|---------|
+| KO | 아동 | `BREVO_LIST_ID_KO_KIDS` | 40 |
+| KO | 영미·유럽 | `BREVO_LIST_ID_KO_ANGLO` | 38 |
+| KO | 일본 | `BREVO_LIST_ID_KO_JAPAN` | 39 |
+| EN | Adults | `BREVO_LIST_ID_EN_ADULTS` | 48 |
+| EN | Kids | `BREVO_LIST_ID_EN_KIDS` | 50 |
+
+Also set `BREVO_API_KEY` (same key as the weekly newsletter Apps Script). Redeploy on Vercel after adding env vars.
