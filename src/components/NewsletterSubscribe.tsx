@@ -8,7 +8,7 @@ type Status = "idle" | "loading" | "success" | "error";
 const KO_OPTIONS = [
   { id: "ko-kids", en: "Children’s titles", ko: "아동" },
   { id: "ko-anglo", en: "Anglo-European", ko: "영미·유럽" },
-  { id: "ko-japan", en: "Japan", ko: "일본" },
+  { id: "ko-japan", en: "Japan · Asia", ko: "일본·아시아" },
 ] as const;
 
 const EN_OPTIONS = [
