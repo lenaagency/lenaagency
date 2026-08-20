@@ -44,6 +44,8 @@ export default function NewsletterSubscribe() {
 
     const form = e.currentTarget;
     const fd = new FormData(form);
+    const name = String(fd.get("name") || "").trim();
+    const company = String(fd.get("company") || "").trim();
     const email = String(fd.get("email") || "").trim();
     const website = String(fd.get("website") || "");
 
@@ -69,6 +71,8 @@ export default function NewsletterSubscribe() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
+          name,
+          company,
           email,
           lang,
           lists: selected,
@@ -94,6 +98,7 @@ export default function NewsletterSubscribe() {
 
       setStatus("success");
       form.reset();
+      setSelected(options.map((o) => o.id));
     } catch {
       setStatus("error");
       setErrorMsg(
@@ -109,10 +114,7 @@ export default function NewsletterSubscribe() {
     <div className="form-card newsletter-card">
       <h2 className="newsletter-title">{t("Newsletter", "뉴스레터")}</h2>
       <p className="newsletter-lead">
-        {t(
-          "Get selected Korean titles for rights sales — pick the lists you want.",
-          "해외 판권용 한국 도서를 소개하는 뉴스레터입니다. 원하는 리스트를 골라 주세요."
-        )}
+        {t("Pick the list you want.", "원하시는 리스트를 골라주세요.")}
       </p>
 
       {status === "success" && (
@@ -149,8 +151,8 @@ export default function NewsletterSubscribe() {
         />
 
         <fieldset className="newsletter-lists">
-          <legend>
-            {t("Lists *", "구독 리스트 *")}
+          <legend className="sr-only">
+            {t("Lists", "리스트")}
           </legend>
           <div className="newsletter-checks">
             {options.map((o) => (
@@ -166,6 +168,26 @@ export default function NewsletterSubscribe() {
           </div>
         </fieldset>
 
+        <div className="form-row">
+          <label htmlFor="newsletter-name">{t("Name *", "이름 *")}</label>
+          <input
+            id="newsletter-name"
+            name="name"
+            required
+            autoComplete="name"
+          />
+        </div>
+        <div className="form-row">
+          <label htmlFor="newsletter-company">
+            {t("Company *", "회사 *")}
+          </label>
+          <input
+            id="newsletter-company"
+            name="company"
+            required
+            autoComplete="organization"
+          />
+        </div>
         <div className="form-row">
           <label htmlFor="newsletter-email">{t("Email *", "이메일 *")}</label>
           <input

@@ -165,11 +165,11 @@ export default function ContactPage() {
         </div>
       </div>
 
-      <section className="section">
-        <div className="container contact-stack">
+      <section className="section" id="inquiry">
+        <div className="container contact-form-only">
           <div className="form-card">
             <h2 className="contact-form-title">
-              {t("Send an inquiry", "문의 보내기")}
+              {t("Inquiry", "문의하기")}
             </h2>
             {status === "success" && (
               <div className="form-success show">
@@ -271,7 +271,11 @@ export default function ContactPage() {
               </p>
             </form>
           </div>
+        </div>
+      </section>
 
+      <section className="section section-alt" id="newsletter">
+        <div className="container contact-form-only">
           <NewsletterSubscribe />
         </div>
       </section>

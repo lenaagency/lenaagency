@@ -15,6 +15,8 @@ const LIST_ENV: Record<string, string> = {
 };
 
 type Body = {
+  name?: string;
+  company?: string;
   email?: string;
   lang?: string;
   lists?: string[];
@@ -62,9 +64,21 @@ export async function POST(req: Request) {
     return NextResponse.json({ ok: true });
   }
 
+  const name = String(body.name || "").trim();
+  const company = String(body.company || "").trim();
   const email = String(body.email || "").trim().toLowerCase();
   const lang = String(body.lang || "ko").trim().toLowerCase() === "en" ? "en" : "ko";
   const rawLists = Array.isArray(body.lists) ? body.lists.map(String) : [];
+
+  if (!name || !company) {
+    return NextResponse.json(
+      {
+        ok: false,
+        error: "Name and company are required. / 이름과 회사를 입력해 주세요.",
+      },
+      { status: 400 }
+    );
+  }
 
   if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     return NextResponse.json(
@@ -123,24 +137,71 @@ export async function POST(req: Request) {
     );
   }
 
-  try {
-    const res = await fetch(`${BREVO_API}/contacts`, {
+  const headers = {
+    accept: "application/json",
+    "content-type": "application/json",
+    "api-key": apiKey,
+  };
+
+  async function createContact(attributes: Record<string, string>) {
+    return fetch(`${BREVO_API}/contacts`, {
       method: "POST",
-      headers: {
-        accept: "application/json",
-        "content-type": "application/json",
-        "api-key": apiKey,
-      },
+      headers,
       body: JSON.stringify({
         email,
         listIds,
         updateEnabled: true,
-        attributes: {
-          LANGUAGE: lang === "en" ? "EN" : "KO",
-          SOURCE: "website",
-        },
+        attributes,
       }),
     });
+  }
+
+  try {
+    // Prefer full profile; if COMPANY (or other) attr is missing in Brevo, retry leaner payload
+    let res = await createContact({
+      FNAME: name,
+      COMPANY: company,
+      LANGUAGE: lang === "en" ? "EN" : "KO",
+      SOURCE: "website",
+    });
+
+    if (!(res.ok || res.status === 204)) {
+      const first = (await res.json().catch(() => ({}))) as {
+        code?: string;
+        message?: string;
+      };
+      const attrIssue = /attribute|invalid|company/i.test(
+        String(first.message || first.code || "")
+      );
+      if (res.status === 400 && attrIssue) {
+        res = await createContact({
+          FNAME: `${name} · ${company}`.slice(0, 120),
+          LANGUAGE: lang === "en" ? "EN" : "KO",
+          SOURCE: "website",
+        });
+      } else if (
+        res.status === 400 &&
+        /already|duplicate|exist/i.test(String(first.message || first.code || ""))
+      ) {
+        return NextResponse.json({
+          ok: true,
+          lang,
+          listIds,
+          lists: listKeys,
+          existing: true,
+        });
+      } else {
+        console.error("[newsletter] brevo failed", res.status, first);
+        return NextResponse.json(
+          {
+            ok: false,
+            error:
+              "Failed to subscribe. Please try again later. / 구독 신청에 실패했습니다. 잠시 후 다시 시도해 주세요.",
+          },
+          { status: 502 }
+        );
+      }
+    }
 
     if (res.ok || res.status === 204) {
       return NextResponse.json({ ok: true, lang, listIds, lists: listKeys });
