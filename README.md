@@ -71,9 +71,9 @@ No API key needed. On the **first** real submission, open that Gmail inbox and c
 ### Optional (Formspree)
 Set `FORMSPREE_FORM_ID` to your form id instead.
 
-## Newsletter subscribe (`/contact`)
+## Newsletter subscribe (`/newsletter`)
 
-The contact page includes an email form with **checkboxes** that adds the address to Brevo via `POST /api/newsletter/subscribe`.
+The newsletter page (`/newsletter`) has an email form with **checkboxes** that adds the address to Brevo via `POST /api/newsletter/subscribe`. Inquiry remains on `/contact`.
 
 | Site language | Checkbox options | Env var | List id |
 |---------------|------------------|---------|---------|
