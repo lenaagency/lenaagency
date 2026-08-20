@@ -3,7 +3,6 @@
 import { FormEvent, useState } from "react";
 import Link from "next/link";
 import { useLang } from "@/context/LangContext";
-import NewsletterSubscribe from "@/components/NewsletterSubscribe";
 
 type Status = "idle" | "loading" | "success" | "error";
 
@@ -153,9 +152,9 @@ export default function ContactPage() {
         <div className="container">
           <div className="breadcrumb">
             <Link href="/">{t("Home", "홈")}</Link> /{" "}
-            <span>{t("Contact", "문의")}</span>
+            <span>{t("Inquiry", "문의하기")}</span>
           </div>
-          <h1>{t("Contact", "문의")}</h1>
+          <h1>{t("Inquiry", "문의하기")}</h1>
           <p>
             {t(
               "Send a clear brief. LENA Agency will follow up with next steps.",
@@ -165,12 +164,9 @@ export default function ContactPage() {
         </div>
       </div>
 
-      <section className="section" id="inquiry">
+      <section className="section">
         <div className="container contact-form-only">
           <div className="form-card">
-            <h2 className="contact-form-title">
-              {t("Inquiry", "문의하기")}
-            </h2>
             {status === "success" && (
               <div className="form-success show">
                 {t(
@@ -271,12 +267,6 @@ export default function ContactPage() {
               </p>
             </form>
           </div>
-        </div>
-      </section>
-
-      <section className="section section-alt" id="newsletter">
-        <div className="container contact-form-only">
-          <NewsletterSubscribe />
         </div>
       </section>
     </>

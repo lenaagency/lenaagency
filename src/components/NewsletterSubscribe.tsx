@@ -16,7 +16,16 @@ const EN_OPTIONS = [
   { id: "en-kids", en: "Kids", ko: "Kids" },
 ] as const;
 
-export default function NewsletterSubscribe() {
+type Props = {
+  /** When false, page hero already shows the title */
+  showTitle?: boolean;
+  showLead?: boolean;
+};
+
+export default function NewsletterSubscribe({
+  showTitle = true,
+  showLead = true,
+}: Props) {
   const { lang, t } = useLang();
   const [status, setStatus] = useState<Status>("idle");
   const [errorMsg, setErrorMsg] = useState("");
@@ -112,10 +121,14 @@ export default function NewsletterSubscribe() {
 
   return (
     <div className="form-card newsletter-card">
-      <h2 className="newsletter-title">{t("Newsletter", "뉴스레터")}</h2>
-      <p className="newsletter-lead">
-        {t("Pick the list you want.", "원하시는 리스트를 골라주세요.")}
-      </p>
+      {showTitle && (
+        <h2 className="newsletter-title">{t("Newsletter", "뉴스레터")}</h2>
+      )}
+      {showLead && (
+        <p className="newsletter-lead">
+          {t("Pick the list you want.", "원하시는 리스트를 골라주세요.")}
+        </p>
+      )}
 
       {status === "success" && (
         <div className="form-success show">

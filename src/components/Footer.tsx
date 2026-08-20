@@ -63,10 +63,8 @@ export default function Footer() {
 
           <div className="footer-col">
             <h4>{t("Contact", "문의")}</h4>
-            <Link href="/contact#inquiry">{t("Inquiry", "문의하기")}</Link>
-            <Link href="/contact#newsletter">
-              {t("Newsletter", "뉴스레터")}
-            </Link>
+            <Link href="/contact">{t("Inquiry", "문의하기")}</Link>
+            <Link href="/newsletter">{t("Newsletter", "뉴스레터")}</Link>
             <Link href="/login">{t("Member login", "회원 로그인")}</Link>
             <Link href="/royalties">{t("Royalty reports", "인세보고")}</Link>
           </div>

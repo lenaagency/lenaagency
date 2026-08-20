@@ -60,6 +60,20 @@ export default function Header() {
               {t(item.en, item.ko)}
             </Link>
           ))}
+          <Link
+            href="/newsletter"
+            className={`nav-cta-mobile${pathname.startsWith("/newsletter") ? " active" : ""}`}
+            onClick={() => setOpen(false)}
+          >
+            {t("Newsletter", "뉴스레터")}
+          </Link>
+          <Link
+            href="/contact"
+            className={`nav-cta-mobile${pathname.startsWith("/contact") ? " active" : ""}`}
+            onClick={() => setOpen(false)}
+          >
+            {t("Inquiry", "문의하기")}
+          </Link>
           <div className="lang-switch" style={{ marginLeft: 8 }}>
             <button
               type="button"
@@ -78,7 +92,7 @@ export default function Header() {
           </div>
         </nav>
 
-        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+        <div className="header-actions">
           <a
             className="header-social"
             href={IG}
@@ -88,7 +102,18 @@ export default function Header() {
           >
             <IgIcon />
           </a>
-          <Link className="header-cta" href="/contact">
+          <Link
+            className="header-cta header-cta-secondary"
+            href="/newsletter"
+            onClick={() => setOpen(false)}
+          >
+            {t("Newsletter", "뉴스레터")}
+          </Link>
+          <Link
+            className="header-cta"
+            href="/contact"
+            onClick={() => setOpen(false)}
+          >
             {t("Inquiry", "문의하기")}
           </Link>
         </div>
