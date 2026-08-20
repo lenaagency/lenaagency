@@ -8,6 +8,7 @@ import type { ExportTitle, ImportHighlight } from "@/lib/types";
 import { normalizeCoverUrl } from "@/lib/cover-url";
 import { authorHref, bookAuthors } from "@/lib/export-authors";
 import { RichText, plainText } from "@/components/RichText";
+import { formatPubDate } from "@/lib/pub-date";
 
 type Badge = "export" | "import" | "none";
 
@@ -166,7 +167,8 @@ export function ImportCard({
 }) {
   const { t } = useLang();
   const title = t(book.title, book.titleKo);
-  const year = book.pubYear ? ` · ${book.pubYear}` : "";
+  const pub = formatPubDate(book.pubYear, book.pubMonth);
+  const year = pub ? ` · ${pub}` : "";
 
   return (
     <div className="title-card import-card">

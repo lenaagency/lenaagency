@@ -1,5 +1,6 @@
 import type { ExportTitle } from "@/lib/types";
 import { normalizeCoverUrl, parseImageUrlList } from "@/lib/cover-url";
+import { parsePubDate } from "@/lib/pub-date";
 import {
   EXPORT_CATEGORIES,
   EXPORT_CATEGORY_META,
@@ -154,7 +155,12 @@ const HEADER_ALIASES: Record<string, string> = {
   pubyear: "pubYear",
   pub_year: "pubYear",
   year: "pubYear",
+  pubdate: "pubYear",
+  pub_date: "pubYear",
   출간연도: "pubYear",
+  출간년월: "pubYear",
+  출간년_월: "pubYear",
+  출간년월일: "pubYear",
   age: "age",
   대상: "age",
   연령: "age",
@@ -434,7 +440,9 @@ export function rowsToExportTitles(
     const pagesRaw = get("pages").trim();
     const pages = pagesRaw ? parseInt(pagesRaw, 10) || 0 : 0;
     const yearRaw = get("pubYear").trim();
-    const pubYear = yearRaw ? parseInt(yearRaw, 10) || 0 : 0;
+    const { year: pubYear, month: pubMonth } = yearRaw
+      ? parsePubDate(yearRaw)
+      : { year: 0 };
 
     // Interior previews: preview1–4 and/or combined `preview` cell
     const previewFromParts = ["preview1", "preview2", "preview3", "preview4"]
@@ -481,6 +489,7 @@ export function rowsToExportTitles(
       rightsSoldKo: get("rightsSoldKo") || undefined,
       pages,
       pubYear,
+      pubMonth,
       age: get("age") || "",
       // series = English, seriesKo/시리즈명 = Korean (fallback to the other if one empty)
       series: get("series") || get("seriesKo") || undefined,

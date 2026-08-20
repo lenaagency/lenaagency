@@ -9,6 +9,7 @@ import { useExportTitles } from "@/hooks/useExportTitles";
 import { authorHref, bookAuthors } from "@/lib/export-authors";
 import { RichText, plainText } from "@/components/RichText";
 import { bookCategoryIds } from "@/lib/export-categories";
+import { formatPubDate } from "@/lib/pub-date";
 
 export default function ExportDetailPage() {
   const params = useParams();
@@ -300,8 +301,8 @@ export default function ExportDetailPage() {
                   )}
                   {hasYear && (
                     <tr>
-                      <th>{t("Year", "출간연도")}</th>
-                      <td>{book.pubYear}</td>
+                      <th>{t("Year / Month", "출간년/월")}</th>
+                      <td>{formatPubDate(book.pubYear, book.pubMonth)}</td>
                     </tr>
                   )}
                   {hasRightsNote && (

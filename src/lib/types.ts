@@ -32,7 +32,10 @@ export type ExportTitle = {
   rightsSold?: string;
   rightsSoldKo?: string;
   pages: number;
+  /** Publication year (from sheet `pubYear`) */
   pubYear: number;
+  /** Publication month 1–12 when sheet has e.g. `2024/3` */
+  pubMonth?: number;
   age: string;
   /** Series name (English) — sheet: series / seriesEn / 영문시리즈명 */
   series?: string;
@@ -69,6 +72,8 @@ export type ImportHighlight = {
   koreanPublisher: string;
   country: string;
   pubYear: number | null;
+  /** Optional month 1–12 when known */
+  pubMonth?: number | null;
   cumSold: number;
   cover?: string;
   colors: string[];

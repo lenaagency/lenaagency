@@ -88,6 +88,7 @@ npm run dev
 | `authorBio2` / `authorBio2Ko` | 저자 2 소개 | 선택 |
 | `category` | `practical` / `fiction` / … | ✅ |
 | `synopsisKo` | 소개 | 권장 |
+| `pubYear` | 출간년/월 · `2024` 또는 `2024/3` (`2024-03` · `2024.3`도 가능) | 권장 |
 | `title` · `coverCopy` · `synopsis` · `authorBio` | 영문 (비우면 메뉴로 자동 채우기 가능) | 권장 |
 | `cover` | 표지 이미지 (아래 참고) | 선택 |
 
