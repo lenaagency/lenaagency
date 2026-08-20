@@ -15,9 +15,11 @@ export const EXPORT_CATEGORY_META: Record<
   { label: string; labelKo: string }
 > = {
   fiction: { label: "Fiction", labelKo: "소설" },
+  essay: { label: "Essay", labelKo: "에세이" },
   nonfiction: { label: "Nonfiction", labelKo: "비소설" },
   business: { label: "Business/Economics", labelKo: "경제경영" },
   "self-help": { label: "Self-help", labelKo: "자기계발" },
+  psychology: { label: "Psychology", labelKo: "심리" },
   professional: { label: "Professional", labelKo: "직업/실무" },
   "science-tech": { label: "Science/Technology", labelKo: "과학/기술" },
   humanities: {
@@ -42,6 +44,10 @@ export const EXPORT_CATEGORY_META: Record<
     label: "Business/Economics",
     labelKo: "경제경영",
   },
+  "business-self-help": {
+    label: "Business/Economics",
+    labelKo: "경제경영",
+  },
   "science-technology": {
     label: "Science/Technology",
     labelKo: "과학/기술",
@@ -54,16 +60,17 @@ export const EXPORT_CATEGORY_META: Record<
   "children-selfhelp": { label: "Early Grade", labelKo: "아동(7-9)" },
   selfhelp: { label: "Self-help", labelKo: "자기계발" },
   practical: { label: "Lifestyle/Health", labelKo: "실용/건강" },
-  essay: { label: "Nonfiction", labelKo: "비소설" },
   children: { label: "Middle Grade", labelKo: "아동(10-12)" },
 };
 
 /** Preferred display order = live Categories sheet order */
 export const EXPORT_CATEGORY_ORDER = [
   "fiction",
+  "essay",
   "nonfiction",
   "business",
   "self-help",
+  "psychology",
   "professional",
   "science-tech",
   "humanities",
@@ -104,12 +111,16 @@ export function isContentCategoryId(id: string): boolean {
 /** Old / alternate id → current sheet id */
 export const CATEGORY_ID_ALIASES: Record<string, string> = {
   fiction: "fiction",
+  essay: "essay",
   nonfiction: "nonfiction",
   business: "business",
   "business-selfhelp": "business",
+  "business-self-help": "business",
   businessselfhelp: "business",
   "self-help": "self-help",
   selfhelp: "self-help",
+  psychology: "psychology",
+  psych: "psychology",
   professional: "professional",
   profession: "professional",
   "science-tech": "science-tech",
@@ -145,7 +156,6 @@ export const CATEGORY_ID_ALIASES: Record<string, string> = {
   comics: "comics",
   // legacy content
   practical: "lifestyle",
-  essay: "nonfiction",
   children: "middle",
   childrens: "middle",
   "children-fiction": "middle",
@@ -156,13 +166,15 @@ export const CATEGORY_ID_ALIASES: Record<string, string> = {
   "children-selfhelp": "early",
   // Korean labels (normalized without spaces / slashes / parens)
   소설: "fiction",
+  에세이: "essay",
   논픽션: "nonfiction",
   비소설: "nonfiction",
   인문비소설: "nonfiction",
-  인문에세이: "nonfiction",
+  인문에세이: "essay",
   경제경영: "business",
   자기계발: "self-help",
   자기계발경영: "self-help",
+  심리: "psychology",
   직업실무: "professional",
   직업: "professional",
   실무: "professional",
@@ -370,7 +382,11 @@ export function bookMatchesAgeFilter(
   return ageBandIdsFromText(book.age).includes(id);
 }
 
-/** Ensure static/API titles always have categories[] */
+/**
+ * Ensure static/API titles always have categories[].
+ * Prefer already-resolved per-id labels from the sheet; never fall back to the
+ * *primary* category label for secondary ids (that made psychology show as 인문/사회).
+ */
 export function withNormalizedCategories<
   T extends {
     category: string;
@@ -383,12 +399,26 @@ export function withNormalizedCategories<
 >(book: T): T {
   const ids = bookCategoryIds(book);
   const list = ids.length ? ids : ["nonfiction"];
-  const labels = list.map(
-    (id) => EXPORT_CATEGORY_META[id]?.label || book.categoryLabel || id
-  );
-  const labelsKo = list.map(
-    (id) => EXPORT_CATEGORY_META[id]?.labelKo || book.categoryLabelKo || id
-  );
+
+  const labelFor = (id: string, which: "en" | "ko"): string => {
+    const idx =
+      book.categories?.findIndex((c) => normalizeCategoryId(c) === id) ?? -1;
+    const fromSheet =
+      which === "en"
+        ? idx >= 0
+          ? book.categoryLabels?.[idx]?.trim()
+          : undefined
+        : idx >= 0
+          ? book.categoryLabelsKo?.[idx]?.trim()
+          : undefined;
+    if (fromSheet) return fromSheet;
+    const meta = EXPORT_CATEGORY_META[id];
+    if (meta) return which === "en" ? meta.label : meta.labelKo;
+    return id;
+  };
+
+  const labels = list.map((id) => labelFor(id, "en"));
+  const labelsKo = list.map((id) => labelFor(id, "ko"));
   return {
     ...book,
     category: list[0],
