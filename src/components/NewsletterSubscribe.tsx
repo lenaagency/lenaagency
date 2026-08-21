@@ -6,14 +6,14 @@ import { useLang } from "@/context/LangContext";
 type Status = "idle" | "loading" | "success" | "error";
 
 const KO_OPTIONS = [
-  { id: "ko-kids", en: "Children’s titles", ko: "아동" },
+  { id: "ko-kids", en: "Children & Youth", ko: "아동/청소년" },
   { id: "ko-anglo", en: "Anglo-European", ko: "영미·유럽" },
   { id: "ko-japan", en: "Japan · Asia", ko: "일본·아시아" },
 ] as const;
 
 const EN_OPTIONS = [
   { id: "en-adults", en: "Adults", ko: "Adults" },
-  { id: "en-kids", en: "Kids", ko: "Kids" },
+  { id: "en-kids", en: "Children & Youth", ko: "Children & Youth" },
 ] as const;
 
 type Props = {
