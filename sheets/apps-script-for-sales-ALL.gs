@@ -1123,8 +1123,6 @@ function applyRecommendedTitleCategories() {
       series: "Deca Fusion Math Kids",
       seriesKo: "데카 융합수학 키즈",
     },
-    "first-analects-mencius": { category: "middle" },
-    "three-kingdoms-journey": { category: "middle" },
     "margin-parenting": { category: "parenting" },
     "five-year-old-sel": { category: "parenting" },
     "inflammation-on-the-table": { category: "lifestyle" },
