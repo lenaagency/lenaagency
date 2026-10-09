@@ -141,6 +141,11 @@ function applyRecommendedTitleCategories() {
       series: "We Lend You the Museum",
       seriesKo: "미술관을 빌려드립니다",
     },
+    "cat-math-kids": {
+      category: "baby,early",
+      series: "Deca Fusion Math Kids",
+      seriesKo: "데카 융합수학 키즈",
+    },
     "land-you-the-museum-nordic": {
       category: "arts,essay",
       series: "We Lend You the Museum",

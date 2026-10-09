@@ -6,6 +6,55 @@ import type { ExportTitle } from "@/lib/types";
  */
 export const PENDING_EXPORT_TITLES: ExportTitle[] = [
   {
+    id: "cat-math-kids",
+    title: "Cat Math Kids: A–E Set",
+    titleKo: "고양이 수학 키즈 A~E 세트",
+    author: "강미선",
+    authorEn: "Miseon Kang",
+    category: "baby",
+    categoryLabel: "Baby/Toddler",
+    categoryLabelKo: "아동(0-6)",
+    categories: ["baby", "early"],
+    categoryLabels: ["Baby/Toddler", "Early Grade"],
+    categoryLabelsKo: ["아동(0-6)", "아동(7-9)"],
+    series: "Deca Fusion Math Kids",
+    seriesKo: "데카 융합수학 키즈",
+    publisher: "서사원주니어",
+    publisherEn: "Seosawon Junior",
+    country: "Korea",
+    format: [],
+    rightsNote: "",
+    rightsNoteKo: "",
+    territories: "",
+    territoriesKo: "",
+    pages: 180,
+    pubYear: 2026,
+    pubMonth: 9,
+    age: "5–7",
+    coverCopy:
+      "First math at ages 5–7 with kittens · Picture-book activity set in five volumes · By math-education PhD Miseon Kang",
+    coverCopyKo:
+      "5~7세 첫 수학은 아기 고양이와 · 그림책 같은 활동북 전5권 · 데카르트 수학책방 강미선 박사",
+    synopsis:
+      "A five-volume preschool math set filled with kittens—from birth to a first-birthday party. Counting, shapes, addition and subtraction, clocks and calendars hide in the everyday work of caring for cats, learned the way a picture book is read.<br /><br />This is math you color, path-find, and compare—not math you only read. Miseon Kang, a PhD in mathematics education who runs Korea’s first specialist math bookstore, Descartes, wrote it as a bridge from kindergarten to early elementary.<br /><br />The point is not finishing every problem. It is that a child’s first impression of math can be warm.",
+    synopsisKo:
+      "전5권으로 구성된 『고양이 수학 키즈』는 귀여운 아기 고양이가 가득한 유아 수학 활동북이다. 아기 고양이의 탄생에서 한 살 생일 파티까지, 돌보는 일상에 숨은 수 세기·도형·덧셈·뺄셈·시계와 달력을 그림책처럼 익힌다.<br /><br />글로만 배우는 수학이 아니라 색칠하고, 길을 찾고, 길이를 비교하며 체험하는 수학. 국내 최초 수학 전문 서점 데카르트 수학책방을 운영하는 강미선 수학교육학 박사가 누리과정부터 초등 저학년까지 잇는 유초이음으로 썼다.<br /><br />무엇보다 중요한 건 문제를 다 푸는 것보다 수학에 재미를 느끼는 것. 사랑스러운 아기 고양이와 함께라면 수학의 첫인상이 따뜻해진다.",
+    authorBio:
+      "Miseon Kang holds a BA in mathematics education from Sungkyunkwan University and an MA and PhD from Ewha Womans University. Years as a high-school math teacher and exam lecturer convinced her that later success depends on grasping concepts and principles early. She researches how to teach those concepts and how to make children actually like math, and she publishes and lectures widely on both. She hosted the Naver Audio Clip “Miseon Kang’s Math Counseling Office,” now teaches mathematics education at university, and runs Descartes, Korea’s first specialist math bookstore. Her twenty-odd books include <i>Math Is Rice</i>, the Fraction Method series, <i>Hong Jeong-ha, Joseon’s God of Mathematics</i>, and <i>Kang-ssaem’s Math Counseling Office</i>.",
+    authorBioKo:
+      "성균관대학교 수학교육과에서 학사 학위를, 이화여자대학교 수학교육학과에서 석사와 박사 학위를 받았다. 고등학교 수학 교사와 대입 단과 수학 강사로 가르치며, 기초 개념과 원리를 제대로 익히는 일이 얼마나 중요한지 절감했다. 개념을 잘 가르치는 법과 아이들에게 수학의 흥미를 불어넣는 법을 연구하고, 그 결과를 책과 강의로 알리며 수학교육 대중화에 힘쓰고 있다. 네이버 오디오클립 「강미선의 수학 상담소」를 진행했고, 지금은 대학교에서 수학교육학을 강의한다. 국내 최초 수학 전문 서점 데카르트 수학책방 운영자이기도 하다. 저서로 「분수 비법 시리즈」, 『수학은 밥이다』, 『조선 수학의 신, 홍정하』, 『강쌤의 수학상담소』 등 20여 권이 있다.",
+    colors: ["#3dccc4", "#ff7a3c"],
+    featured: false,
+    new: true,
+    cover: "/covers/cat-math-kids.jpg",
+    previewImages: [
+      "/previews/cat-math-kids/1.jpg",
+      "/previews/cat-math-kids/2.jpg",
+      "/previews/cat-math-kids/3.jpg",
+      "/previews/cat-math-kids/4.jpg",
+    ],
+  },
+  {
     id: "land-you-the-museum-italy",
     title: "We Lend You the Museum: Italy",
     titleKo: "미술관을 빌려드립니다: 이탈리아",
