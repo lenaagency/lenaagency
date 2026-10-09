@@ -146,16 +146,11 @@ function applyRecommendedTitleCategories() {
       series: "Deca Fusion Math Kids",
       seriesKo: "데카 융합수학 키즈",
     },
-    "margin-parenting": {
-      category: "parenting",
-      series: "Right Education Series",
-      seriesKo: "바른 교육 시리즈",
-    },
-    "five-year-old-sel": {
-      category: "parenting",
-      series: "Right Education Series",
-      seriesKo: "바른 교육 시리즈",
-    },
+    "cat-math": { category: "early,middle" },
+    "first-analects-mencius": { category: "middle" },
+    "three-kingdoms-journey": { category: "middle" },
+    "margin-parenting": { category: "parenting" },
+    "five-year-old-sel": { category: "parenting" },
     "inflammation-on-the-table": {
       category: "lifestyle",
     },
