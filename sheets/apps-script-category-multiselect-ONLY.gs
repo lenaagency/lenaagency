@@ -136,6 +136,11 @@ function applyRecommendedTitleCategories() {
       series: "We Lend You the Museum",
       seriesKo: "미술관을 빌려드립니다",
     },
+    "land-you-the-museum-nordic": {
+      category: "arts,essay",
+      series: "We Lend You the Museum",
+      seriesKo: "미술관을 빌려드립니다",
+    },
     "pretty-good-day": {
       category: "ya,fiction",
     },

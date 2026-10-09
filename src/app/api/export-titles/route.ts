@@ -4,6 +4,7 @@ import {
   EXPORT_CATEGORIES,
   withNormalizedCategories,
 } from "@/lib/export-categories";
+import { withPendingExportTitles } from "@/lib/export-pending";
 import { withLocalPreviews } from "@/lib/local-previews";
 import {
   fetchExportCatalogFromSheet,
@@ -25,9 +26,9 @@ export async function GET() {
     if (sheetConfigured) {
       const catalog = await fetchExportCatalogFromSheet();
       if (catalog && catalog.titles.length > 0) {
-        const titles = withLocalPreviews(catalog.titles).map(
-          withNormalizedCategories
-        );
+        const titles = withLocalPreviews(
+          withPendingExportTitles(catalog.titles)
+        ).map(withNormalizedCategories);
         const withPreview = titles.filter(
           (t) => t.previewImages && t.previewImages.length > 0
         ).length;
@@ -53,9 +54,9 @@ export async function GET() {
       }
     }
 
-    const staticTitles = withLocalPreviews(LENA.exportTitles).map(
-      withNormalizedCategories
-    );
+    const staticTitles = withLocalPreviews(
+      withPendingExportTitles(LENA.exportTitles)
+    ).map(withNormalizedCategories);
     return NextResponse.json({
       source: "static",
       count: staticTitles.length,
@@ -70,10 +71,13 @@ export async function GET() {
   } catch (err) {
     const message = err instanceof Error ? err.message : "Unknown error";
     console.error("[export-titles]", message);
+    const fallbackTitles = withLocalPreviews(
+      withPendingExportTitles(LENA.exportTitles)
+    ).map(withNormalizedCategories);
     return NextResponse.json({
       source: "static",
-      count: LENA.exportTitles.length,
-      titles: withLocalPreviews(LENA.exportTitles).map(withNormalizedCategories),
+      count: fallbackTitles.length,
+      titles: fallbackTitles,
       categories: EXPORT_CATEGORIES,
       categoriesSource: "static",
       updatedAt: new Date().toISOString(),
