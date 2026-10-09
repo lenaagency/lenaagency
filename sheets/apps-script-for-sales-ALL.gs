@@ -1123,6 +1123,23 @@ function applyRecommendedTitleCategories() {
       series: "Deca Fusion Math Kids",
       seriesKo: "데카 융합수학 키즈",
     },
+    "margin-parenting": {
+      category: "parenting",
+      series: "Right Education Series",
+      seriesKo: "바른 교육 시리즈",
+    },
+    "five-year-old-sel": {
+      category: "parenting",
+      series: "Right Education Series",
+      seriesKo: "바른 교육 시리즈",
+    },
+    "inflammation-on-the-table": { category: "lifestyle" },
+    "banggibong": {
+      category: "middle",
+      series: "Seosawon Middle-Grade Stories",
+      seriesKo: "서사원 중학년 동화",
+    },
+    "philosophy-beats-anxiety": { category: "humanities" },
     "pretty-good-day": { category: "ya,fiction" },
   };
 
