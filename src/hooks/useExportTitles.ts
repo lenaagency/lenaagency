@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { LENA } from "@/lib/data";
 import { EXPORT_CATEGORIES, type ExportCategory } from "@/lib/export-categories";
+import { withPendingExportTitles } from "@/lib/export-pending";
 import type { ExportTitle } from "@/lib/types";
 
 type Source = "static" | "google_sheets" | "loading";
@@ -19,7 +20,7 @@ type State = {
 
 export function useExportTitles() {
   const [state, setState] = useState<State>({
-    titles: LENA.exportTitles,
+    titles: withPendingExportTitles(LENA.exportTitles),
     categories: EXPORT_CATEGORIES,
     loading: true,
     source: "loading",
@@ -41,7 +42,7 @@ export function useExportTitles() {
         titles:
           Array.isArray(data.titles) && data.titles.length
             ? data.titles
-            : LENA.exportTitles,
+            : withPendingExportTitles(LENA.exportTitles),
         categories:
           Array.isArray(data.categories) && data.categories.length
             ? data.categories
@@ -55,7 +56,9 @@ export function useExportTitles() {
     } catch (e) {
       setState((prev) => ({
         ...prev,
-        titles: prev.titles.length ? prev.titles : LENA.exportTitles,
+        titles: prev.titles.length
+          ? prev.titles
+          : withPendingExportTitles(LENA.exportTitles),
         categories: prev.categories.length ? prev.categories : EXPORT_CATEGORIES,
         loading: false,
         source: "static",
