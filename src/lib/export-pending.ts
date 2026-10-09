@@ -187,8 +187,8 @@ export const PENDING_EXPORT_TITLES: ExportTitle[] = [
     categories: ["psychology"],
     categoryLabels: ["Psychology"],
     categoryLabelsKo: ["심리"],
-    series: "In Praise of Copying",
-    seriesKo: "필사 예찬",
+    series: "",
+    seriesKo: "",
     publisher: "서사원",
     publisherEn: "Seosawon",
     country: "Korea",
@@ -202,9 +202,9 @@ export const PENDING_EXPORT_TITLES: ExportTitle[] = [
     pubMonth: 11,
     age: "",
     coverCopy:
-      "A real adult does not suppress feeling—they can work with it · 100 days of psychology, copying, and healing writing · Volume 2 of In Praise of Copying",
+      "A real adult does not suppress feeling—they can work with it · 100 days of psychology, copying, and healing writing",
     coverCopyKo:
-      "진짜 어른은 감정을 다스리는 게 아니라 다룰 줄 아는 사람이다 · 심리학·필사·치유 글쓰기 100일 · 필사 예찬 2",
+      "진짜 어른은 감정을 다스리는 게 아니라 다룰 줄 아는 사람이다 · 심리학·필사·치유 글쓰기 100일",
     synopsis:
       "Feelings too fine to name leave grit in the body. Some people would rather throw the feeling away. Counselor Kyeongeun Han’s reply is blunt: feeling is the self. To discard it is to discard yourself.<br /><br />A hundred days, five minutes a day. Copy one line from a philosopher, psychologist, or writer; read a short page of psychology; answer two questions. Five movements: recognize, accept, become the subject, live with others, care for yourself.<br /><br />The point is not to become someone who never feels. It is to become someone who can stay with a feeling until it is ready to leave.",
     synopsisKo:
@@ -478,8 +478,8 @@ export const PENDING_EXPORT_TITLES: ExportTitle[] = [
     categories: ["middle"],
     categoryLabels: ["Middle Grade"],
     categoryLabelsKo: ["아동(10-12)"],
-    series: "Seosawon Middle-Grade Stories",
-    seriesKo: "서사원 중학년 동화",
+    series: "",
+    seriesKo: "",
     publisher: "서사원주니어",
     publisherEn: "Seosawon Junior",
     country: "Korea",
@@ -572,8 +572,8 @@ export const PENDING_EXPORT_TITLES: ExportTitle[] = [
     categories: ["baby", "early"],
     categoryLabels: ["Baby/Toddler", "Early Grade"],
     categoryLabelsKo: ["아동(0-6)", "아동(7-9)"],
-    series: "Deca Fusion Math Kids",
-    seriesKo: "데카 융합수학 키즈",
+    series: "",
+    seriesKo: "",
     publisher: "서사원주니어",
     publisherEn: "Seosawon Junior",
     country: "Korea",
@@ -710,7 +710,24 @@ export const PENDING_EXPORT_TITLES: ExportTitle[] = [
 ];
 
 export function withPendingExportTitles(titles: ExportTitle[]): ExportTitle[] {
-  const ids = new Set(titles.map((t) => t.id));
-  const extra = PENDING_EXPORT_TITLES.filter((t) => !ids.has(t.id));
-  return extra.length ? [...extra, ...titles] : titles;
+  const pendingById = new Map(
+    PENDING_EXPORT_TITLES.map((t) => [t.id, t] as const)
+  );
+  const sheetIds = new Set(titles.map((t) => t.id));
+  const merged = titles.map((t) => {
+    const p = pendingById.get(t.id);
+    if (!p) return t;
+    const next = { ...t };
+    if ("series" in p || "seriesKo" in p) {
+      next.series = p.series || "";
+      next.seriesKo = p.seriesKo || "";
+    }
+    if (p.id === "emotion-copying") {
+      next.coverCopy = p.coverCopy;
+      next.coverCopyKo = p.coverCopyKo;
+    }
+    return next;
+  });
+  const extra = PENDING_EXPORT_TITLES.filter((t) => !sheetIds.has(t.id));
+  return extra.length ? [...extra, ...merged] : merged;
 }

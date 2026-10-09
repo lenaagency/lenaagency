@@ -141,21 +141,13 @@ function applyRecommendedTitleCategories() {
       series: "We Lend You the Museum",
       seriesKo: "미술관을 빌려드립니다",
     },
-    "cat-math-kids": {
-      category: "baby,early",
-      series: "Deca Fusion Math Kids",
-      seriesKo: "데카 융합수학 키즈",
-    },
+    "cat-math-kids": { category: "baby,early" },
     "margin-parenting": { category: "parenting" },
     "five-year-old-sel": { category: "parenting" },
     "inflammation-on-the-table": {
       category: "lifestyle",
     },
-    "banggibong": {
-      category: "middle",
-      series: "Seosawon Middle-Grade Stories",
-      seriesKo: "서사원 중학년 동화",
-    },
+    "banggibong": { category: "middle" },
     "philosophy-beats-anxiety": {
       category: "humanities",
     },
@@ -170,11 +162,7 @@ function applyRecommendedTitleCategories() {
     "yoriharu-habit-diet": { category: "lifestyle" },
     "thepos-swim-lessons": { category: "lifestyle" },
     "write-nietzsche": { category: "humanities" },
-    "emotion-copying": {
-      category: "psychology",
-      series: "In Praise of Copying",
-      seriesKo: "필사 예찬",
-    },
+    "emotion-copying": { category: "psychology" },
     "menopause-diet": { category: "lifestyle" },
     "today-too-ok": { category: "essay" },
     "ppeoni-topping-weaning": { category: "parenting" },
