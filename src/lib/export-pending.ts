@@ -6,53 +6,6 @@ import type { ExportTitle } from "@/lib/types";
  */
 export const PENDING_EXPORT_TITLES: ExportTitle[] = [
   {
-    id: "cat-math",
-    title: "Cat Math: A–D Set",
-    titleKo: "고양이 수학 A~D 세트",
-    author: "켈리 피어슨",
-    authorEn: "Kelli Pearson",
-    category: "early",
-    categoryLabel: "Early Grade",
-    categoryLabelKo: "아동(7-9)",
-    categories: ["early", "middle"],
-    categoryLabels: ["Early Grade", "Middle Grade"],
-    categoryLabelsKo: ["아동(7-9)", "아동(10-12)"],
-    publisher: "서사원주니어",
-    publisherEn: "Seosawon Junior",
-    country: "Korea",
-    format: [],
-    rightsNote: "",
-    rightsNoteKo: "",
-    territories: "",
-    territoriesKo: "",
-    pages: 352,
-    pubYear: 2026,
-    pubMonth: 7,
-    age: "8–12",
-    coverCopy:
-      "Foster orphan kittens—and math happens · Korea’s first real-life fusion math workbooks · Four volumes",
-    coverCopyKo:
-      "아기 고양이를 돌보면 수학이 된다 · 실생활과 수학을 잇는 융합수학 교재 전4권",
-    synopsis:
-      "How do you get better at math? By taking care of kittens. Children become foster parents to orphaned babies: they mix formula, weigh, shop, plan a feeding schedule, and budget for toys—and along the way they use addition, subtraction, multiplication, division, fractions, decimals, graphs, and time.<br /><br />A is roughly grades 2–3; B, 3–4; C and D step up from there. Games, full-color kitten photos, and real care tasks make the work feel like play. Translated by mathematics-education PhD Miseon Kang, who also wrote the preschool <i>Cat Math Kids</i> set.<br /><br />The point is not another worksheet. It is math that has a reason: keeping four tiny lives fed, warm, and safe.",
-    synopsisKo:
-      "귀여운 고양이를 키우면 저절로 수학 공부가 된다고요? 엄마 잃은 아기 고양이를 임시 보호하는 상황을 가정해, 우유를 타 주고 몸무게를 재고 용품을 사고 시간표를 짜는 동안 사칙연산·분수와 소수·그래프·날짜와 시간을 익힙니다.<br /><br />A권은 초등 2~3학년, B권은 3~4학년 수준이며 C·D권에서 개념이 이어집니다. 실생활과 수학을 연결한 국내 최초의 융합수학 교재로, 수학교육학 박사 강미선이 옮겼습니다. 유아용 『고양이 수학 키즈』의 초등 편이기도 합니다.<br /><br />문제는 문제가 아닙니다. 네 마리 아기 고양이를 먹이고 따뜻하게 지키는 일이 곧 수학입니다.",
-    authorBio:
-      "Kelli Pearson is the founder of Artful Math and the author of <i>Miss Brain’s Cool Math Games</i>. She creates playful math so children can learn with joy, dream boldly, and share their gifts. She likes building cat trees and collecting kisses from the cats she lives with.",
-    authorBioKo:
-      "『미스 브레인의 멋진 수학 게임』의 저자이자 Artful Math의 창립자. 어린이들이 수학을 즐겁게 배우고, 대담하게 꿈꾸며, 자신의 재능을 세상과 나눌 자신감을 갖도록 돕는다. 캣타워를 만드는 일과 키우는 고양이들로부터 뽀뽀 받는 일을 좋아한다.",
-    colors: ["#f07828", "#46c4c8"],
-    featured: false,
-    new: true,
-    cover: "/covers/cat-math.jpg",
-    previewImages: [
-      "/previews/cat-math/1.jpg",
-      "/previews/cat-math/2.jpg",
-      "/previews/cat-math/3.jpg",
-      "/previews/cat-math/4.jpg",
-    ],
-  },
-  {
     id: "first-analects-mencius",
     title: "First Analects + Mencius Set",
     titleKo: "처음 읽는 논어 + 맹자 세트",
