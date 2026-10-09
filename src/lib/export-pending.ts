@@ -6,6 +6,55 @@ import type { ExportTitle } from "@/lib/types";
  */
 export const PENDING_EXPORT_TITLES: ExportTitle[] = [
   {
+    id: "land-you-the-museum-italy",
+    title: "We Lend You the Museum: Italy",
+    titleKo: "미술관을 빌려드립니다: 이탈리아",
+    author: "이지안",
+    authorEn: "Jian Lee",
+    author2: "이정우",
+    author2En: "Jung-woo Lee",
+    category: "arts",
+    categoryLabel: "Arts",
+    categoryLabelKo: "예술/미술",
+    categories: ["arts", "essay"],
+    categoryLabels: ["Arts", "Essay"],
+    categoryLabelsKo: ["예술/미술", "에세이"],
+    series: "We Lend You the Museum",
+    seriesKo: "미술관을 빌려드립니다",
+    publisher: "더블북",
+    publisherEn: "Doublebook",
+    country: "Korea",
+    format: [],
+    rightsNote: "",
+    rightsNoteKo: "",
+    territories: "",
+    territoriesKo: "",
+    pages: 368,
+    pubYear: 2026,
+    pubMonth: 1,
+    age: "",
+    coverCopy:
+      "An invitation to Italy’s alluring, unfamiliar masterpieces · Ten museums from Milan to Naples · Docent Jian Lee × editor Jung-woo Lee",
+    coverCopyKo:
+      "매혹적이고 낯선 이탈리아 명화의 초대 · 밀라노 브레라에서 나폴리 카포디몬테까지 · 도슨트 이지안 × 에디터 이정우",
+    synopsis:
+      "Too often a trip to the Uffizi ends with a photo in front of <i>The Birth of Venus</i> and little else. This volume is a guide to looking properly—what to see, and how to see it, in Italy’s museums.<br /><br />Docent and art therapist Jian Lee and contemporary-art editor Jung-woo Lee lead a north-to-south tour of ten museums, from Milan’s Pinacoteca di Brera to Naples’ Museo di Capodimonte, including the Uffizi, the Vatican Museums, the Galleria Borghese, and Venice’s Peggy Guggenheim Collection.<br /><br />A grand tour in a single book: Renaissance masters, the Macchiaioli, and Italy’s modern and contemporary experiments, with the stories that make the rooms breathe.",
+    synopsisKo:
+      "우피치에 가서도 무엇이 무엇인지 모른 채 〈비너스의 탄생〉 앞에서 인증샷만 찍고 나오는 아쉬움. 그 빈자리를 채우는 이탈리아 미술관 안내서다.<br /><br />명화 속 심리를 읽는 도슨트 이지안과 현대미술 에디터 이정우가 북부 밀라노에서 남부 나폴리까지, 반드시 보고 제대로 알아야 할 작품을 골라 안내한다. 우피치, 바티칸, 브레라는 물론 보르게세, 베네치아 구겐하임, 카포디몬테까지.<br /><br />고전부터 현대까지 이탈리아 미술의 흐름을 한 권에 담은, 책으로 떠나는 그랜드 투어.",
+    authorBio:
+      "Jian Lee is a museum docent and art therapist who reads psychology in masterpieces. She studied at Hanyang University and completed a master’s in clinical art therapy at CHA University. She has led tours at the Seoul Arts Center and My Art Museum, and works as an art therapist for “A Healing Walk Among Paintings” at Seoul National University Bundang Hospital’s cancer center. She lectures with Kyobo, Hana Tour, and Walkerhill Hotel on museum healing tours, and hosts a contemporary-exhibition segment on KBS Radio 1. She is the founder of Healing Museum.",
+    authorBioKo:
+      "명화 속 심리를 읽는 미술치료사 도슨트. 한양대학교와 CHA의과학대학교 미술치료대학원을 졸업하고 미술관 미술치료 연구와 현장 활동에 매진하고 있다. 예술의전당, 마이아트뮤지엄 전시해설 도슨트이자 분당서울대병원 암센터 ‘치유의 그림산책’ 아트테라피스트로, 단순한 미술사를 넘어 명화 속 심리를 읽는 해설로 위안을 전한다. 교보문고·하나투어·워커힐호텔과 ‘마음으로 가는 미술관’ 강연과 해외 미술관 힐링아트투어를 진행하며, KBS 1라디오에서 ‘요즘 전시’를 진행한다. 치유의 미술관 대표.",
+    authorBio2:
+      "Jung-woo Lee is a contemporary-art editor who believes art is completed in conversation. He has planned and written story-driven art content as chief editor of <i>Culture & Art for You</i> and is now editor-in-chief of the contemporary-art web magazine <i>BidPiece</i>. He is the author of <i>The Secret of Paintings People Queue For</i>, a regular panelist on SBS Radio’s <i>Mokdon Research Lab</i>, and writes the Kyobo column “Art History Through Relationships.”",
+    authorBio2Ko:
+      "예술을 읽고 쓰는 현대미술 에디터. ‘예술의 가치는 대화로 완성된다’고 믿으며, 단순한 설명을 넘어 예술 속 이야기를 삶의 언어로 풀어내는 콘텐츠를 기획·집필해 왔다. 『널 위한 문화예술』 치프 에디터를 거쳐 현재 현대미술 웹매거진 『빋피 BidPiece』 편집장으로 일한다. 예술가 브랜딩을 다룬 『줄 서서 보는 그림의 비밀』을 썼고, SBS 라디오 《목돈연구소》 고정 패널이자 교보문고 칼럼 「관계로 보는 미술사」를 연재한다.",
+    colors: ["#1a4a32", "#e8d48b"],
+    featured: false,
+    new: true,
+    cover: "/covers/land-you-the-museum-italy.jpg",
+  },
+  {
     id: "land-you-the-museum-nordic",
     title: "We Lend You the Museum: Northern Europe",
     titleKo: "미술관을 빌려드립니다: 북유럽",
