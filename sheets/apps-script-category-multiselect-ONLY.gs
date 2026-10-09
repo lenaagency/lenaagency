@@ -178,6 +178,11 @@ function applyRecommendedTitleCategories() {
     "menopause-diet": { category: "lifestyle" },
     "today-too-ok": { category: "essay" },
     "ppeoni-topping-weaning": { category: "parenting" },
+    "aic-im-upset": {
+      category: "picturebook",
+      series: "In My Words",
+      seriesKo: "나의 말 속에는",
+    },
   };
 
   var ss = SpreadsheetApp.getActiveSpreadsheet();
