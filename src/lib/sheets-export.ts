@@ -1,5 +1,6 @@
 import type { ExportTitle } from "@/lib/types";
 import { normalizeCoverUrl, parseImageUrlList } from "@/lib/cover-url";
+import { stripSeriesLabelPrefix } from "@/lib/export-series";
 import { parsePubDate } from "@/lib/pub-date";
 import {
   EXPORT_CATEGORIES,
@@ -491,9 +492,16 @@ export function rowsToExportTitles(
       pubYear,
       pubMonth,
       age: get("age") || "",
-      // series = English, seriesKo/시리즈명 = Korean (fallback to the other if one empty)
-      series: get("series") || get("seriesKo") || undefined,
-      seriesKo: get("seriesKo") || get("series") || undefined,
+      // series = English, seriesKo/시리즈명 = Korean (fallback to the other if one empty).
+      // Strip "Series:" / "시리즈:" so sibling volumes match on /export?series=
+      series:
+        stripSeriesLabelPrefix(get("series")) ||
+        stripSeriesLabelPrefix(get("seriesKo")) ||
+        undefined,
+      seriesKo:
+        stripSeriesLabelPrefix(get("seriesKo")) ||
+        stripSeriesLabelPrefix(get("series")) ||
+        undefined,
       coverCopy: get("coverCopy") || undefined,
       coverCopyKo: get("coverCopyKo") || undefined,
       synopsis: get("synopsis") || get("synopsisKo") || "",

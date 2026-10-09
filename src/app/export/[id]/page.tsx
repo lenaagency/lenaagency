@@ -10,6 +10,10 @@ import { authorHref, bookAuthors } from "@/lib/export-authors";
 import { RichText, plainText } from "@/components/RichText";
 import { bookCategoryIds } from "@/lib/export-categories";
 import { formatPubDate } from "@/lib/pub-date";
+import {
+  booksShareSeries,
+  seriesCatalogHref,
+} from "@/lib/export-series";
 
 export default function ExportDetailPage() {
   const params = useParams();
@@ -50,15 +54,21 @@ export default function ExportDetailPage() {
     ? t(book.publisherEn || book.publisher, book.publisher)
     : "";
   const myCats = new Set(bookCategoryIds(book));
+  const sameSeries = exportTitles.filter(
+    (b) => b.id !== book.id && booksShareSeries(book, b)
+  );
   const sameCategory = exportTitles.filter((b) => {
     if (b.id === book.id) return false;
+    if (sameSeries.some((s) => s.id === b.id)) return false;
     return bookCategoryIds(b).some((id) => myCats.has(id));
   });
   const others = exportTitles.filter((b) => {
     if (b.id === book.id) return false;
+    if (sameSeries.some((s) => s.id === b.id)) return false;
     return !bookCategoryIds(b).some((id) => myCats.has(id));
   });
   const related = [...sameCategory, ...others].slice(0, 8);
+  const seriesHref = seriesCatalogHref(book);
   const catIds = (book.categories?.length ? book.categories : [book.category]).filter(
     Boolean
   );
@@ -135,9 +145,7 @@ export default function ExportDetailPage() {
             <p className="detail-series">
               <Link
                 className="detail-series-link"
-                href={`/export?series=${encodeURIComponent(
-                  (book.seriesKo || book.series || "") as string
-                )}`}
+                href={seriesHref}
                 title={t("Browse series", "시리즈 목록 보기")}
               >
                 {t(
@@ -257,12 +265,7 @@ export default function ExportDetailPage() {
                     <tr>
                       <th>{t("Series", "시리즈")}</th>
                       <td>
-                        <Link
-                          className="inline-link"
-                          href={`/export?series=${encodeURIComponent(
-                            book.seriesKo || book.series || ""
-                          )}`}
-                        >
+                        <Link className="inline-link" href={seriesHref}>
                           {t(
                             book.series || book.seriesKo || "",
                             book.seriesKo || book.series || ""
@@ -348,7 +351,28 @@ export default function ExportDetailPage() {
         </div>
       </div>
 
-      <section className="section" style={{ paddingTop: 0 }}>
+      {sameSeries.length > 0 ? (
+        <section className="section" style={{ paddingTop: 0 }}>
+          <div className="section-head">
+            <h2>
+              {t(
+                `More in ${book.series || book.seriesKo}`,
+                `${book.seriesKo || book.series} 더 보기`
+              )}
+            </h2>
+            <Link className="btn-ghost" href={seriesHref}>
+              {t("All in series", "시리즈 전체")}
+            </Link>
+          </div>
+          <div className="scroll-row">
+            {sameSeries.map((b) => (
+              <ExportCard key={b.id} book={b} />
+            ))}
+          </div>
+        </section>
+      ) : null}
+
+      <section className="section" style={{ paddingTop: sameSeries.length ? 8 : 0 }}>
         <div className="section-head">
           <h2>
             {sameCategory.length > 0

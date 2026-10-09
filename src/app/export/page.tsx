@@ -20,6 +20,10 @@ import {
   isAgeCategoryId,
   isContentCategoryId,
 } from "@/lib/export-categories";
+import {
+  bookMatchesSeriesFilter,
+  stripSeriesLabelPrefix,
+} from "@/lib/export-series";
 
 function parseSelectedCategories(raw: string | null): string[] {
   if (!raw || raw === "all") return [];
@@ -172,7 +176,7 @@ function ExportCatalog() {
   const list = useMemo(() => {
     const query = searchText.trim().toLowerCase();
     const pubFilter = publisherFilter.trim().toLowerCase();
-    const seriesQ = seriesFilter.trim().toLowerCase();
+    const seriesQ = seriesFilter.trim();
 
     return exportTitles.filter((b) => {
       if (selectedCategories.length > 0) {
@@ -194,11 +198,7 @@ function ExportCatalog() {
         const pubEn = (b.publisherEn || "").toLowerCase();
         if (pubKo !== pubFilter && pubEn !== pubFilter) return false;
       }
-      if (seriesQ) {
-        const sEn = (b.series || "").toLowerCase();
-        const sKo = (b.seriesKo || "").toLowerCase();
-        if (!sEn.includes(seriesQ) && !sKo.includes(seriesQ)) return false;
-      }
+      if (seriesQ && !bookMatchesSeriesFilter(b, seriesQ)) return false;
       if (!query) return true;
       const hay = [
         stripRichText(b.title),
@@ -391,8 +391,8 @@ function ExportCatalog() {
                     ? " · "
                     : ""}
                   {t(
-                    `series: ${seriesFilter.trim()}`,
-                    `시리즈: ${seriesFilter.trim()}`
+                    `series: ${stripSeriesLabelPrefix(seriesFilter)}`,
+                    `시리즈: ${stripSeriesLabelPrefix(seriesFilter)}`
                   )}
                 </span>
               ) : null}
