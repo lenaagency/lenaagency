@@ -167,6 +167,17 @@ function applyRecommendedTitleCategories() {
     "pretty-good-day": {
       category: "ya,fiction",
     },
+    "yoriharu-habit-diet": { category: "lifestyle" },
+    "thepos-swim-lessons": { category: "lifestyle" },
+    "write-nietzsche": { category: "humanities" },
+    "emotion-copying": {
+      category: "psychology",
+      series: "In Praise of Copying",
+      seriesKo: "필사 예찬",
+    },
+    "menopause-diet": { category: "lifestyle" },
+    "today-too-ok": { category: "essay" },
+    "ppeoni-topping-weaning": { category: "parenting" },
   };
 
   var ss = SpreadsheetApp.getActiveSpreadsheet();
