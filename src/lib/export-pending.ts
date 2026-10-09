@@ -19,8 +19,6 @@ export const PENDING_EXPORT_TITLES: ExportTitle[] = [
     categories: ["picturebook"],
     categoryLabels: ["Picture Books"],
     categoryLabelsKo: ["그림책"],
-    series: "In My Words",
-    seriesKo: "나의 말 속에는",
     publisher: "촘촘북스",
     publisherEn: "Chunchum Books",
     country: "Korea",
@@ -34,9 +32,9 @@ export const PENDING_EXPORT_TITLES: ExportTitle[] = [
     pubMonth: 10,
     age: "4–8",
     coverCopy:
-      "What is hiding behind “Ai-C”? · Look at the feeling before you scold the words · Book 1 of In My Words",
+      "What is hiding behind “Ai-C”? · Look at the feeling before you scold the words",
     coverCopyKo:
-      "“아이C!”라는 말 뒤에 숨은 진짜 마음은 무엇일까? · 혼내기 전에 그 말 속 감정부터 · 《나의 말 속에는》 시리즈 1",
+      "“아이C!”라는 말 뒤에 숨은 진짜 마음은 무엇일까? · 혼내기 전에 그 말 속 감정부터",
     synopsis:
       "Kids spit out “Ai-C!” when they are angry, jealous, bored, or just done. Grown-ups hear a bad word and scold. The book starts one step earlier: that sound is not a swear. It is “ai” plus “sshi,” a grunt of not-wanting, and a whole weather system of feeling packed into one syllable.<br /><br />Whenever Myeonghun says it, odd little creatures pop out of the air. At first they only scare him. Then he traces each one back—to a test he might fail, a prize a friend won, a classmate who moved away, a class that would not end, a flash of temper he already regrets. The question shifts from “Why did I say that?” to “What am I feeling right now?”<br /><br />A fantasy picture book for children and the adults beside them. Feelings have no correct answer. Naming them, in words that actually fit, is how a child starts to share a heart.",
     synopsisKo:
