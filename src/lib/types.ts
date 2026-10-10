@@ -32,6 +32,11 @@ export type ExportTitle = {
   rightsSold?: string;
   rightsSoldKo?: string;
   pages: number;
+  /**
+   * Trim / book size (picture books). Sheet: bookSize / 판형 / 도서사이즈.
+   * Example: "205 × 255 mm"
+   */
+  bookSize?: string;
   /** Publication year (from sheet `pubYear`) */
   pubYear: number;
   /** Publication month 1–12 when sheet has e.g. `2024/3` */

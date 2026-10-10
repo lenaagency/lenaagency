@@ -28,6 +28,7 @@ export const PENDING_EXPORT_TITLES: ExportTitle[] = [
     territories: "",
     territoriesKo: "",
     pages: 60,
+    bookSize: "205 × 255 mm",
     pubYear: 2026,
     pubMonth: 10,
     age: "4–8",
@@ -721,6 +722,9 @@ export function withPendingExportTitles(titles: ExportTitle[]): ExportTitle[] {
     if ("series" in p || "seriesKo" in p) {
       next.series = p.series || "";
       next.seriesKo = p.seriesKo || "";
+    }
+    if ("bookSize" in p) {
+      next.bookSize = p.bookSize || "";
     }
     if (p.id === "emotion-copying") {
       next.coverCopy = p.coverCopy;

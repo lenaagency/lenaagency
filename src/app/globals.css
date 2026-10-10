@@ -1396,6 +1396,12 @@ a.pill-link {
   max-width: 220px;
 }
 
+.detail-pdf-link {
+  margin-top: 12px;
+  max-width: 220px;
+  font-size: 0.82rem;
+}
+
 .interior-preview-trigger {
   display: flex;
   flex-direction: column;

@@ -87,6 +87,9 @@ export default function ExportDetailPage() {
   const hasSeries = Boolean(book.series?.trim() || book.seriesKo?.trim());
   const hasAge = Boolean(book.age?.trim());
   const hasPages = Boolean(book.pages && book.pages > 0);
+  const hasBookSize = Boolean(
+    book.bookSize?.trim() && catIds.includes("picturebook")
+  );
   const hasYear = Boolean(book.pubYear && book.pubYear > 0);
   const hasFormat = Boolean(formatText);
   const hasSynopsis = Boolean(
@@ -112,6 +115,7 @@ export default function ExportDetailPage() {
     hasAge ||
     hasPublisher ||
     hasPages ||
+    hasBookSize ||
     hasFormat ||
     hasYear ||
     hasRightsNote ||
@@ -137,6 +141,18 @@ export default function ExportDetailPage() {
           <HeroCover book={book} />
           {book.previewImages && book.previewImages.length > 0 ? (
             <InteriorPreview images={book.previewImages} title={titlePlain} />
+          ) : null}
+          {book.id === "aic-im-upset" ? (
+            <p className="detail-pdf-link">
+              <a
+                className="inline-link"
+                href="/catalog/aic-im-upset-en.pdf"
+                target="_blank"
+                rel="noreferrer"
+              >
+                {t("English one-sheet (PDF)", "영문 소개 PDF")}
+              </a>
+            </p>
           ) : null}
         </div>
         <div className="detail-body">
@@ -294,6 +310,12 @@ export default function ExportDetailPage() {
                     <tr>
                       <th>{t("Pages", "페이지")}</th>
                       <td>{book.pages}</td>
+                    </tr>
+                  )}
+                  {hasBookSize && (
+                    <tr>
+                      <th>{t("Book size", "도서사이즈")}</th>
+                      <td>{book.bookSize}</td>
                     </tr>
                   )}
                   {hasFormat && (
