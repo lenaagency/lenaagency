@@ -14,6 +14,7 @@ import {
   booksShareSeries,
   seriesCatalogHref,
 } from "@/lib/export-series";
+import { CatalogPdfLink } from "@/components/CatalogPdfLink";
 
 export default function ExportDetailPage() {
   const params = useParams();
@@ -142,18 +143,7 @@ export default function ExportDetailPage() {
           {book.previewImages && book.previewImages.length > 0 ? (
             <InteriorPreview images={book.previewImages} title={titlePlain} />
           ) : null}
-          {book.id === "aic-im-upset" ? (
-            <p className="detail-pdf-link">
-              <a
-                className="inline-link"
-                href="/catalog/aic-im-upset-en.pdf"
-                target="_blank"
-                rel="noreferrer"
-              >
-                {t("English one-sheet (PDF)", "영문 소개 PDF")}
-              </a>
-            </p>
-          ) : null}
+          <CatalogPdfLink bookId={book.id} />
         </div>
         <div className="detail-body">
           {titlePlain ? <RichText text={title} as="h1" /> : null}
