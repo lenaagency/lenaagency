@@ -161,6 +161,7 @@ function applyRecommendedTitleCategories() {
     },
     "yoriharu-habit-diet": { category: "lifestyle" },
     "thepos-swim-lessons": { category: "lifestyle" },
+    "completion-over-perfection": { category: "essay" },
     "write-nietzsche": { category: "humanities" },
     "emotion-copying": { category: "psychology" },
     "menopause-diet": { category: "lifestyle" },
