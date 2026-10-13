@@ -73,7 +73,7 @@ Set `FORMSPREE_FORM_ID` to your form id instead.
 
 ## Newsletter subscribe (`/newsletter`)
 
-The newsletter page (`/newsletter`) has an email form with **checkboxes** that adds the address to Brevo via `POST /api/newsletter/subscribe`. Inquiry remains on `/contact`.
+The newsletter page (`/newsletter`) has a name / company / email form with **checkboxes** that creates or updates a Brevo contact (`FIRSTNAME`, `COMPANY`) via `POST /api/newsletter/subscribe`. Inquiry remains on `/contact`.
 
 | Site language | Checkbox options | Env var | List id |
 |---------------|------------------|---------|---------|
