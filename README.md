@@ -75,13 +75,13 @@ Set `FORMSPREE_FORM_ID` to your form id instead.
 
 The newsletter page (`/newsletter`) has a name / company / email form with **checkboxes** that creates or updates a Brevo contact (`FIRSTNAME`, `COMPANY`) via `POST /api/newsletter/subscribe`. Inquiry remains on `/contact`.
 
-| Site language | Checkbox options | Env var | List id |
-|---------------|------------------|---------|---------|
-| KO | 아동 | `BREVO_LIST_ID_KO_KIDS` | 40 |
-| KO | 영미·유럽 | `BREVO_LIST_ID_KO_ANGLO` | 38 |
-| KO | 일본 | `BREVO_LIST_ID_KO_JAPAN` | 39 |
-| EN | Adults | `BREVO_LIST_ID_EN_ADULTS` | 48 |
-| EN | Kids | `BREVO_LIST_ID_EN_KIDS` | 50 |
+| Site language | Checkbox options | Env var | List id | Brevo list |
+|---------------|------------------|---------|---------|------------|
+| KO | 아동/청소년 | `BREVO_LIST_ID_KO_KIDS` | 62 | 웹 한글 · 아동/청소년 |
+| KO | 영미·유럽 | `BREVO_LIST_ID_KO_ANGLO` | 63 | 웹 한글 · 영미·유럽 |
+| KO | 일본·아시아 | `BREVO_LIST_ID_KO_JAPAN` | 64 | 웹 한글 · 일본·아시아 |
+| EN | Adults | `BREVO_LIST_ID_EN_ADULTS` | 65 | 웹 영문 · Adults |
+| EN | Kids | `BREVO_LIST_ID_EN_KIDS` | 66 | 웹 영문 · Children & Youth |
 
 Also set `BREVO_API_KEY` (same key as the weekly newsletter Apps Script). Redeploy on Vercel after adding env vars.
 
