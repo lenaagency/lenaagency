@@ -84,3 +84,12 @@ The newsletter page (`/newsletter`) has a name / company / email form with **che
 | EN | Kids | `BREVO_LIST_ID_EN_KIDS` | 50 |
 
 Also set `BREVO_API_KEY` (same key as the weekly newsletter Apps Script). Redeploy on Vercel after adding env vars.
+
+Website signups are also appended to a **private** Google Sheet (name, company, email). Upload `sheets/LENA-Newsletter-Subscribers.xlsx`, paste `sheets/apps-script-newsletter-subscribe_복사용.txt` into Apps Script, deploy as a web app, then set:
+
+```
+NEWSLETTER_SHEETS_WRITE_URL=https://script.google.com/macros/s/XXXX/exec
+NEWSLETTER_SHEETS_WRITE_SECRET=lena-newsletter-subscribe-secret
+```
+
+Do not share that sheet with “anyone with the link”.

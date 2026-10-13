@@ -241,3 +241,15 @@ public/previews/{도서id}/4.png
 | `사용법` 시트 | 시트 안 안내 |
 | `Titles` 시트 | 실제 데이터 |
 | `Categories` / `열설명` | 참고용 |
+
+## 5. 웹 뉴스레터 신청자 (비공개)
+
+사이트 `/newsletter` 신청은 Brevo와 별도로 **이름·회사·이메일**을 이 시트에 남깁니다. 이메일이 있으므로 **링크 공개하지 마세요.**
+
+1. `LENA-Newsletter-Subscribers.xlsx` 를 Drive에 올리고 Google 스프레드시트로 연다  
+2. Apps Script에 `apps-script-newsletter-subscribe_복사용.txt` 전체 붙여넣기 → 저장  
+3. 배포 → 웹 앱 (실행: 나 / 액세스: 모든 사용자)  
+4. Vercel 환경변수  
+   - `NEWSLETTER_SHEETS_WRITE_URL` = 웹 앱 URL  
+   - `NEWSLETTER_SHEETS_WRITE_SECRET` = 스크립트의 `SCRIPT_SECRET` 과 동일  
+5. Redeploy 후 테스트 신청 → **신청자** 탭에 행이 생기는지 확인

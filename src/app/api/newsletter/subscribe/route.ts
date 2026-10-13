@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { appendNewsletterSignup } from "@/lib/newsletter-sheet";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -193,9 +194,20 @@ export async function POST(req: Request) {
     );
   }
 
+  const saveLog = (brevo: "ok" | "existing" | "error" | "") =>
+    appendNewsletterSignup({
+      name,
+      company,
+      email,
+      lang,
+      lists: listKeys,
+      brevo,
+    });
+
   const apiKey = process.env.BREVO_API_KEY?.trim();
   if (!apiKey) {
     console.error("[newsletter] BREVO_API_KEY missing");
+    await saveLog("error");
     return NextResponse.json(
       {
         ok: false,
@@ -209,6 +221,7 @@ export async function POST(req: Request) {
   const { ids: listIds, missing } = resolveListIds(listKeys);
   if (listIds.length === 0) {
     console.error("[newsletter] no list ids resolved", listKeys, missing);
+    await saveLog("error");
     return NextResponse.json(
       {
         ok: false,
@@ -298,7 +311,10 @@ export async function POST(req: Request) {
     });
 
     let result = await upsertContact(attributes);
-    if (result.ok) return NextResponse.json(okBody);
+    if (result.ok) {
+      await saveLog("ok");
+      return NextResponse.json(okBody);
+    }
 
     if (result.status === 400 && isAttributeError(result.err || {})) {
       const otherName: "FIRSTNAME" | "FNAME" =
@@ -312,22 +328,33 @@ export async function POST(req: Request) {
         includeCompany: companyReady,
       });
       result = await upsertContact(retryAttrs);
-      if (result.ok) return NextResponse.json(okBody);
+      if (result.ok) {
+        await saveLog("ok");
+        return NextResponse.json(okBody);
+      }
 
       if (result.status === 400 && isAttributeError(result.err || {})) {
         // Last resort so name+company are not dropped if COMPANY is rejected.
         const combined = `${name} · ${company}`.slice(0, 120);
         result = await upsertContact({ [nameKey]: combined });
-        if (result.ok) return NextResponse.json(okBody);
+        if (result.ok) {
+          await saveLog("ok");
+          return NextResponse.json(okBody);
+        }
         result = await upsertContact({ [otherName]: combined });
-        if (result.ok) return NextResponse.json(okBody);
+        if (result.ok) {
+          await saveLog("ok");
+          return NextResponse.json(okBody);
+        }
       }
     }
 
     console.error("[newsletter] brevo failed", result.status, result.err);
+    await saveLog("error");
     return fail();
   } catch (err) {
     console.error("[newsletter] network", err);
+    await saveLog("error");
     return NextResponse.json(
       {
         ok: false,
