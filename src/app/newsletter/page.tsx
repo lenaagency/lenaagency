@@ -16,7 +16,13 @@ export default function NewsletterPage() {
             <span>{t("Newsletter", "뉴스레터")}</span>
           </div>
           <h1>{t("Newsletter", "뉴스레터")}</h1>
-          <p>{t("Pick the list you want.", "원하시는 리스트를 골라주세요.")}</p>
+          <p>
+            {t(
+              "Only publishers outside Korea can subscribe.",
+              "한국 출판사만 신청 가능합니다."
+            )}{" "}
+            {t("Pick the list you want.", "원하시는 리스트를 골라주세요.")}
+          </p>
         </div>
       </div>
 

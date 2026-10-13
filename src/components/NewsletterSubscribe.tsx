@@ -126,6 +126,10 @@ export default function NewsletterSubscribe({
       )}
       {showLead && (
         <p className="newsletter-lead">
+          {t(
+            "Only publishers outside Korea can subscribe.",
+            "한국 출판사만 신청 가능합니다."
+          )}{" "}
           {t("Pick the list you want.", "원하시는 리스트를 골라주세요.")}
         </p>
       )}
