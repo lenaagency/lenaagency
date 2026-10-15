@@ -90,7 +90,6 @@ export const PENDING_EXPORT_TITLES: ExportTitle[] = [
       "/previews/candykong-strange-tea-party/3.jpg",
       "/previews/candykong-strange-tea-party/4.jpg",
     ],
-    videoUrl: "https://www.youtube.com/watch?v=niCyRzoAIJI",
   },
   {
     id: "strange-candykong",
