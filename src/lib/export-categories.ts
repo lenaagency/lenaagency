@@ -36,10 +36,12 @@ export const EXPORT_CATEGORY_META: Record<
   lifestyle: { label: "Lifestyle/Health", labelKo: "실용/건강" },
   parenting: { label: "Parenting", labelKo: "자녀교육" },
   picturebook: { label: "Picture Books", labelKo: "그림책" },
-  baby: { label: "Baby/Toddler", labelKo: "아동(0-6)" },
-  early: { label: "Early Grade", labelKo: "아동(7-9)" },
-  middle: { label: "Middle Grade", labelKo: "아동(10-12)" },
-  ya: { label: "YA", labelKo: "청소년" },
+  baby: { label: "Baby/Toddler(0-3)", labelKo: "아동(0-3)" },
+  "pre-school": { label: "Pre-school(4-7)", labelKo: "아동(4-7)" },
+  early: { label: "Early Grade(7-9)", labelKo: "아동(7-9)" },
+  middle: { label: "Middle Grade(9-12)", labelKo: "아동(9-12)" },
+  teens: { label: "Teens(12-15)", labelKo: "청소년(12-15)" },
+  ya: { label: "YA", labelKo: "YA" },
   "all-ages": { label: "All Ages", labelKo: "전연령" },
   series: { label: "Series", labelKo: "시리즈" },
   comics: { label: "Comics", labelKo: "만화" },
@@ -87,8 +89,10 @@ export const EXPORT_CATEGORY_ORDER = [
   "parenting",
   "picturebook",
   "baby",
+  "pre-school",
   "early",
   "middle",
+  "teens",
   "ya",
   "all-ages",
   "series",
@@ -98,8 +102,10 @@ export const EXPORT_CATEGORY_ORDER = [
 /** Age-band category ids (shown as a separate filter row) */
 export const AGE_CATEGORY_IDS = [
   "baby",
+  "pre-school",
   "early",
   "middle",
+  "teens",
   "ya",
   "all-ages",
 ] as const;
@@ -154,12 +160,22 @@ export const CATEGORY_ID_ALIASES: Record<string, string> = {
   picturebooks: "picturebook",
   baby: "baby",
   toddler: "baby",
+  "pre-school": "pre-school",
+  preschool: "pre-school",
+  "pre-school(4-7)": "pre-school",
+  아동47: "pre-school",
+  "아동4-7": "pre-school",
   early: "early",
   "early-grade": "early",
   earlygrade: "early",
   middle: "middle",
   "middle-grade": "middle",
   middlegrade: "middle",
+  teens: "teens",
+  teen: "teens",
+  "teens(12-15)": "teens",
+  청소년1215: "teens",
+  "청소년12-15": "teens",
   ya: "ya",
   "young-adult": "ya",
   youngadult: "ya",
@@ -206,15 +222,26 @@ export const CATEGORY_ID_ALIASES: Record<string, string> = {
   자녀교육: "parenting",
   육아: "parenting",
   그림책: "picturebook",
+  아동03: "baby",
+  아동0_3: "baby",
+  "아동0-3": "baby",
   아동06: "baby",
   아동0_6: "baby",
   "아동0-6": "baby",
+  아동47: "pre-school",
+  아동4_7: "pre-school",
+  "아동4-7": "pre-school",
   아동79: "early",
   아동7_9: "early",
   "아동7-9": "early",
+  아동912: "middle",
+  아동9_12: "middle",
+  "아동9-12": "middle",
   아동1012: "middle",
   아동10_12: "middle",
   "아동10-12": "middle",
+  청소년1215: "teens",
+  "청소년12-15": "teens",
   청소년: "ya",
   전연령: "all-ages",
   시리즈: "series",
@@ -348,10 +375,16 @@ export function ageBandIdsFromText(age: string | undefined | null): string[] {
   const out: string[] = [];
 
   if (
-    /baby|toddler|0\s*[-–~to]?\s*6|영아|유아|0-6|0–6|아동\(0/.test(a) ||
-    /0\s*~\s*6/.test(a)
+    /baby|toddler|0\s*[-–~to]?\s*3|영아|아동\(0-?3|0-3|0–3/.test(a) ||
+    /0\s*~\s*3/.test(a)
   ) {
     out.push("baby");
+  }
+  if (
+    /pre-?school|4\s*[-–~to]?\s*7|유아|아동\(4|4-7|4–7/.test(a) ||
+    /4\s*~\s*7/.test(a)
+  ) {
+    out.push("pre-school");
   }
   if (
     /early|7\s*[-–~to]?\s*9|초등저|아동\(7|7-9|7–9/.test(a) ||
@@ -360,16 +393,23 @@ export function ageBandIdsFromText(age: string | undefined | null): string[] {
     out.push("early");
   }
   if (
-    /middle|10\s*[-–~to]?\s*12|초등고|아동\(10|10-12|10–12/.test(a) ||
+    /middle|9\s*[-–~to]?\s*12|10\s*[-–~to]?\s*12|초등고|아동\(9|아동\(10|9-12|10-12|9–12|10–12/.test(
+      a
+    ) ||
+    /9\s*~\s*12/.test(a) ||
     /10\s*~\s*12/.test(a)
   ) {
     out.push("middle");
   }
   if (
-    /\bya\b|young.?adult|teen|청소년|12\+|13\+|14\+|15\+|16\+|17\+|18\+|중고등/.test(
-      a
-    ) ||
-    /12\s*\+/.test(a)
+    /teens|12\s*[-–~to]?\s*15|청소년\(12|12-15|12–15/.test(a) ||
+    /12\s*~\s*15/.test(a)
+  ) {
+    out.push("teens");
+  }
+  if (
+    /\bya\b|young.?adult|중고등|15\+|16\+|17\+|18\+/.test(a) ||
+    (/청소년/.test(a) && !/청소년\(12/.test(a))
   ) {
     out.push("ya");
   }

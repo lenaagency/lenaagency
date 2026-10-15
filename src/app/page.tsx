@@ -6,6 +6,10 @@ import { useLang } from "@/context/LangContext";
 import { ExportCard, ImportCard } from "@/components/CoverCard";
 import { HeroBestsellers } from "@/components/HeroBestsellers";
 import { useExportTitles } from "@/hooks/useExportTitles";
+import {
+  isAgeCategoryId,
+  isContentCategoryId,
+} from "@/lib/export-categories";
 import type { ImportHighlight } from "@/lib/types";
 
 export default function HomePage() {
@@ -62,22 +66,53 @@ export default function HomePage() {
               {t("View all →", "전체 보기 →")}
             </Link>
           </div>
-          <div
-            className="filter-pills home-category-pills"
-            role="navigation"
-            aria-label={t("Browse by category", "카테고리별 보기")}
-          >
-            {exportCategories
-              .filter((c) => c.id !== "all")
-              .map((c) => (
-                <Link
-                  key={c.id}
-                  className="pill pill-link"
-                  href={`/export?category=${encodeURIComponent(c.id)}`}
+          <div className="home-filter-groups">
+            <div className="filter-group">
+              <div className="filter-group-label">
+                {t("Category", "카테고리")}
+              </div>
+              <div
+                className="filter-pills home-category-pills"
+                role="navigation"
+                aria-label={t("Browse by category", "카테고리별 보기")}
+              >
+                {exportCategories
+                  .filter((c) => c.id !== "all" && isContentCategoryId(c.id))
+                  .map((c) => (
+                    <Link
+                      key={c.id}
+                      className="pill pill-link"
+                      href={`/export?category=${encodeURIComponent(c.id)}`}
+                    >
+                      {t(c.label, c.labelKo)}
+                    </Link>
+                  ))}
+              </div>
+            </div>
+            {exportCategories.some((c) => isAgeCategoryId(c.id)) ? (
+              <div className="filter-group">
+                <div className="filter-group-label">
+                  {t("Age group", "연령대")}
+                </div>
+                <div
+                  className="filter-pills home-category-pills"
+                  role="navigation"
+                  aria-label={t("Browse by age group", "연령대별 보기")}
                 >
-                  {t(c.label, c.labelKo)}
-                </Link>
-              ))}
+                  {exportCategories
+                    .filter((c) => isAgeCategoryId(c.id))
+                    .map((c) => (
+                      <Link
+                        key={c.id}
+                        className="pill pill-link"
+                        href={`/export?category=${encodeURIComponent(c.id)}`}
+                      >
+                        {t(c.label, c.labelKo)}
+                      </Link>
+                    ))}
+                </div>
+              </div>
+            ) : null}
           </div>
           <div className="scroll-row">
             {homeList.map((b) => (
