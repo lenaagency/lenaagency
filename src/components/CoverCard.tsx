@@ -54,7 +54,7 @@ function CoverVisual({
             className="cover-img"
             src={coverSrc}
             alt={title}
-            style={{ width: "100%", height: "100%", objectFit: "cover" }}
+            style={{ width: "100%", height: "auto", objectFit: "contain" }}
             referrerPolicy="no-referrer"
             loading="lazy"
           />
@@ -65,7 +65,7 @@ function CoverVisual({
             alt={title}
             width={312}
             height={468}
-            style={{ width: "100%", height: "100%", objectFit: "cover" }}
+            style={{ width: "100%", height: "auto", objectFit: "contain" }}
           />
         )
       ) : (

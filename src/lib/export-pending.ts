@@ -749,12 +749,12 @@ export const PENDING_EXPORT_TITLES: ExportTitle[] = [
     titleKo: "고양이 수학 키즈 A~E 세트",
     author: "강미선",
     authorEn: "Miseon Kang",
-    category: "baby",
-    categoryLabel: "Baby/Toddler(0-3)",
-    categoryLabelKo: "아동(0-3)",
-    categories: ["baby", "early"],
-    categoryLabels: ["Baby/Toddler(0-3)", "Early Grade(7-9)"],
-    categoryLabelsKo: ["아동(0-3)", "아동(7-9)"],
+    category: "nonfiction",
+    categoryLabel: "Nonfiction",
+    categoryLabelKo: "비소설",
+    categories: ["nonfiction", "pre-school"],
+    categoryLabels: ["Nonfiction", "Pre-school(4-7)"],
+    categoryLabelsKo: ["비소설", "아동(4-7)"],
     series: "",
     seriesKo: "",
     publisher: "서사원주니어",
@@ -911,6 +911,14 @@ export function withPendingExportTitles(titles: ExportTitle[]): ExportTitle[] {
     if (p.id === "emotion-copying") {
       next.coverCopy = p.coverCopy;
       next.coverCopyKo = p.coverCopyKo;
+    }
+    if (p.id === "cat-math-kids") {
+      next.category = p.category;
+      next.categoryLabel = p.categoryLabel;
+      next.categoryLabelKo = p.categoryLabelKo;
+      next.categories = p.categories;
+      next.categoryLabels = p.categoryLabels;
+      next.categoryLabelsKo = p.categoryLabelsKo;
     }
     return next;
   });
