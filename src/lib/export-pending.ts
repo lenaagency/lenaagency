@@ -90,6 +90,7 @@ export const PENDING_EXPORT_TITLES: ExportTitle[] = [
       "/previews/candykong-strange-tea-party/3.jpg",
       "/previews/candykong-strange-tea-party/4.jpg",
     ],
+    videoUrl: "https://www.youtube.com/watch?v=niCyRzoAIJI",
   },
   {
     id: "strange-candykong",
@@ -125,7 +126,7 @@ export const PENDING_EXPORT_TITLES: ExportTitle[] = [
     synopsis:
       "Candykong’s forest smells sweet and sounds loud. The animals want the cookie house. They also fear Candykong—wild, quick-tempered, a rumor even boar and bear cannot beat.<br /><br />Then two clueless rabbits follow the smell in. While Candykong is out they eat the house. Candykong comes back furious, waving a stick, wrecking what is left. The rabbits just dodge. Tired and hungry, Candykong stops yelling, shares the cookies, and falls asleep.<br /><br />At sundown the rabbits finally see what everyone meant by scary—and start to cry. Mother Rabbit comes looking, and spots the loneliness under the temper. A picture book about finding a friend the forest had already decided was strange.",
     synopsisKo:
-      "달콤한 냄새와 요란한 소리가 가득한 숲. 동물들은 캔디콩의 과자집이 탐나지만, 우왁스럽고 성질이 사나운 캔디콩을 무서워한다. 멧돼지도 곰도 당해 내지 못한다는 소문이 파다하다.<br /><br />그러던 어느 날, 눈치 없는 토끼 두 마리가 냄새를 따라 들어온다. 캔디콩이 집을 비운 사이 과자집을 먹어 치운다. 화가 난 캔디콩은 지팡이를 휘두르지만 토끼들은 요리조리 피할 뿐이다. 피곤하고 배고픈 캔디콩은 화를 멈추고, 토끼들과 과자를 나눠 먹고 잠이 든다.<br /><br />해 질 녘, 토끼들은 그제야 캔디콩의 진짜 무서움을 알고 운다. 엄마 토끼가 아이들을 찾으러 오고, 성질 아래의 외로움을 알아챈다. 이상하다고 소문난 친구를 발견하는 그림책.",
+      "달콤한 냄새와 요란한 소리가 가득한 숲. 동물들은 캔디콩의 과자집이 탐나지만, 우왁스럽고 성질이 사나운 캔디콩을 무서워한다. 멧돼지도 곰도 당해 내지 못한다는 소문이 파다하다.<br /><br />그러던 어느 날, 눈치 없는 토끼 두 마리가 냄새를 따라 들어온다. 캔디콩이 집을 비운 사이 과자집을 먹어 치운다. 화가 난 캔디콩은 지팡이를 휘두르지만 토끼들은 요리조리 피할 뿐이다. 피곤하고 배고픈 캔디콩은 화를 멈추고, 토끼들과 과자를 나눠 먹고 잠이 든다.<br /><br />해 질 녘, 토끼들은 그제야 캔디콩의 진짜 무서움을 알고 운다. 엄마 토끼가 아이들을 찾으러 오고, 캔디콩의 사나움 아래 자리한 외로움을 알아차린다. 이상하다고 소문난 친구를 '발견'하는 그림책.",
     authorBio:
       "Eunhye Gong writes and draws in the quiet before her child wakes. <i>Cheers</i> won a Special Prize at the 3rd Korea Picture Book Awards; <i>Your Story</i> won at the 11th Korea Electronic Publishing Awards. Picture books she wrote and drew include <i>Let’s Hug</i>. Instagram @gongsme_baby.",
     authorBioKo:
@@ -140,6 +141,7 @@ export const PENDING_EXPORT_TITLES: ExportTitle[] = [
       "/previews/strange-candykong/3.jpg",
       "/previews/strange-candykong/4.jpg",
     ],
+    videoUrl: "https://www.youtube.com/watch?v=niCyRzoAIJI",
   },
   {
     id: "jangsong",
@@ -943,6 +945,9 @@ export function withPendingExportTitles(titles: ExportTitle[]): ExportTitle[] {
       }
       if ("bookSize" in p) {
         next.bookSize = p.bookSize || "";
+      }
+      if (p.videoUrl) {
+        next.videoUrl = p.videoUrl;
       }
       if (p.id === "emotion-copying") {
         next.coverCopy = p.coverCopy;

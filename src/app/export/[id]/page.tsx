@@ -15,6 +15,7 @@ import {
   seriesCatalogHref,
 } from "@/lib/export-series";
 import { CatalogPdfLink } from "@/components/CatalogPdfLink";
+import { youtubeEmbedSrc } from "@/lib/youtube-embed";
 
 export default function ExportDetailPage() {
   const params = useParams();
@@ -102,6 +103,7 @@ export default function ExportDetailPage() {
   const hasCoverCopy = Boolean(
     plainText(book.coverCopy).trim() || plainText(book.coverCopyKo).trim()
   );
+  const videoSrc = youtubeEmbedSrc(book.videoUrl);
   const hasRightsSold = Boolean(
     plainText(book.rightsSold).trim() || plainText(book.rightsSoldKo).trim()
   );
@@ -209,7 +211,7 @@ export default function ExportDetailPage() {
             </div>
           )}
 
-          {(hasSynopsis || hasCoverCopy) && (
+          {(hasSynopsis || hasCoverCopy || videoSrc) && (
             <div className="detail-section">
               <h2>{t("Synopsis", "소개")}</h2>
               {hasCoverCopy && (
@@ -222,6 +224,18 @@ export default function ExportDetailPage() {
               {hasSynopsis && (
                 <RichText as="p" text={t(book.synopsis, book.synopsisKo)} />
               )}
+              {videoSrc ? (
+                <div className="detail-video">
+                  <iframe
+                    src={videoSrc}
+                    title={t("Book trailer", "북트레일러")}
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    allowFullScreen
+                    loading="lazy"
+                    referrerPolicy="strict-origin-when-cross-origin"
+                  />
+                </div>
+              ) : null}
             </div>
           )}
 

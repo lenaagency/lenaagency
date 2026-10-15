@@ -66,6 +66,8 @@ export type ExportTitle = {
    * From sheet columns preview1–preview4 or combined `preview`.
    */
   previewImages?: string[];
+  /** Book trailer / intro video (YouTube URL or 11-char id) */
+  videoUrl?: string;
 };
 
 export type ImportHighlight = {

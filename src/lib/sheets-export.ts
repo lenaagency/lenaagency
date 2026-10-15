@@ -160,6 +160,13 @@ const HEADER_ALIASES: Record<string, string> = {
   판형: "bookSize",
   도서사이즈: "bookSize",
   도서크기: "bookSize",
+  video: "videoUrl",
+  videourl: "videoUrl",
+  video_url: "videoUrl",
+  youtube: "videoUrl",
+  trailer: "videoUrl",
+  동영상: "videoUrl",
+  북트레일러: "videoUrl",
   pubyear: "pubYear",
   pub_year: "pubYear",
   year: "pubYear",
@@ -523,6 +530,7 @@ export function rowsToExportTitles(
       new: truthy(get("new")),
       cover: normalizeCoverUrl(get("cover")),
       previewImages: previewImages.length ? previewImages : undefined,
+      videoUrl: get("videoUrl") || undefined,
     };
 
     titles.push(book);
