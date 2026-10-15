@@ -1,5 +1,41 @@
 import type { ExportTitle } from "@/lib/types";
 
+/** Sheet rows keep their other fields; these ids get category chips from here. */
+const CATEGORY_OVERRIDES: Record<
+  string,
+  Pick<
+    ExportTitle,
+    | "category"
+    | "categoryLabel"
+    | "categoryLabelKo"
+    | "categories"
+    | "categoryLabels"
+    | "categoryLabelsKo"
+  >
+> = {
+  "cat-math-kids": {
+    category: "nonfiction",
+    categoryLabel: "Nonfiction",
+    categoryLabelKo: "비소설",
+    categories: ["nonfiction", "pre-school"],
+    categoryLabels: ["Nonfiction", "Pre-school(4-7)"],
+    categoryLabelsKo: ["비소설", "아동(4-7)"],
+  },
+  "pretty-good-day": {
+    category: "teens",
+    categoryLabel: "Teens(12-15)",
+    categoryLabelKo: "청소년(12-15)",
+    categories: ["teens", "fiction"],
+    categoryLabels: ["Teens(12-15)", "Fiction"],
+    categoryLabelsKo: ["청소년(12-15)", "소설"],
+  },
+};
+
+function withCategoryOverride(t: ExportTitle): ExportTitle {
+  const o = CATEGORY_OVERRIDES[t.id];
+  return o ? { ...t, ...o } : t;
+}
+
 /**
  * Titles that should appear on /export even before the live For-sales
  * sheet row exists. Dropped automatically once the same `id` is on the sheet.
@@ -899,29 +935,24 @@ export function withPendingExportTitles(titles: ExportTitle[]): ExportTitle[] {
   const sheetIds = new Set(titles.map((t) => t.id));
   const merged = titles.map((t) => {
     const p = pendingById.get(t.id);
-    if (!p) return t;
     const next = { ...t };
-    if ("series" in p || "seriesKo" in p) {
-      next.series = p.series || "";
-      next.seriesKo = p.seriesKo || "";
+    if (p) {
+      if ("series" in p || "seriesKo" in p) {
+        next.series = p.series || "";
+        next.seriesKo = p.seriesKo || "";
+      }
+      if ("bookSize" in p) {
+        next.bookSize = p.bookSize || "";
+      }
+      if (p.id === "emotion-copying") {
+        next.coverCopy = p.coverCopy;
+        next.coverCopyKo = p.coverCopyKo;
+      }
     }
-    if ("bookSize" in p) {
-      next.bookSize = p.bookSize || "";
-    }
-    if (p.id === "emotion-copying") {
-      next.coverCopy = p.coverCopy;
-      next.coverCopyKo = p.coverCopyKo;
-    }
-    if (p.id === "cat-math-kids") {
-      next.category = p.category;
-      next.categoryLabel = p.categoryLabel;
-      next.categoryLabelKo = p.categoryLabelKo;
-      next.categories = p.categories;
-      next.categoryLabels = p.categoryLabels;
-      next.categoryLabelsKo = p.categoryLabelsKo;
-    }
-    return next;
+    return withCategoryOverride(next);
   });
-  const extra = PENDING_EXPORT_TITLES.filter((t) => !sheetIds.has(t.id));
+  const extra = PENDING_EXPORT_TITLES.filter((t) => !sheetIds.has(t.id)).map(
+    withCategoryOverride
+  );
   return extra.length ? [...extra, ...merged] : merged;
 }
