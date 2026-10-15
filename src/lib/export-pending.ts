@@ -14,9 +14,9 @@ export const PENDING_EXPORT_TITLES: ExportTitle[] = [
     category: "fiction",
     categoryLabel: "Fiction",
     categoryLabelKo: "소설",
-    categories: ["fiction"],
-    categoryLabels: ["Fiction"],
-    categoryLabelsKo: ["소설"],
+    categories: ["fiction", "historical"],
+    categoryLabels: ["Fiction", "Historical"],
+    categoryLabelsKo: ["소설", "역사"],
     publisher: "써네스트",
     publisherEn: "Sunest",
     country: "Korea",
@@ -30,13 +30,13 @@ export const PENDING_EXPORT_TITLES: ExportTitle[] = [
     pubMonth: 10,
     age: "",
     coverCopy:
-      "The emperor is dead. The living are sealed in his tomb · A missing imperial seal, and a race to get out alive",
+      "★ Korea Story Contest Excellence Prize, 2026 Busan Story Market Korean IP ★<br /><br />The emperor is dead. The living are sealed in his tomb · A missing imperial seal, and a race to get out alive",
     coverCopyKo:
-      "황제는 죽고, 살아 있는 자들은 무덤에 갇힌다 · 사라진 옥새, 목숨을 건 탈출",
+      "★ 대한민국스토리공모대전 우수상, 2026 부산스토리마켓 한국 IP ★<br /><br />황제는 죽고, 살아 있는 자들은 무덤에 갇힌다 · 사라진 옥새, 목숨을 건 탈출",
     synopsis:
-      "A Korea Story Contest winner and a 2026 Busan Story Market Korean IP. When the emperor dies, palace women, eunuchs, soldiers, craftsmen, and scholars are sealed alive in his tomb—buried with him, as custom demands. The tomb is a maze. Traps and mechanisms decide who takes the next step.<br /><br />A missing imperial seal pulls the fight for the throne inside the grave. One person needs money to keep a family. One came for a grudge. One is tangled in a love affair. They were sentenced to the same death. They did not live the same lives, and they will not survive for the same reasons. Alliances flip. Betrayal follows help.<br /><br />Outside, the succession war goes on. An action-adventure mystery that turns a historical rite into a race to get out alive. Can anyone leave a tomb that was built to keep them in?",
+      "When the emperor dies, palace women, eunuchs, soldiers, craftsmen, and scholars are sealed alive in his tomb—buried with him, as custom demands. The tomb is a maze. Traps and mechanisms decide who takes the next step.<br /><br />A missing imperial seal pulls the fight for the throne inside the grave. One person needs money to keep a family. One came for a grudge. One is tangled in a love affair. They were sentenced to the same death. They did not live the same lives, and they will not survive for the same reasons. Alliances flip. Betrayal follows help.<br /><br />Outside, the succession war goes on. An action-adventure mystery that turns a historical rite into a race to get out alive. Can anyone leave a tomb that was built to keep them in?",
     synopsisKo:
-      "대한민국스토리공모대전 우수상, 2026 부산스토리마켓 한국 IP. 황제가 죽자 궁녀·환관·병사·장인·학자가 순장이라는 이름으로 거대한 분묘에 산 채로 갇힌다. 무덤은 함정과 기관으로 가득한 미궁이다.<br /><br />사라진 옥새의 음모는 무덤 안까지 이어진다. 가족을 지키려는 사람, 원한을 품은 사람, 치정에 얽힌 사람. 같은 죽음을 강요받았을 뿐, 살아온 삶과 살아남으려는 이유는 제각각이다. 협력과 배신이 거듭된다.<br /><br />무덤 밖에서는 황위 다툼이 계속된다. 역사 속 순장을 생존 탈출극으로 다시 짠 액션 어드벤처 미스터리. 죽음이 예정된 무덤에서, 살아서 나갈 수 있을 것인가.",
+      "황제가 죽자 궁녀·환관·병사·장인·학자가 순장이라는 이름으로 거대한 분묘에 산 채로 갇힌다. 무덤은 함정과 기관으로 가득한 미궁이다.<br /><br />사라진 옥새의 음모는 무덤 안까지 이어진다. 가족을 지키려는 사람, 원한을 품은 사람, 치정에 얽힌 사람. 같은 죽음을 강요받았을 뿐, 살아온 삶과 살아남으려는 이유는 제각각이다. 협력과 배신이 거듭된다.<br /><br />무덤 밖에서는 황위 다툼이 계속된다. 역사 속 순장을 생존 탈출극으로 다시 짠 액션 어드벤처 미스터리. 죽음이 예정된 무덤에서, 살아서 나갈 수 있을 것인가.",
     authorBio:
       "Hwarin Jeon plans and writes stories for film, television, and fiction. She won the Dong-A Ilbo New Year’s Literary Contest in the screenplay category, an Excellence Prize at the Korea Story Contest, an Excellence Prize in the KBS miniseries script contest for career writers, and an Excellence Prize in the story category of the Korea Content Awards.",
     authorBioKo:
