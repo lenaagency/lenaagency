@@ -5,6 +5,7 @@ import { useLang } from "@/context/LangContext";
 
 const PDF_BY_ID: Record<string, string> = {
   "aic-im-upset": "/catalog/aic-im-upset-en.pdf",
+  jangsong: "/catalog/jangsong-en.pdf",
 };
 
 /** English one-sheet download — admin session only (same login as royalties). */
