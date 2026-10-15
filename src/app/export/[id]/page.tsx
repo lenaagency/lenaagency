@@ -54,21 +54,24 @@ export default function ExportDetailPage() {
   const publisherLabel = hasPublisher
     ? t(book.publisherEn || book.publisher, book.publisher)
     : "";
-  const myCats = new Set(bookCategoryIds(book));
+  const primaryCat = book.category;
   const sameSeries = exportTitles.filter(
     (b) => b.id !== book.id && booksShareSeries(book, b)
   );
   const sameCategory = exportTitles.filter((b) => {
     if (b.id === book.id) return false;
     if (sameSeries.some((s) => s.id === b.id)) return false;
-    return bookCategoryIds(b).some((id) => myCats.has(id));
+    return Boolean(primaryCat) && bookCategoryIds(b).includes(primaryCat);
   });
-  const others = exportTitles.filter((b) => {
-    if (b.id === book.id) return false;
-    if (sameSeries.some((s) => s.id === b.id)) return false;
-    return !bookCategoryIds(b).some((id) => myCats.has(id));
-  });
-  const related = [...sameCategory, ...others].slice(0, 8);
+  const related =
+    sameCategory.length > 0
+      ? sameCategory.slice(0, 8)
+      : exportTitles
+          .filter(
+            (b) =>
+              b.id !== book.id && !sameSeries.some((s) => s.id === b.id)
+          )
+          .slice(0, 8);
   const seriesHref = seriesCatalogHref(book);
   const catIds = (book.categories?.length ? book.categories : [book.category]).filter(
     Boolean
@@ -384,26 +387,30 @@ export default function ExportDetailPage() {
         </section>
       ) : null}
 
-      <section className="section" style={{ paddingTop: sameSeries.length ? 8 : 0 }}>
-        <div className="section-head">
-          <h2>
-            {sameCategory.length > 0
-              ? t(
-                  `More in ${book.categoryLabel}`,
-                  `${book.categoryLabelKo} 더 보기`
-                )
-              : t("More titles", "다른 도서")}
-          </h2>
-          <Link className="btn-ghost" href={categoryHref}>
-            {t(`All ${book.categoryLabel}`, `${book.categoryLabelKo} 전체`)}
-          </Link>
-        </div>
-        <div className="scroll-row">
-          {related.map((b) => (
-            <ExportCard key={b.id} book={b} />
-          ))}
-        </div>
-      </section>
+      {related.length > 0 ? (
+        <section className="section" style={{ paddingTop: sameSeries.length ? 8 : 0 }}>
+          <div className="section-head">
+            <h2>
+              {sameCategory.length > 0
+                ? t(
+                    `More in ${book.categoryLabel}`,
+                    `${book.categoryLabelKo} 더 보기`
+                  )
+                : t("More titles", "다른 도서")}
+            </h2>
+            {sameCategory.length > 0 ? (
+              <Link className="btn-ghost" href={categoryHref}>
+                {t(`All ${book.categoryLabel}`, `${book.categoryLabelKo} 전체`)}
+              </Link>
+            ) : null}
+          </div>
+          <div className="scroll-row">
+            {related.map((b) => (
+              <ExportCard key={b.id} book={b} />
+            ))}
+          </div>
+        </section>
+      ) : null}
     </div>
   );
 }
