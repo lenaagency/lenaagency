@@ -1658,6 +1658,10 @@ a.pill-link {
   font-weight: 800;
 }
 
+.detail-section .cover-copy.rich-text span[style*="color"] {
+  font-weight: 800;
+}
+
 .detail-section .cover-copy.rich-text i,
 .detail-section .cover-copy.rich-text em,
 .detail-section p.rich-text i,

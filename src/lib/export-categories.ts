@@ -15,7 +15,11 @@ export const EXPORT_CATEGORY_META: Record<
   { label: string; labelKo: string }
 > = {
   fiction: { label: "Fiction", labelKo: "소설" },
-  historical: { label: "Historical", labelKo: "역사" },
+  "action-adventure": {
+    label: "Action Adventure",
+    labelKo: "액션 어드벤처",
+  },
+  mystery: { label: "Mystery", labelKo: "미스터리" },
   essay: { label: "Essay", labelKo: "에세이" },
   nonfiction: { label: "Nonfiction", labelKo: "비소설" },
   business: { label: "Business/Economics", labelKo: "경제경영" },
@@ -67,7 +71,8 @@ export const EXPORT_CATEGORY_META: Record<
 /** Preferred display order = live Categories sheet order */
 export const EXPORT_CATEGORY_ORDER = [
   "fiction",
-  "historical",
+  "action-adventure",
+  "mystery",
   "essay",
   "nonfiction",
   "business",
@@ -113,10 +118,12 @@ export function isContentCategoryId(id: string): boolean {
 /** Old / alternate id → current sheet id */
 export const CATEGORY_ID_ALIASES: Record<string, string> = {
   fiction: "fiction",
-  historical: "historical",
-  "historical-fiction": "historical",
-  historicalfiction: "historical",
-  역사소설: "historical",
+  "action-adventure": "action-adventure",
+  actionadventure: "action-adventure",
+  액션어드벤처: "action-adventure",
+  액션어드벤쳐: "action-adventure",
+  mystery: "mystery",
+  미스터리: "mystery",
   essay: "essay",
   nonfiction: "nonfiction",
   business: "business",

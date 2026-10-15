@@ -11,12 +11,12 @@ export const PENDING_EXPORT_TITLES: ExportTitle[] = [
     titleKo: "장송",
     author: "전화린",
     authorEn: "Hwarin Jeon",
-    category: "fiction",
-    categoryLabel: "Fiction",
-    categoryLabelKo: "소설",
-    categories: ["fiction", "historical"],
-    categoryLabels: ["Fiction", "Historical"],
-    categoryLabelsKo: ["소설", "역사"],
+    category: "action-adventure",
+    categoryLabel: "Action Adventure",
+    categoryLabelKo: "액션 어드벤처",
+    categories: ["action-adventure", "mystery"],
+    categoryLabels: ["Action Adventure", "Mystery"],
+    categoryLabelsKo: ["액션 어드벤처", "미스터리"],
     publisher: "써네스트",
     publisherEn: "Sunest",
     country: "Korea",
@@ -30,9 +30,9 @@ export const PENDING_EXPORT_TITLES: ExportTitle[] = [
     pubMonth: 10,
     age: "",
     coverCopy:
-      "★ Korea Story Contest Excellence Prize, 2026 Busan Story Market Korean IP ★<br /><br />The emperor is dead. The living are sealed in his tomb · A missing imperial seal, and a race to get out alive",
+      "{#c41e3a}<b>★ Korea Story Contest Excellence Prize, 2026 Busan Story Market Korean IP ★</b>{/}<br /><br />The emperor is dead. The living are sealed in his tomb · A missing imperial seal, and a race to get out alive",
     coverCopyKo:
-      "★ 대한민국스토리공모대전 우수상, 2026 부산스토리마켓 한국 IP ★<br /><br />황제는 죽고, 살아 있는 자들은 무덤에 갇힌다 · 사라진 옥새, 목숨을 건 탈출",
+      "{#c41e3a}<b>★ 대한민국스토리공모대전 우수상, 2026 부산스토리마켓 한국 IP ★</b>{/}<br /><br />황제는 죽고, 살아 있는 자들은 무덤에 갇힌다 · 사라진 옥새, 목숨을 건 탈출",
     synopsis:
       "When the emperor dies, palace women, eunuchs, soldiers, craftsmen, and scholars are sealed alive in his tomb—buried with him, as custom demands. The tomb is a maze. Traps and mechanisms decide who takes the next step.<br /><br />A missing imperial seal pulls the fight for the throne inside the grave. One person needs money to keep a family. One came for a grudge. One is tangled in a love affair. They were sentenced to the same death. They did not live the same lives, and they will not survive for the same reasons. Alliances flip. Betrayal follows help.<br /><br />Outside, the succession war goes on. An action-adventure mystery that turns a historical rite into a race to get out alive. Can anyone leave a tomb that was built to keep them in?",
     synopsisKo:
