@@ -318,6 +318,7 @@ function ExportCatalog() {
               >
                 {contentCategories.map((c) => {
                   const count = counts[c.id] ?? 0;
+                  if (c.id !== "all" && count === 0) return null;
                   const isActive =
                     c.id === "all"
                       ? selectedCategories.filter((id) => !isAgeCategoryId(id))
@@ -338,7 +339,7 @@ function ExportCatalog() {
                 })}
               </div>
             </div>
-            {ageCategories.length > 0 ? (
+            {ageCategories.some((c) => (counts[c.id] ?? 0) > 0) ? (
               <div className="filter-group">
                 <div className="filter-group-label">
                   {t("Age group", "연령대")}
@@ -350,6 +351,7 @@ function ExportCatalog() {
                 >
                   {ageCategories.map((c) => {
                     const count = counts[c.id] ?? 0;
+                    if (count === 0) return null;
                     const isActive = selectedCategories.includes(c.id);
                     return (
                       <button

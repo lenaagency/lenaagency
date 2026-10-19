@@ -68,6 +68,11 @@ export type ExportTitle = {
   previewImages?: string[];
   /** Book trailer / intro video (YouTube URL or 11-char id) */
   videoUrl?: string;
+  /**
+   * False when overseas rights have never been sold.
+   * Public catalog hides these; admins still see them (to publish later).
+   */
+  listed?: boolean;
 };
 
 export type ImportHighlight = {

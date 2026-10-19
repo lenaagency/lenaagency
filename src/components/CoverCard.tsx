@@ -10,7 +10,7 @@ import { authorHref, bookAuthors } from "@/lib/export-authors";
 import { RichText, plainText } from "@/components/RichText";
 import { formatPubDate } from "@/lib/pub-date";
 
-type Badge = "export" | "import" | "none";
+type Badge = "export" | "import" | "unlisted" | "none";
 
 function CoverVisual({
   title,
@@ -37,6 +37,10 @@ function CoverVisual({
   let badgeEl: ReactNode = null;
   if (rank) {
     badgeEl = <span className="badge sold">#{rank}</span>;
+  } else if (badge === "unlisted") {
+    badgeEl = (
+      <span className="badge unlisted">{t("Admin only", "관리자 전용")}</span>
+    );
   } else if (badge === "export") {
     badgeEl = <span className="badge available">{t("Export", "수출")}</span>;
   } else if (badge === "import") {
@@ -114,7 +118,7 @@ export function ExportCard({ book }: { book: ExportTitle }) {
           colors={book.colors}
           cover={book.cover}
           genre={genre}
-          badge="none"
+          badge={book.listed === false ? "unlisted" : "none"}
         />
       </Link>
       <div className="title-meta">
@@ -205,7 +209,7 @@ export function HeroCover({ book }: { book: ExportTitle }) {
       colors={book.colors}
       cover={book.cover}
       genre={book.categoryLabelKo}
-      badge="none"
+      badge={book.listed === false ? "unlisted" : "none"}
     />
   );
 }

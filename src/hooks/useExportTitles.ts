@@ -1,9 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { LENA } from "@/lib/data";
 import { EXPORT_CATEGORIES, type ExportCategory } from "@/lib/export-categories";
-import { withPendingExportTitles } from "@/lib/export-pending";
 import { withNormalizedSeries } from "@/lib/export-series";
 import type { ExportTitle } from "@/lib/types";
 
@@ -21,7 +19,7 @@ type State = {
 
 export function useExportTitles() {
   const [state, setState] = useState<State>({
-    titles: withPendingExportTitles(LENA.exportTitles).map(withNormalizedSeries),
+    titles: [],
     categories: EXPORT_CATEGORIES,
     loading: true,
     source: "loading",
@@ -29,7 +27,10 @@ export function useExportTitles() {
 
   const load = useCallback(async () => {
     try {
-      const res = await fetch("/api/export-titles", { cache: "no-store" });
+      const res = await fetch("/api/export-titles", {
+        cache: "no-store",
+        credentials: "same-origin",
+      });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const data = (await res.json()) as {
         titles: ExportTitle[];
@@ -40,11 +41,9 @@ export function useExportTitles() {
         updatedAt?: string;
       };
       setState({
-        titles: (
-          Array.isArray(data.titles) && data.titles.length
-            ? data.titles
-            : withPendingExportTitles(LENA.exportTitles)
-        ).map(withNormalizedSeries),
+        titles: (Array.isArray(data.titles) ? data.titles : []).map(
+          withNormalizedSeries
+        ),
         categories:
           Array.isArray(data.categories) && data.categories.length
             ? data.categories
@@ -58,10 +57,7 @@ export function useExportTitles() {
     } catch (e) {
       setState((prev) => ({
         ...prev,
-        titles: (prev.titles.length
-          ? prev.titles
-          : withPendingExportTitles(LENA.exportTitles)
-        ).map(withNormalizedSeries),
+        titles: prev.titles.map(withNormalizedSeries),
         categories: prev.categories.length ? prev.categories : EXPORT_CATEGORIES,
         loading: false,
         source: "static",

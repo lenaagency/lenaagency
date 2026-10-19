@@ -7,6 +7,8 @@ import { ExportCard, ImportCard } from "@/components/CoverCard";
 import { HeroBestsellers } from "@/components/HeroBestsellers";
 import { useExportTitles } from "@/hooks/useExportTitles";
 import {
+  bookCategoryIds,
+  bookMatchesAgeFilter,
   isAgeCategoryId,
   isContentCategoryId,
 } from "@/lib/export-categories";
@@ -16,8 +18,22 @@ export default function HomePage() {
   const { t } = useLang();
   const { titles: exportTitles, categories: exportCategories } =
     useExportTitles();
-  const homeList = exportTitles.length ? exportTitles : LENA.exportTitles;
+  const homeList = exportTitles;
   const imports = LENA.importHighlights as ImportHighlight[];
+  const homeContentCategories = exportCategories.filter(
+    (c) =>
+      c.id !== "all" &&
+      isContentCategoryId(c.id) &&
+      homeList.some((b) => bookCategoryIds(b).includes(c.id))
+  );
+  const homeAgeCategories = exportCategories.filter(
+    (c) =>
+      isAgeCategoryId(c.id) &&
+      homeList.some(
+        (b) =>
+          bookCategoryIds(b).includes(c.id) || bookMatchesAgeFilter(b, c.id)
+      )
+  );
 
   return (
     <>
@@ -66,19 +82,19 @@ export default function HomePage() {
               {t("View all →", "전체 보기 →")}
             </Link>
           </div>
+          {homeContentCategories.length > 0 || homeAgeCategories.length > 0 ? (
           <div className="home-filter-groups">
-            <div className="filter-group">
-              <div className="filter-group-label">
-                {t("Category", "카테고리")}
-              </div>
-              <div
-                className="filter-pills home-category-pills"
-                role="navigation"
-                aria-label={t("Browse by category", "카테고리별 보기")}
-              >
-                {exportCategories
-                  .filter((c) => c.id !== "all" && isContentCategoryId(c.id))
-                  .map((c) => (
+            {homeContentCategories.length > 0 ? (
+              <div className="filter-group">
+                <div className="filter-group-label">
+                  {t("Category", "카테고리")}
+                </div>
+                <div
+                  className="filter-pills home-category-pills"
+                  role="navigation"
+                  aria-label={t("Browse by category", "카테고리별 보기")}
+                >
+                  {homeContentCategories.map((c) => (
                     <Link
                       key={c.id}
                       className="pill pill-link"
@@ -87,9 +103,10 @@ export default function HomePage() {
                       {t(c.label, c.labelKo)}
                     </Link>
                   ))}
+                </div>
               </div>
-            </div>
-            {exportCategories.some((c) => isAgeCategoryId(c.id)) ? (
+            ) : null}
+            {homeAgeCategories.length > 0 ? (
               <div className="filter-group">
                 <div className="filter-group-label">
                   {t("Age group", "연령대")}
@@ -99,21 +116,20 @@ export default function HomePage() {
                   role="navigation"
                   aria-label={t("Browse by age group", "연령대별 보기")}
                 >
-                  {exportCategories
-                    .filter((c) => isAgeCategoryId(c.id))
-                    .map((c) => (
-                      <Link
-                        key={c.id}
-                        className="pill pill-link"
-                        href={`/export?category=${encodeURIComponent(c.id)}`}
-                      >
-                        {t(c.label, c.labelKo)}
-                      </Link>
-                    ))}
+                  {homeAgeCategories.map((c) => (
+                    <Link
+                      key={c.id}
+                      className="pill pill-link"
+                      href={`/export?category=${encodeURIComponent(c.id)}`}
+                    >
+                      {t(c.label, c.labelKo)}
+                    </Link>
+                  ))}
                 </div>
               </div>
             ) : null}
           </div>
+          ) : null}
           <div className="scroll-row">
             {homeList.map((b) => (
               <ExportCard key={b.id} book={b} />

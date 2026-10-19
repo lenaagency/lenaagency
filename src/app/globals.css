@@ -752,6 +752,13 @@ ul {
   color: var(--white);
 }
 
+.badge.unlisted {
+  background: var(--ink);
+  color: var(--white);
+  text-transform: none;
+  letter-spacing: 0.02em;
+}
+
 .title-meta h3 {
   font-size: 0.86rem;
   font-weight: 600;
