@@ -1,7 +1,7 @@
 "use client";
 
-import { FormEvent, Suspense, useState } from "react";
-import { signIn } from "next-auth/react";
+import { FormEvent, Suspense, useEffect, useState } from "react";
+import { signIn, useSession } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { useLang } from "@/context/LangContext";
@@ -10,7 +10,18 @@ function LoginForm() {
   const { t } = useLang();
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { status } = useSession();
   const callbackUrl = searchParams.get("callbackUrl") || "/royalties";
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
+  useEffect(() => {
+    if (status === "authenticated") {
+      router.replace(callbackUrl);
+    }
+  }, [status, callbackUrl, router]);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");

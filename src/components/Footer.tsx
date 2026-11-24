@@ -48,9 +48,6 @@ export default function Footer() {
             <h4>{t("Menu", "메뉴")}</h4>
             <Link href="/">{t("Home", "홈")}</Link>
             <Link href="/about">{t("About", "소개")}</Link>
-            <Link href="/import">{t("Licensed", "수입")}</Link>
-            <Link href="/export">{t("For sales", "수출")}</Link>
-            <Link href="/royalties">{t("Royalties", "인세보고")}</Link>
           </div>
 
           <div className="footer-col">
@@ -65,7 +62,7 @@ export default function Footer() {
             <h4>{t("Contact", "문의")}</h4>
             <Link href="/contact">{t("Inquiry", "문의하기")}</Link>
             <Link href="/newsletter">{t("Newsletter", "뉴스레터")}</Link>
-            <Link href="/login">{t("Member login", "회원 로그인")}</Link>
+            <a href="/login">{t("Member login", "회원 로그인")}</a>
             <Link href="/royalties">{t("Royalty reports", "인세보고")}</Link>
           </div>
         </div>

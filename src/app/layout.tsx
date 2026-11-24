@@ -52,7 +52,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ko" className={`${dmSans.variable} ${fraunces.variable}`}>
+    <html
+      lang="ko"
+      className={`${dmSans.variable} ${fraunces.variable}`}
+      data-scroll-behavior="smooth"
+    >
       <body>
         <AuthSessionProvider>
           <LangProvider>

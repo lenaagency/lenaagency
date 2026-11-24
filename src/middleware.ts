@@ -28,13 +28,9 @@ export default auth((req) => {
     return NextResponse.redirect(login);
   }
 
-  if (path === "/login" && isLoggedIn) {
-    return NextResponse.redirect(new URL("/royalties", req.nextUrl.origin));
-  }
-
   return NextResponse.next();
 });
 
 export const config = {
-  matcher: ["/royalties/:path*", "/login", "/export", "/export/:path*"],
+  matcher: ["/royalties/:path*", "/export", "/export/:path*"],
 };
