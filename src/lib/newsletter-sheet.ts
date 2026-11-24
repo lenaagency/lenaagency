@@ -15,6 +15,47 @@ export type NewsletterSignupRow = {
   brevo?: "ok" | "existing" | "error" | "";
 };
 
+/**
+ * Where a signup is stored. The Apps Script web app
+ * (sheets/apps-script-newsletter-subscribe.gs) applies this on `lang`.
+ * English columns match the Subscribers header row.
+ */
+export const NEWSLETTER_SHEET_TARGETS = {
+  ko: {
+    spreadsheetId: "1j1Jc4hjcOtGn-K7noRKdwuVdn0AdsnXeQY3hVuEWO3c",
+    sheet: "신청자",
+    columns: [
+      "신청시각",
+      "이름",
+      "회사",
+      "이메일",
+      "언어",
+      "리스트",
+      "리스트명",
+      "출처",
+      "Brevo",
+    ],
+  },
+  en: {
+    spreadsheetId: "1uVK1V8hhkhYHIgmW8kNxSMGlGPXA-_NFLPaHMd7OaWE",
+    sheet: "Subscribers",
+    columns: [
+      "submittedAt",
+      "name",
+      "company",
+      "email",
+      "lists",
+      "language",
+      "source",
+      "status",
+    ],
+  },
+} as const;
+
+export function newsletterSheetTarget(lang: "ko" | "en") {
+  return lang === "en" ? NEWSLETTER_SHEET_TARGETS.en : NEWSLETTER_SHEET_TARGETS.ko;
+}
+
 function listsLabel(lang: "ko" | "en", lists: string[]): string {
   return lists
     .map((id) => {
@@ -50,6 +91,8 @@ export async function appendNewsletterSignup(
         listsLabel: listsLabel(row.lang, row.lists),
         source: "website",
         brevo: row.brevo || "",
+        spreadsheetId: newsletterSheetTarget(row.lang).spreadsheetId,
+        sheet: newsletterSheetTarget(row.lang).sheet,
       }),
       redirect: "follow",
       signal: controller.signal,
