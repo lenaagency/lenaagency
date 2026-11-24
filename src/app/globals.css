@@ -752,30 +752,12 @@ ul {
   color: var(--white);
 }
 
-.home-export {
-  padding-top: 28px;
-  padding-bottom: 32px;
+.home-carousel {
+  position: relative;
 }
 
-.home-export-grid {
-  display: grid;
-  grid-template-columns: repeat(6, minmax(0, 1fr));
-  gap: 16px 14px;
-}
-
-.home-cover .cover-img,
-.home-cover .cover-placeholder {
-  max-height: 220px;
-  object-fit: contain;
-  object-position: top center;
-}
-
-.home-cover {
-  max-width: none;
-}
-
-.home-cover .cover-card {
-  max-width: none;
+.home-carousel-row {
+  scroll-padding-inline: 4px;
 }
 
 .home-cover .title-card-link {
@@ -799,17 +781,32 @@ ul {
   overflow: hidden;
 }
 
-@media (max-width: 1100px) {
-  .home-export-grid {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-  }
+.home-carousel-arrow {
+  position: absolute;
+  top: 28%;
+  z-index: 2;
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--white);
+  color: var(--ink);
+  box-shadow: var(--shadow);
+  font-size: 1.6rem;
+  line-height: 1;
+  cursor: pointer;
 }
 
-@media (max-width: 720px) {
-  .home-export-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 18px 12px;
-  }
+.home-carousel-arrow.prev {
+  left: -6px;
+}
+
+.home-carousel-arrow.next {
+  right: -6px;
+}
+
+.home-carousel-arrow:hover {
+  color: var(--coral);
 }
 
 .title-meta h3 {

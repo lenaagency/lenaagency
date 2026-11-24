@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useSession } from "next-auth/react";
 import { LENA } from "@/lib/data";
 import { useLang } from "@/context/LangContext";
 
@@ -18,6 +19,9 @@ function IgIcon() {
 
 export default function Footer() {
   const { lang, t } = useLang();
+  const { data: session } = useSession();
+  const isAdmin =
+    (session?.user as { role?: string } | undefined)?.role === "admin";
   const a = LENA.agency;
   const year = new Date().getFullYear();
 
@@ -48,6 +52,13 @@ export default function Footer() {
             <h4>{t("Menu", "메뉴")}</h4>
             <Link href="/">{t("Home", "홈")}</Link>
             <Link href="/about">{t("About", "소개")}</Link>
+            {isAdmin ? (
+              <>
+                <Link href="/import">{t("Licensed", "수입")}</Link>
+                <Link href="/export">{t("For sales", "수출")}</Link>
+                <Link href="/royalties">{t("Royalties", "인세보고")}</Link>
+              </>
+            ) : null}
           </div>
 
           <div className="footer-col">

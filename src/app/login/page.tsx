@@ -10,18 +10,18 @@ function LoginForm() {
   const { t } = useLang();
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { status } = useSession();
+  const { data: session, status } = useSession();
   const callbackUrl = searchParams.get("callbackUrl") || "/royalties";
+  const role = (session?.user as { role?: string } | undefined)?.role;
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
   useEffect(() => {
-    if (status === "authenticated") {
-      router.replace(callbackUrl);
-    }
-  }, [status, callbackUrl, router]);
+    if (status !== "authenticated") return;
+    router.replace(role === "admin" ? "/" : callbackUrl);
+  }, [status, role, callbackUrl, router]);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -49,7 +49,6 @@ function LoginForm() {
         setLoading(false);
         return;
       }
-      router.push(callbackUrl);
       router.refresh();
     } catch {
       setError(t("Something went wrong. Please try again.", "오류가 발생했습니다. 다시 시도해 주세요."));

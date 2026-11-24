@@ -7,11 +7,13 @@ const { auth } = NextAuth(authConfig);
 
 export default auth((req) => {
   const isLoggedIn = !!req.auth;
+  const isAdmin =
+    (req.auth?.user as { role?: string } | undefined)?.role === "admin";
   const path = req.nextUrl.pathname;
 
   if (
-    path === "/export" ||
-    path.startsWith("/export/")
+    !isAdmin &&
+    (path === "/export" || path.startsWith("/export/"))
   ) {
     const subscribed = req.cookies.get(EXPORT_ACCESS_COOKIE)?.value === "1";
     if (!subscribed) {
