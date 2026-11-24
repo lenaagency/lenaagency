@@ -1,3 +1,4 @@
+import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 import {
   EXPORT_ACCESS_COOKIE,
@@ -284,7 +285,17 @@ export async function POST(req: Request) {
 
   const okBody = { ok: true as const, lang, listIds, lists: listKeys };
   const grantExport = listKeys.some((key) => key.startsWith("en-"));
-  const ok = () => {
+  const ok = async () => {
+    if (grantExport) {
+      const jar = await cookies();
+      jar.set(EXPORT_ACCESS_COOKIE, "1", {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "lax",
+        path: "/",
+        maxAge: EXPORT_ACCESS_MAX_AGE,
+      });
+    }
     const res = NextResponse.json(okBody);
     if (grantExport) {
       res.cookies.set(EXPORT_ACCESS_COOKIE, "1", {
@@ -331,7 +342,7 @@ export async function POST(req: Request) {
     let result = await upsertContact(attributes);
     if (result.ok) {
       await saveLog("ok");
-      return ok();
+      return await ok();
     }
 
     if (result.status === 400 && isAttributeError(result.err || {})) {
@@ -348,7 +359,7 @@ export async function POST(req: Request) {
       result = await upsertContact(retryAttrs);
       if (result.ok) {
         await saveLog("ok");
-        return ok();
+        return await ok();
       }
 
       if (result.status === 400 && isAttributeError(result.err || {})) {
@@ -357,12 +368,12 @@ export async function POST(req: Request) {
         result = await upsertContact({ [nameKey]: combined });
         if (result.ok) {
           await saveLog("ok");
-          return ok();
+          return await ok();
         }
         result = await upsertContact({ [otherName]: combined });
         if (result.ok) {
           await saveLog("ok");
-          return ok();
+          return await ok();
         }
       }
     }

@@ -87,6 +87,7 @@ export default function NewsletterSubscribe({
     try {
       const res = await fetch("/api/newsletter/subscribe", {
         method: "POST",
+        credentials: "same-origin",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           name,

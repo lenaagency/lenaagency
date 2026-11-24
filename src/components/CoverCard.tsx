@@ -82,7 +82,7 @@ function CoverVisual({
   );
 }
 
-/** Cover only — home page. Title metadata lives in the bibliography. */
+/** Home teaser: cover, title, and author. The whole card opens the title. */
 export function ExportCover({ book }: { book: ExportTitle }) {
   const { t } = useLang();
   const title = plainText(t(book.title, book.titleKo));
@@ -91,18 +91,18 @@ export function ExportCover({ book }: { book: ExportTitle }) {
     .join(" · ");
 
   return (
-    <article className="title-card">
-      <Link
-        className="title-card-link"
-        href={`/export/${book.id}`}
-        aria-label={title}
-      >
+    <article className="title-card home-cover">
+      <Link className="title-card-link" href={`/export/${book.id}`}>
         <CoverVisual
           title={title}
           author={authorLine}
           colors={book.colors}
           cover={book.cover}
         />
+        <div className="title-meta home-cover-meta">
+          <h3>{title}</h3>
+          {authorLine ? <div className="author">{authorLine}</div> : null}
+        </div>
       </Link>
     </article>
   );
