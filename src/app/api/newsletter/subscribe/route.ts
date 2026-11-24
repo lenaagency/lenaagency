@@ -1,4 +1,8 @@
 import { NextResponse } from "next/server";
+import {
+  EXPORT_ACCESS_COOKIE,
+  EXPORT_ACCESS_MAX_AGE,
+} from "@/lib/export-access";
 import { appendNewsletterSignup } from "@/lib/newsletter-sheet";
 
 export const runtime = "nodejs";
@@ -279,6 +283,20 @@ export async function POST(req: Request) {
   }
 
   const okBody = { ok: true as const, lang, listIds, lists: listKeys };
+  const grantExport = listKeys.some((key) => key.startsWith("en-"));
+  const ok = () => {
+    const res = NextResponse.json(okBody);
+    if (grantExport) {
+      res.cookies.set(EXPORT_ACCESS_COOKIE, "1", {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "lax",
+        path: "/",
+        maxAge: EXPORT_ACCESS_MAX_AGE,
+      });
+    }
+    return res;
+  };
   const fail = () =>
     NextResponse.json(
       {
@@ -313,7 +331,7 @@ export async function POST(req: Request) {
     let result = await upsertContact(attributes);
     if (result.ok) {
       await saveLog("ok");
-      return NextResponse.json(okBody);
+      return ok();
     }
 
     if (result.status === 400 && isAttributeError(result.err || {})) {
@@ -330,7 +348,7 @@ export async function POST(req: Request) {
       result = await upsertContact(retryAttrs);
       if (result.ok) {
         await saveLog("ok");
-        return NextResponse.json(okBody);
+        return ok();
       }
 
       if (result.status === 400 && isAttributeError(result.err || {})) {
@@ -339,12 +357,12 @@ export async function POST(req: Request) {
         result = await upsertContact({ [nameKey]: combined });
         if (result.ok) {
           await saveLog("ok");
-          return NextResponse.json(okBody);
+          return ok();
         }
         result = await upsertContact({ [otherName]: combined });
         if (result.ok) {
           await saveLog("ok");
-          return NextResponse.json(okBody);
+          return ok();
         }
       }
     }

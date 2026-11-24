@@ -411,9 +411,9 @@ export function rowsToExportTitles(
       return sheetText(cells[idx]);
     };
 
-    // Skip drafts: published empty = true (default public); published=false hides
+    // Empty published cell = public. Only an explicit false/no hides the row.
     const publishedRaw = get("published");
-    if (publishedRaw && !truthy(publishedRaw)) continue;
+    const published = !publishedRaw || truthy(publishedRaw);
 
     const titleKo = get("titleKo") || get("title");
     const titleEn = get("title") || titleKo;
@@ -531,13 +531,13 @@ export function rowsToExportTitles(
       cover: normalizeCoverUrl(get("cover")),
       previewImages: previewImages.length ? previewImages : undefined,
       videoUrl: get("videoUrl") || undefined,
+      published,
     };
 
     titles.push(book);
   }
 
-  // Sheet rows are top→bottom (old→new when appending).
-  // Website lists newest first.
+  // Titles tab is top → bottom. The site lists the bottom row first.
   return titles.reverse();
 }
 

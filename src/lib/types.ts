@@ -69,8 +69,13 @@ export type ExportTitle = {
   /** Book trailer / intro video (YouTube URL or 11-char id) */
   videoUrl?: string;
   /**
-   * False when overseas rights have never been sold.
-   * Public catalog hides these; admins still see them (to publish later).
+   * False only when the sheet marks the row unpublished.
+   * Omitted or true means the title is public.
+   */
+  published?: boolean;
+  /**
+   * True for every title the site returns.
+   * Drafts are omitted; rights-sold status does not change this.
    */
   listed?: boolean;
 };

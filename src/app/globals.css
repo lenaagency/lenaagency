@@ -752,11 +752,73 @@ ul {
   color: var(--white);
 }
 
-.badge.unlisted {
-  background: var(--ink);
-  color: var(--white);
-  text-transform: none;
-  letter-spacing: 0.02em;
+.home-biblio-wrap {
+  overflow-x: auto;
+}
+
+.home-biblio {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.92rem;
+}
+
+.home-biblio th,
+.home-biblio td {
+  text-align: left;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--line);
+  vertical-align: top;
+}
+
+.home-biblio th {
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.home-biblio a {
+  color: inherit;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.home-biblio a:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 720px) {
+  .home-biblio thead {
+    display: none;
+  }
+
+  .home-biblio tr {
+    display: block;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .home-biblio td {
+    display: block;
+    border: 0;
+    padding: 2px 0;
+  }
+
+  .home-biblio td:first-child {
+    padding-top: 0;
+  }
+
+  .home-biblio td::before {
+    content: attr(data-label);
+    display: block;
+    margin-bottom: 2px;
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
 }
 
 .title-meta h3 {

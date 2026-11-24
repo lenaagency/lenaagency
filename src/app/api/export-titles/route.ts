@@ -1,5 +1,4 @@
 import { NextResponse } from "next/server";
-import { auth } from "@/auth";
 import { LENA } from "@/lib/data";
 import {
   EXPORT_CATEGORIES,
@@ -7,10 +6,7 @@ import {
 } from "@/lib/export-categories";
 import { withPendingExportTitles } from "@/lib/export-pending";
 import { withNormalizedSeries } from "@/lib/export-series";
-import {
-  isExportAdmin,
-  visibleExportTitles,
-} from "@/lib/export-visibility";
+import { visibleExportTitles } from "@/lib/export-visibility";
 import { withLocalPreviews } from "@/lib/local-previews";
 import {
   fetchExportCatalogFromSheet,
@@ -38,22 +34,17 @@ function assembleTitles(raw: ExportTitle[]) {
  * Returns For-sales books + category pills from Google Sheet when configured,
  * otherwise falls back to static data in src/lib/data.ts
  *
- * Public: only titles with overseas rights sold.
- * Admin session: full list (unlisted titles stay admin-only until published).
+ * Every published title is included (`listed: true`).
+ * Unpublished drafts are omitted. Rights-sold status is not a filter.
  */
 export async function GET() {
-  const session = await auth();
-  const isAdmin = isExportAdmin(session?.user?.role);
   const sheetConfigured = Boolean(getSheetsCsvUrl());
 
   try {
     if (sheetConfigured) {
       const catalog = await fetchExportCatalogFromSheet();
       if (catalog && catalog.titles.length > 0) {
-        const titles = visibleExportTitles(
-          assembleTitles(catalog.titles),
-          isAdmin
-        );
+        const titles = visibleExportTitles(assembleTitles(catalog.titles));
         const withPreview = titles.filter(
           (t) => t.previewImages && t.previewImages.length > 0
         ).length;
@@ -75,10 +66,7 @@ export async function GET() {
       }
     }
 
-    const staticTitles = visibleExportTitles(
-      assembleTitles(LENA.exportTitles),
-      isAdmin
-    );
+    const staticTitles = visibleExportTitles(assembleTitles(LENA.exportTitles));
     return NextResponse.json(
       {
         source: "static",
@@ -97,8 +85,7 @@ export async function GET() {
     const message = err instanceof Error ? err.message : "Unknown error";
     console.error("[export-titles]", message);
     const fallbackTitles = visibleExportTitles(
-      assembleTitles(LENA.exportTitles),
-      isAdmin
+      assembleTitles(LENA.exportTitles)
     );
     return NextResponse.json(
       {

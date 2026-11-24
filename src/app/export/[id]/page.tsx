@@ -107,9 +107,6 @@ export default function ExportDetailPage() {
   const hasRightsSold = Boolean(
     plainText(book.rightsSold).trim() || plainText(book.rightsSoldKo).trim()
   );
-  const hasRightsNote = Boolean(
-    plainText(book.rightsNote).trim() || plainText(book.rightsNoteKo).trim()
-  );
   const hasTerritories = Boolean(
     plainText(book.territories).trim() || plainText(book.territoriesKo).trim()
   );
@@ -124,7 +121,6 @@ export default function ExportDetailPage() {
     hasBookSize ||
     hasFormat ||
     hasYear ||
-    hasRightsNote ||
     hasTerritories;
 
   return (
@@ -335,14 +331,6 @@ export default function ExportDetailPage() {
                     <tr>
                       <th>{t("Year / Month", "출간년/월")}</th>
                       <td>{formatPubDate(book.pubYear, book.pubMonth)}</td>
-                    </tr>
-                  )}
-                  {hasRightsNote && (
-                    <tr>
-                      <th>{t("Rights note", "판권 안내")}</th>
-                      <td>
-                        {t(book.rightsNote || "", book.rightsNoteKo || "")}
-                      </td>
                     </tr>
                   )}
                   {hasTerritories && (
