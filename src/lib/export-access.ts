@@ -14,7 +14,6 @@ export function safeExportNext(raw: string | null | undefined): string | null {
   } catch {
     return null;
   }
-  if (!decoded.startsWith("/export")) return null;
   if (
     decoded.startsWith("//") ||
     decoded.includes("\\") ||
@@ -26,7 +25,8 @@ export function safeExportNext(raw: string | null | undefined): string | null {
   try {
     const url = new URL(decoded, "https://www.lenaagency.com");
     if (url.username || url.password) return null;
-    if (!url.pathname.startsWith("/export")) return null;
+    const bare = url.pathname.replace(/^\/en(?=\/|$)/, "") || "/";
+    if (!bare.startsWith("/export")) return null;
     return url.pathname + url.search;
   } catch {
     return null;

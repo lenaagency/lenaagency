@@ -6,10 +6,11 @@ import {
   useContext,
   useEffect,
   useMemo,
-  useState,
   type ReactNode,
 } from "react";
+import { usePathname, useRouter } from "next/navigation";
 import type { Lang } from "@/lib/types";
+import { isEnglishPath, localizeHref, stripLocale } from "@/lib/locale-path";
 
 type LangContextValue = {
   lang: Lang;
@@ -20,22 +21,28 @@ type LangContextValue = {
 const LangContext = createContext<LangContextValue | null>(null);
 
 export function LangProvider({ children }: { children: ReactNode }) {
-  const [lang, setLangState] = useState<Lang>("ko");
-  const [ready, setReady] = useState(false);
+  const pathname = usePathname() || "/";
+  const router = useRouter();
+  const lang: Lang = isEnglishPath(pathname) ? "en" : "ko";
 
   useEffect(() => {
-    const saved = localStorage.getItem("lena-lang");
-    if (saved === "en" || saved === "ko") setLangState(saved);
-    setReady(true);
-  }, []);
-
-  useEffect(() => {
-    if (!ready) return;
     document.documentElement.lang = lang;
     localStorage.setItem("lena-lang", lang);
-  }, [lang, ready]);
+  }, [lang]);
 
-  const setLang = useCallback((next: Lang) => setLangState(next), []);
+  const setLang = useCallback(
+    (next: Lang) => {
+      const search = window.location.search
+        .replace(/([?&])lang=en(?=&|$)/, "$1")
+        .replace(/^\?&/, "?")
+        .replace(/\?$/, "");
+      const hash = window.location.hash;
+      const target = localizeHref(stripLocale(pathname) + search + hash, next);
+      const current = `${pathname}${window.location.search}${hash}`;
+      if (target !== current) router.push(target);
+    },
+    [pathname, router]
+  );
 
   const t = useCallback(
     (en: string, ko?: string) => (lang === "ko" && ko ? ko : en),

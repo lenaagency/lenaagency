@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import Link from "@/components/LocaleLink";
 import { LENA } from "@/lib/data";
 import { useLang } from "@/context/LangContext";
 import { ImportCard } from "@/components/CoverCard";

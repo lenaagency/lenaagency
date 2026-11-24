@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import Link from "@/components/LocaleLink";
 import { useParams } from "next/navigation";
 import { useLang } from "@/context/LangContext";
 import { ExportCard, HeroCover } from "@/components/CoverCard";

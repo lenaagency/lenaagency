@@ -1,9 +1,10 @@
 "use client";
 
-import Link from "next/link";
+import Link from "@/components/LocaleLink";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { useLang } from "@/context/LangContext";
+import { stripLocale } from "@/lib/locale-path";
 
 const IG = "https://www.instagram.com/lena.agency";
 
@@ -26,7 +27,7 @@ function IgIcon() {
 }
 
 export default function Header() {
-  const pathname = usePathname();
+  const pathname = stripLocale(usePathname() || "/");
   const { lang, setLang, t } = useLang();
   const [open, setOpen] = useState(false);
 

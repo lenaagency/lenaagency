@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
+import Link from "@/components/LocaleLink";
 import type { ReactNode } from "react";
 import { useLang } from "@/context/LangContext";
 import type { ExportTitle, ImportHighlight } from "@/lib/types";

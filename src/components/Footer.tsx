@@ -1,9 +1,10 @@
 "use client";
 
-import Link from "next/link";
+import Link from "@/components/LocaleLink";
 import { useSession } from "next-auth/react";
 import { LENA } from "@/lib/data";
 import { useLang } from "@/context/LangContext";
+import { localizeHref } from "@/lib/locale-path";
 
 const IG = "https://www.instagram.com/lena.agency";
 
@@ -73,7 +74,7 @@ export default function Footer() {
             <h4>{t("Contact", "문의")}</h4>
             <Link href="/contact">{t("Inquiry", "문의하기")}</Link>
             <Link href="/newsletter">{t("Newsletter", "뉴스레터")}</Link>
-            <a href="/login">{t("Member login", "회원 로그인")}</a>
+            <a href={localizeHref("/login", lang)}>{t("Member login", "회원 로그인")}</a>
             <Link href="/royalties">{t("Royalty reports", "인세보고")}</Link>
           </div>
         </div>

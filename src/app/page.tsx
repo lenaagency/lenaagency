@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef } from "react";
-import Link from "next/link";
+import Link from "@/components/LocaleLink";
 import { LENA } from "@/lib/data";
 import { useLang } from "@/context/LangContext";
 import { ExportCover } from "@/components/CoverCard";

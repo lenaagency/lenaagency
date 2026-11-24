@@ -3,11 +3,12 @@
 import { FormEvent, Suspense, useEffect, useState } from "react";
 import { signIn, useSession } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
-import Link from "next/link";
+import Link from "@/components/LocaleLink";
 import { useLang } from "@/context/LangContext";
+import { localizeHref } from "@/lib/locale-path";
 
 function LoginForm() {
-  const { t } = useLang();
+  const { t, lang } = useLang();
   const router = useRouter();
   const searchParams = useSearchParams();
   const { data: session, status } = useSession();
@@ -20,7 +21,10 @@ function LoginForm() {
 
   useEffect(() => {
     if (status !== "authenticated") return;
-    router.replace(role === "admin" ? "/" : callbackUrl);
+    const home = localizeHref("/", lang);
+    const next =
+      role === "admin" ? home : localizeHref(callbackUrl, lang);
+    router.replace(next);
   }, [status, role, callbackUrl, router]);
 
   const [email, setEmail] = useState("");

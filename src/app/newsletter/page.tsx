@@ -1,22 +1,18 @@
 "use client";
 
-import { Suspense, useEffect } from "react";
-import Link from "next/link";
+import { Suspense } from "react";
+import Link from "@/components/LocaleLink";
 import { useSearchParams } from "next/navigation";
 import { useLang } from "@/context/LangContext";
 import NewsletterSubscribe from "@/components/NewsletterSubscribe";
 import { safeExportNext } from "@/lib/export-access";
 
 function NewsletterScreen() {
-  const { t, setLang } = useLang();
+  const { t, lang } = useLang();
   const searchParams = useSearchParams();
-  const englishGate = searchParams.get("lang") === "en";
+  const englishGate = lang === "en";
   const nextPath = safeExportNext(searchParams.get("next"));
   const copy = (en: string, ko: string) => (englishGate ? en : t(en, ko));
-
-  useEffect(() => {
-    if (englishGate) setLang("en");
-  }, [englishGate, setLang]);
 
   return (
     <>

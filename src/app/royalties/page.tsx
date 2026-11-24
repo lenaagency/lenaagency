@@ -2,8 +2,9 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { signOut, useSession } from "next-auth/react";
-import Link from "next/link";
+import Link from "@/components/LocaleLink";
 import { useLang } from "@/context/LangContext";
+import { localizeHref } from "@/lib/locale-path";
 import type {
   RoyaltyContract,
   RoyaltyEditableFields,
@@ -234,7 +235,10 @@ export default function RoyaltiesPage() {
     try {
       const res = await fetch("/api/royalties?fresh=1", { cache: "no-store" });
       if (res.status === 401) {
-        window.location.href = "/login?callbackUrl=/royalties";
+        window.location.href = localizeHref(
+          `/login?callbackUrl=${encodeURIComponent(localizeHref("/royalties", lang))}`,
+          lang
+        );
         return;
       }
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -255,7 +259,10 @@ export default function RoyaltiesPage() {
   useEffect(() => {
     if (status === "authenticated") load();
     if (status === "unauthenticated") {
-      window.location.href = "/login?callbackUrl=/royalties";
+      window.location.href = localizeHref(
+          `/login?callbackUrl=${encodeURIComponent(localizeHref("/royalties", lang))}`,
+          lang
+        );
     }
   }, [status, load]);
 
@@ -355,7 +362,10 @@ export default function RoyaltiesPage() {
         cache: "no-store",
       });
       if (res.status === 401) {
-        window.location.href = "/login?callbackUrl=/royalties";
+        window.location.href = localizeHref(
+          `/login?callbackUrl=${encodeURIComponent(localizeHref("/royalties", lang))}`,
+          lang
+        );
         return;
       }
       if (!res.ok) throw new Error(`HTTP ${res.status}`);

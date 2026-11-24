@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import Link from "@/components/LocaleLink";
 import { useLang } from "@/context/LangContext";
 import { useExportTitles } from "@/hooks/useExportTitles";
 import { listAuthorProfiles } from "@/lib/export-authors";

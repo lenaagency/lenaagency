@@ -8,7 +8,7 @@ import {
   useRef,
   useState,
 } from "react";
-import Link from "next/link";
+import Link from "@/components/LocaleLink";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useLang } from "@/context/LangContext";
 import { ExportCard } from "@/components/CoverCard";
