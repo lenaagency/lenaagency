@@ -537,8 +537,8 @@ export function rowsToExportTitles(
     titles.push(book);
   }
 
-  // Titles tab is top → bottom. The site lists the bottom row first.
-  return titles.reverse();
+  // Titles tab top → bottom. The first data row is first on the site.
+  return titles;
 }
 
 /** Candidate CSV URLs for For-sales Titles (first success wins). */
